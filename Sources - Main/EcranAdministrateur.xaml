@@ -1,0 +1,39 @@
+﻿<Window x:Class="AirAmbe.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AirAmbe"
+        mc:Ignorable="d"
+        Title="Air-Ambe" Height="Auto" Width="525">
+    <Grid Name="gridPrincipal">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label FontSize="25" Grid.Row="0">Administration des utilisateurs</Label>        
+        <Button Name="btnDeconnexion" Width="30" Height="30" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0">Decon</Button>
+
+        <DataGrid Name="dgUtilisateur" RowHeight="30" VerticalAlignment="Top" HorizontalAlignment="Left" AutoGenerateColumns="False" SelectionMode="Single" Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Prénom" IsReadOnly="True" Binding="{Binding Prenom}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Nom" IsReadOnly="True" Binding="{Binding Nom}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Poste" IsReadOnly="True" Binding="{Binding Poste}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Type d'utilisateur" IsReadOnly="True" Binding="{Binding TypeUtilisateur}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Date Embauche" IsReadOnly="True" Binding="{Binding DateEmbauche}"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Modifier">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Name="btnModifier">Modifier</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Name="btnAjouter" Width="30" Height="30" Margin="0,0,10,30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="2">Add</Button>
+        <Rectangle Fill="Black" Width="auto" Height="1" Margin="0,0,0,20" VerticalAlignment="Bottom" Grid.Row="2"></Rectangle>
+    </Grid>
+</Window>
