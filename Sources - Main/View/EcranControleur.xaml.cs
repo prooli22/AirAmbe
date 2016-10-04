@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AirAmbe.Model;
+using AirAmbe.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +29,7 @@ namespace AirAmbe
             lblUser.Content = U.NomUtilisateur;
             lblUser.Width = 300;
             lblUser.Height = 30;
+            lblUser.VerticalAlignment = VerticalAlignment.Top;
             grdPrincipale.Children.Add(lblUser);
 
 

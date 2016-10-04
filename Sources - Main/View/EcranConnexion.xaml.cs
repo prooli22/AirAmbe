@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AirAmbe.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Security.Cryptography;
 
 namespace AirAmbe
 {
@@ -20,10 +23,15 @@ namespace AirAmbe
     /// </summary>
     public partial class EcranConnexion : Window
     {
+
+        private ObservableCollection<Utilisateur> Utilisateurs { get; set; }
+
         public EcranConnexion()
         {
             InitializeComponent();
 
+            DataContext = new UtilisateurViewModel();
+            Utilisateurs = ((UtilisateurViewModel)DataContext).SommaireUtilisateurs;
         }
 
 
@@ -70,16 +78,22 @@ namespace AirAmbe
         {
             Utilisateur U = new Utilisateur();
 
-            if (nomUtilisateur == "oprovost")
+            foreach (Utilisateur u in Utilisateurs)
             {
-                U.NomUtilisateur = nomUtilisateur;
-                U.MotPasse = motPasse;
+                // https://coderwall.com/p/4puszg/c-convert-string-to-md5-hash
+                if (nomUtilisateur == u.NomUtilisateur && MD5(motPasse) == u.MotPasse)
+                {
+                    U.NomUtilisateur = nomUtilisateur;
+                    U.MotPasse = motPasse;
+                }
+
+                else
+                {
+                    U = null;
+                }
             }
 
-            else
-            {
-                U = null;
-            }
+
 
             return U;
         }
