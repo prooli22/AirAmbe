@@ -39,5 +39,11 @@ namespace AirAmbe
             lblMDP.Height = 30;
             grdPrincipale.Children.Add(lblMDP);
         }
+
+
+        public EcranControleur()
+        {
+            InitializeComponent();
+        }
     }
 }

@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace AirAmbe.ViewModel
 {
-    public class EcranTestConnexionViewModel : INotifyPropertyChanged
+    public class UtilisateurViewModel : INotifyPropertyChanged
     {
         public ICommand cmdVider { get; set; }
         public ICommand cmdAjouter { get; set; }
@@ -202,7 +202,7 @@ namespace AirAmbe.ViewModel
             }
         }
 
-        public EcranTestConnexionViewModel()
+        public UtilisateurViewModel()
         {
             Utilisateur_Service = new UtilisateurAS();
             SommaireUtilisateurs = Utilisateur_Service.RecupererTous();

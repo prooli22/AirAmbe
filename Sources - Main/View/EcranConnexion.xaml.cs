@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Security.Cryptography;
+using AirAmbe.ViewModel;
 
 namespace AirAmbe
 {
@@ -24,20 +24,22 @@ namespace AirAmbe
     public partial class EcranConnexion : Window
     {
 
-        private ObservableCollection<Utilisateur> Utilisateurs { get; set; }
-
         public EcranConnexion()
         {
             InitializeComponent();
-
-            DataContext = new UtilisateurViewModel();
-            Utilisateurs = ((UtilisateurViewModel)DataContext).SommaireUtilisateurs;
         }
 
 
         private void btnConnexion_Click(object sender, RoutedEventArgs e)
         {
-            AfficherEcranControleur();
+            TrouverUtilisateur(txtUser.Text.ToString(), MD5.Hash(txtMDP.Password.ToString()));
+        }
+
+
+        private void txtMDP_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                TrouverUtilisateur(txtUser.Text.ToString(), MD5.Hash(txtMDP.Password.ToString()));
         }
 
 
@@ -53,55 +55,52 @@ namespace AirAmbe
         }
 
 
-
-        private void AfficherEcranControleur()
+        private void TrouverUtilisateur(string nomUtilisateur, string motPasse)
         {
-            Utilisateur U = TrouverUtilisateur(txtUser.Text.ToString(), txtMDP.Password.ToString());
+            Utilisateur U = new Utilisateur();
+            UtilisateurAS uAs = new UtilisateurAS();
 
-            if (U != null)
-            {
-                EcranControleur C = new EcranControleur(U);
-                this.Close();
-                C.ShowDialog();
-            }
+            U = uAs.Recuperer(nomUtilisateur, motPasse);
 
-            else
+            // Si l'utilisateur retourné est null, son nom d'utilisateur ou son mot de passe est incorrect.
+            // On affiche un erreur à l'écran.
+            if (U == null)
             {
+
                 lblErreur.Visibility = Visibility.Visible;
                 lblUser.Foreground = Brushes.Red;
                 lblMDP.Foreground = Brushes.Red;
+                return;
             }
+
+            // Pour test. À modifier.
+            if (U.NomUtilisateur == "oprovost")
+                AfficherEcranAdministrateur();
+            else
+                AfficherEcranControleur(U);
+
         }
 
 
-        private Utilisateur TrouverUtilisateur(string nomUtilisateur, string motPasse)
+        private void AfficherEcranControleur(Utilisateur U)
         {
-            Utilisateur U = new Utilisateur();
-
-            foreach (Utilisateur u in Utilisateurs)
-            {
-                // https://coderwall.com/p/4puszg/c-convert-string-to-md5-hash
-                if (nomUtilisateur == u.NomUtilisateur && MD5(motPasse) == u.MotPasse)
-                {
-                    U.NomUtilisateur = nomUtilisateur;
-                    U.MotPasse = motPasse;
-                }
-
-                else
-                {
-                    U = null;
-                }
-            }
+            EcranControleur C = new EcranControleur(U);
+            this.Close();
+            C.ShowDialog();
+        }
 
 
-
-            return U;
+        private void AfficherEcranAdministrateur()
+        {
+            EcranAdministrateur A = new EcranAdministrateur();
+            this.Close();
+            A.ShowDialog();
         }
 
 
         private void AfficherEcranObservateur()
         {
-            EcranControleur C = new EcranControleur(new Utilisateur());
+            EcranControleur C = new EcranControleur();
             this.Close();
             C.ShowDialog();
         }
@@ -115,5 +114,7 @@ namespace AirAmbe
             if (resultat == MessageBoxResult.Yes)
                 this.Close();
         }
+
+        
     }
 }

@@ -11,7 +11,7 @@
         <TextBox Name="txtUser" Width="250" Height="25" Margin="0, 75, 0, 0" HorizontalAlignment="Center" VerticalAlignment="top" BorderThickness="2"></TextBox>
         
         <Label Name="lblMDP" Width="120" Height="30" FontSize="12" Margin="130, 120, 0, 0" HorizontalAlignment="Left" VerticalAlignment="top">Mot de passe : </Label>
-        <PasswordBox Name="txtMDP" PasswordChar="*" Width="250" Height="25" Margin="0, 145, 0, 0" HorizontalAlignment="Center" VerticalAlignment="top" BorderThickness="2"></PasswordBox>
+        <PasswordBox Name="txtMDP" PasswordChar="*" Width="250" Height="25" Margin="0, 145, 0, 0" HorizontalAlignment="Center" VerticalAlignment="top" BorderThickness="2" KeyDown="txtMDP_KeyDown"></PasswordBox>
         
         <Button Name="btnConnexion" Width="75" Height="25" Content="Connexion" Margin="135, 70, 0, 0" HorizontalAlignment="left" VerticalAlignment="Center" Click="btnConnexion_Click"></Button>
         <Button Name="btnObservateur" Width="75" Height="25" Content="Observateur" Margin="0, 70, 130, 0" HorizontalAlignment="Right" VerticalAlignment="Center" Click="btnObservateur_Click"></Button>

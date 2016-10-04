@@ -1,10 +1,4 @@
-CREATE DATABASE IF NOT EXISTS airambe_bd
-	DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-
-USE airambe_bd;
-
 DROP TABLE IF EXISTS Utilisateurs; 
-DROP TABLE IF EXISTS Adresses; 
 DROP TABLE IF EXISTS Types; 
 
 DROP TABLE IF EXISTS VolScenarios; 
@@ -14,21 +8,6 @@ DROP TABLE IF EXISTS Statuts;
 DROP TABLE IF EXISTS Vols; 
 DROP TABLE IF EXISTS Avions; 
 DROP TABLE IF EXISTS Aeroports;
-
-CREATE TABLE Adresses (
-	idAdresse	    INT	            NOT NULL AUTO_INCREMENT,
-	numero			INT				NOT NULL,
-	rue				VARCHAR(40)     NOT NULL,
-	ville			VARCHAR(40)     NOT NULL,
-	province		VARCHAR(2)	 	NOT NUll,
-	codePostal		VARCHAR(6)		NOT NULL,
-	
-	PRIMARY KEY (idAdresse)
-) CHARACTER SET utf8 COLLATE utf8_general_ci;
-
-ALTER TABLE Adresses
-	ADD CONSTRAINT Adresses_Num_Rue_Ville_UK
-	UNIQUE KEY (numero, rue, ville);
 
 
 CREATE TABLE Types (
@@ -41,7 +20,6 @@ CREATE TABLE Types (
 
 CREATE TABLE Utilisateurs (
 	idUtilisateur	INT				NOT NULL AUTO_INCREMENT,
-	idAdresse		INT,
 	idType			INT				NOT NULL,
 	nomUtilisateur	VARCHAR(30)		NOT NULL UNIQUE,
     motPasse		VARCHAR(32)		NOT NULL,
@@ -51,11 +29,10 @@ CREATE TABLE Utilisateurs (
 	dateEmbauche	DATE,
 	numeroTelephone VARCHAR(10),
 	courriel		VARCHAR(50),
+	adresse			VARCHAR(50),
 	photo			BLOB,
 	
 	PRIMARY KEY (idUtilisateur),
-	FOREIGN KEY (idAdresse)
-		REFERENCES Adresses(idAdresse),
 	FOREIGN KEY (idType)
 		REFERENCES Types(idType)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;

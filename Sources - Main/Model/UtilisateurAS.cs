@@ -82,15 +82,22 @@ namespace AirAmbe.Model
         /// </summary>
         /// <param name="UtilisateurSelection">Un utilisateur</param>
         /// <returns></returns>
-        public Utilisateur Recuperer(int UtilisateurSelection)
+        public Utilisateur Recuperer(string user, string mdp)
         {
          
-            string sel = "SELECT * FROM utilisateurs WHERE idUtilisateur = " + UtilisateurSelection;
+            string sel = "SELECT * FROM utilisateurs WHERE nomUtilisateur LIKE '" + user + "' AND motPasse LIKE '" + mdp + "'";
 
             DataSet dsUtilisateurs = MaBd.Selection(sel);
 
             DataTable dtUtilisateurs = dsUtilisateurs.Tables[0];
 
+            if (dtUtilisateurs.Rows.Count == 0)
+            {
+                Utilisateur u = new Utilisateur();
+                u = null;
+                return u;
+            }
+                
             return new Utilisateur(dtUtilisateurs.Rows[0]);
         }
 
