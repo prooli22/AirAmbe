@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AirAmbe"
         mc:Ignorable="d"
-        Title="Air-Ambe" Height="Auto" Width="525">
+        Title="Air-Ambe" Height="Auto" Width="600">
     <Grid Name="gridPrincipal">
         <Grid.RowDefinitions>
             <RowDefinition Height="75"></RowDefinition>
@@ -16,7 +16,7 @@
         <Label FontSize="25" Grid.Row="0">Administration des utilisateurs</Label>        
         <Button Name="btnDeconnexion" Width="30" Height="30" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0" >Decon</Button>
 
-        <DataGrid Name="dgUtilisateur" RowHeight="30" VerticalAlignment="Top" HorizontalAlignment="Left" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" Grid.Row="1">
+        <DataGrid Name="dgUtilisateur" RowHeight="30" VerticalAlignment="Top" HorizontalAlignment="Center" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Username" IsReadOnly="True" Binding="{Binding NomUtilisateur}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Prénom" IsReadOnly="True" Binding="{Binding Prenom}"></DataGridTextColumn>
