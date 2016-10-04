@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace AirAmbe.Model
 {
+    /// <summary>
+    /// Classe AdressesAS qui permet de définir les requêtes pour cette classe
+    /// </summary>
     public class AdresseAS
     {
         //Déclaration des attributs de la classe AdresseAS
@@ -23,7 +26,7 @@ namespace AirAmbe.Model
         }
 
         /// <summary>
-        /// Une méthode pour l'insertion d'un utilisateur en BD
+        /// Une méthode pour l'insertion d'une adresse en BD
         /// </summary>
         /// <param name="AdresseInsertion">Une adresse</param>
         public void Inserer(Adresse AdresseInsertion)
@@ -37,7 +40,7 @@ namespace AirAmbe.Model
         }
 
         /// <summary>
-        /// Une méthode pour la suppression d'une en BD
+        /// Une méthode pour la suppression d'une adresse en BD
         /// </summary>
         /// <param name="AdresseSuppression">Une adresse</param>
         public void Supprimer(int AdresseSuppression)
@@ -47,9 +50,9 @@ namespace AirAmbe.Model
         }
 
         /// <summary>
-        /// Une méthode pour la modification d'un utilisateur en BD
+        /// Une méthode pour la modification d'une adresse en BD
         /// </summary>
-        /// <param name="UtilisateurModification">Un utilisateur</param>
+        /// <param name="AdresseModification">Une adresse</param>
         public void Modifier(Adresse AdresseModification)
         {
             string amod = "UPDATE adresses SET numero = '" + AdresseModification.Numero +
@@ -64,53 +67,42 @@ namespace AirAmbe.Model
         }
 
         /// <summary>
-        /// Une méthode pour sélectionner un seul utilisateur en BD
+        /// Une méthode pour sélectionner une seule adresse en BD
         /// </summary>
-        /// <param name="UtilisateurSelection">Un utilisateur</param>
+        /// <param name="AdresseSelection">Une adresse</param>
         /// <returns></returns>
-        public Utilisateur Recuperer(int UtilisateurSelection)
+        public Adresse Recuperer(int AdresseSelection)
         {
 
-            string sel = "SELECT * FROM utilisateurs WHERE idUtilisateur = " + UtilisateurSelection;
+            string sel = "SELECT * FROM adresses WHERE idAdresse = " + AdresseSelection;
 
-            DataSet dsUtilisateurs = MaBd.Selection(sel);
+            DataSet dsAdresses = MaBd.Selection(sel);
 
-            DataTable dtUtilisateurs = dsUtilisateurs.Tables[0];
+            DataTable dtAdresses = dsAdresses.Tables[0];
 
-            return new Utilisateur(dtUtilisateurs.Rows[0]);
+            return new Adresse(dtAdresses.Rows[0]);
         }
 
         /// <summary>
-        /// Une méthode pour sélectionner tous les utilisateurs
+        /// Une méthode pour sélectionner toutes les adresses
         /// </summary>
         /// <returns></returns>
-        public ObservableCollection<Utilisateur> RecupererTous()
+        public ObservableCollection<Adresse> RecupererTous()
         {
 
-            string sel = "SELECT * FROM utilisateurs";
-            ObservableCollection<Utilisateur> ObservableDesUtilisateurs = new ObservableCollection<Utilisateur>();
+            string sel = "SELECT * FROM adresses";
+            ObservableCollection<Adresse> ObservableDesAdresses = new ObservableCollection<Adresse>();
 
-            DataSet dsUtilisateurs = MaBd.Selection(sel);
+            DataSet dsAdresses = MaBd.Selection(sel);
 
-            DataTable dtUtilisateurs = dsUtilisateurs.Tables[0];
+            DataTable dtAdresses = dsAdresses.Tables[0];
 
-            foreach (DataRow RowUtilisateur in dtUtilisateurs.Rows)
+            foreach (DataRow RowAdresse in dtAdresses.Rows)
             {
-                ObservableDesUtilisateurs.Add(new Utilisateur(RowUtilisateur));
+                ObservableDesAdresses.Add(new Adresse(RowAdresse));
             }
 
-
-
-            return ObservableDesUtilisateurs;
+            return ObservableDesAdresses;
         }
-
-
-
-
-
-
-
-
-
     }
 }
