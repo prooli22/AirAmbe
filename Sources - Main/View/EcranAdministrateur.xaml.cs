@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,27 +12,29 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using AirAmbe.View;
+using AirAmbe.Model;
+using AirAmbe.ViewModel;
+using System.Collections.ObjectModel;
 
 namespace AirAmbe
 {
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class EcranAdministrateur : Window
     {
-        /// <summary>
-        /// Constructeur par défaut de la classe MainWindow
-        /// </summary>
-        public MainWindow()
+        public EcranAdministrateur()
         {
             InitializeComponent();
+
+            DataContext = new AirAmbe.ViewModel.UtilisateursViewModel();            
+
+            dgUtilisateur.ItemsSource = ((UtilisateursViewModel)DataContext).SommaireUtilisateurs;
         }
 
-        private void Demarre(object sender, RoutedEventArgs e)
+        private void btnModifier_Click(object sender, RoutedEventArgs e)
         {
-             PresenteurContenu.Content = new EcranTestConnexion();
+            
         }
-
     }
 }
