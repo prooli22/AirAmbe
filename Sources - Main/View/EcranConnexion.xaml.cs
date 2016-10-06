@@ -74,7 +74,7 @@ namespace AirAmbe
             }
 
             // Pour test. À modifier.
-            if (U.NomUtilisateur == "vdesilets")
+            if (U.TypeUtilisateur == Type.Administrateur.ToString())
                 AfficherEcranAdministrateur();
             else
                 AfficherEcranControleur(U);
