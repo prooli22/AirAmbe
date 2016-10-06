@@ -66,7 +66,7 @@ namespace AirAmbe.Model
         public Type Recuperer(int TypeSelection)
         {
 
-            string sel = "SELECT * FROM types WHERE idType = " + TypeSelection;
+            string sel = "SELECT nom FROM types WHERE idType = " + TypeSelection;
 
             DataSet dsTypes = MaBd.Selection(sel);
 

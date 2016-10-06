@@ -34,5 +34,7 @@ namespace AirAmbe
             IdType = (int)unType["IdType"];
             Nom = (string)unType["Nom"];
         }
+
+
     }
 }

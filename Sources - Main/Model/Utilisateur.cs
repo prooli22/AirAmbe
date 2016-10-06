@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AirAmbe.Model
 {
@@ -14,10 +15,11 @@ namespace AirAmbe.Model
     {
         //Déclaration des attributs de la classe 
         public int IdUtilisateur { get; set; }
-        //public Adresse IdAdresse { get; set; }
-        //public Type IdType { get; set; }
-        public int IdAdresse { get; set; }
-        public int IdType { get; set; }
+        public string Adresse { get; set; }
+        //public int Type { get; set; }
+        //public int TypeUtilisateur { get; set; }
+        //public int IdAdresse { get; set; }
+        public string TypeUtilisateur { get; set; }
         public string NomUtilisateur { get; set; }
         public string MotPasse { get; set; }
         public string Prenom { get; set; }
@@ -46,24 +48,49 @@ namespace AirAmbe.Model
         {
             IdUtilisateur = (int)unUtilisateur["IdUtilisateur"];
 
-            //if(unUtilisateur["IdAdresse"]==null)
+            // MessageBox.Show(IdUtilisateur.ToString());
+
+            //if (unUtilisateur["IdType"] == null)
             //{
-            //    IdAdresse = new Adresse();
+            //    IdType = new Type();
             //}
             //else
             //{
-            //    IdAdresse = (Adresse)unUtilisateur["IdAdresse"];
+            //int typeTemp;
+            //TypeAS tas = new TypeAS();
+            //Type t=new Type();
+            //MessageBox.Show(unUtilisateur["IdType"].ToString());
+
+            //t=tas.Recuperer(Convert.ToInt32(unUtilisateur["IdType"]));
+            //MessageBox.Show(t.Nom.ToString());
+
+            //IdType = (Type)tas.Recuperer(Convert.ToInt32(unUtilisateur["IdType"]));
+
+            //MessageBox.Show(IdType.Nom.ToString());
+
+            //typeTemp = Convert((Type)unUtilisateur["IdType"]);
+            // IdType = (Type)unUtilisateur["IdType"];
+            //IdType = (Type)tas.Recuperer(Convert.ToInt32(unUtilisateur["IdType"]));
+            //typeTemp = Convert((Type)unUtilisateur["IdType"]);
+
+            //MessageBox.Show(typeTemp.ToString());
+
+            //tas.Recuperer();
+
+
+            TypeUtilisateur = (string)unUtilisateur["TypeUtilisateur"];           
             //}
-            //IdAdresse = (int)unUtilisateur["IdAdresse"];
-            //IdType = (int)unUtilisateur["IdType"];
+
+
             NomUtilisateur = (string)unUtilisateur["NomUtilisateur"];
             MotPasse = (string)unUtilisateur["MotPasse"];
-            //Prenom = (string)unUtilisateur["Prenom"];
-            //Nom = (string)unUtilisateur["Nom"];
-            //Poste = (string)unUtilisateur["Poste"];
-            //DateEmbauche = (DateTime)unUtilisateur["DateEmbauche"];
-            //Telephone = (string)unUtilisateur["Telephone"];
-            //Courriel = (string)unUtilisateur["Courriel"];
+            Prenom = (string)unUtilisateur["Prenom"];
+            Nom = (string)unUtilisateur["Nom"];
+            Poste = (string)unUtilisateur["Poste"];
+            DateEmbauche = (DateTime)unUtilisateur["DateEmbauche"];
+            Telephone = (string)unUtilisateur["Telephone"];
+            Courriel = (string)unUtilisateur["Courriel"];
+            Adresse = (string)unUtilisateur["Adresse"];
         }
 
       
