@@ -19,25 +19,25 @@ namespace AirAmbe.ViewModel
 
         private UtilisateurAS Utilisateur_Service;
 
-        private int idAdresse;
-        public int IdAdresse
+        private string adresse;
+        public string Adresse
         {
-            get { return idAdresse; }
+            get { return adresse; }
             set
             {
-                idAdresse = value;
-                OnPropertyChanged("IdAdresse");
+                adresse = value;
+                OnPropertyChanged("Adresse");
             }
         }
 
-        private int idType;
-        public int IdType
+        private string typeUtilisateur;
+        public string TypeUtilisateur
         {
-            get { return idType; }
+            get { return typeUtilisateur; }
             set
             {
-                idType = value;
-                OnPropertyChanged("IdType");
+                typeUtilisateur = value;
+                OnPropertyChanged("TypeUtilisateur");
             }
         }
 
@@ -168,8 +168,8 @@ namespace AirAmbe.ViewModel
                 if (value == null)
                 {
                     utilisateurSelectionne = null;
-                    IdAdresse = 0;
-                    IdType = 0;
+                    Adresse = null;
+                    TypeUtilisateur = null;
                     NomUtilisateur = null;
                     MotPasse = null;
                     Prenom = null;
@@ -184,8 +184,8 @@ namespace AirAmbe.ViewModel
                 else
                 {
                     utilisateurSelectionne = value;
-                    IdAdresse = utilisateurSelectionne.IdAdresse;
-                    IdType = utilisateurSelectionne.IdType;
+                    Adresse = utilisateurSelectionne.Adresse;
+                    TypeUtilisateur = utilisateurSelectionne.TypeUtilisateur;
                     NomUtilisateur = utilisateurSelectionne.NomUtilisateur;
                     MotPasse = utilisateurSelectionne.MotPasse;
                     Prenom = utilisateurSelectionne.Prenom;
@@ -221,8 +221,8 @@ namespace AirAmbe.ViewModel
         {
             Utilisateur u = new Utilisateur();
 
-            u.IdAdresse = IdAdresse;
-            u.IdType = IdType;
+            u.Adresse = Adresse;
+            u.TypeUtilisateur = TypeUtilisateur;
             u.NomUtilisateur = NomUtilisateur;
             u.MotPasse = MotPasse;
             u.Prenom = Prenom;
@@ -246,8 +246,8 @@ namespace AirAmbe.ViewModel
             Utilisateur u = new Utilisateur();
 
             u.IdUtilisateur = UtilisateurSelectionne.IdUtilisateur;
-            u.IdAdresse = IdAdresse;
-            u.IdType = IdType;
+            u.Adresse = Adresse;
+            u.TypeUtilisateur = TypeUtilisateur;
             u.NomUtilisateur = NomUtilisateur;
             u.MotPasse = MotPasse;
             u.Prenom = Prenom;
