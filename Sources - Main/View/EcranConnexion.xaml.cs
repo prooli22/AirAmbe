@@ -74,7 +74,7 @@ namespace AirAmbe
             }
 
             // Pour test. À modifier.
-            if (U.NomUtilisateur == "oprovost")
+            if (U.NomUtilisateur == "vdesilets")
                 AfficherEcranAdministrateur();
             else
                 AfficherEcranControleur(U);

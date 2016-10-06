@@ -27,14 +27,28 @@ namespace AirAmbe
         {
             InitializeComponent();
 
-            DataContext = new AirAmbe.ViewModel.EcranTestConnexionViewModel();            
+            DataContext = new AirAmbe.ViewModel.UtilisateurViewModel();            
 
-            dgUtilisateur.ItemsSource = ((EcranTestConnexionViewModel)DataContext).SommaireUtilisateurs;
+            dgUtilisateur.ItemsSource = ((UtilisateurViewModel)DataContext).SommaireUtilisateurs;
         }
 
         private void btnModifier_Click(object sender, RoutedEventArgs e)
         {
             EcranUtilisateur eUser = new EcranUtilisateur((Utilisateur)(dgUtilisateur.SelectedItem),true);
+            this.Close();
+            eUser.Show();
+        }
+
+        private void btnDeconnexion_Click(object sender, RoutedEventArgs e)
+        {
+            EcranConnexion eCon = new EcranConnexion();
+            this.Close();
+            eCon.Show();
+        }
+
+        private void btnAjouter_Click(object sender, RoutedEventArgs e)
+        {
+            EcranUtilisateur eUser = new EcranUtilisateur();
             this.Close();
             eUser.Show();
         }

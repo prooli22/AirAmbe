@@ -14,16 +14,15 @@
         </Grid.RowDefinitions>
 
         <Label FontSize="25" Grid.Row="0">Administration des utilisateurs</Label>        
-        <Button Name="btnDeconnexion" Width="30" Height="30" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0" >Decon</Button>
+        <Button Name="btnDeconnexion" Width="30" Height="30" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0" Click="btnDeconnexion_Click">Decon</Button>
 
         <DataGrid Name="dgUtilisateur" RowHeight="30" VerticalAlignment="Top" HorizontalAlignment="Center" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" Grid.Row="1">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Username" IsReadOnly="True" Binding="{Binding NomUtilisateur}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Prénom" IsReadOnly="True" Binding="{Binding Prenom}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Nom" IsReadOnly="True" Binding="{Binding Nom}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Poste" IsReadOnly="True" Binding="{Binding Poste}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Type d'utilisateur" IsReadOnly="True" Binding="{Binding TypeUtilisateur}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Date Embauche" IsReadOnly="True" Binding="{Binding DateEmbauche}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Date Embauche" IsReadOnly="True" Binding="{Binding DateEmbauche, StringFormat='{}{0:yyyy-MM-dd}'}"></DataGridTextColumn>
                 <DataGridTemplateColumn Header="Modifier">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -34,7 +33,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Name="btnAjouter" Width="30" Height="30" Margin="0,0,10,30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="2">Add</Button>
+        <Button Name="btnAjouter" Width="30" Height="30" Margin="0,0,10,30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="2" Click="btnAjouter_Click">Add</Button>
         <Rectangle Fill="Black" Width="auto" Height="1" Margin="0,0,0,20" VerticalAlignment="Bottom" Grid.Row="2"></Rectangle>
     </Grid>
 </Window>

@@ -34,9 +34,7 @@ namespace AirAmbe.ViewModel
 
                 BdInterne = new MySqlConnection(connexionString);
 
-                MessageBox.Show("Connexion OK");
-
-                
+                //MessageBox.Show("Connexion OK");                
             }
             catch (Exception e)
             {

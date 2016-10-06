@@ -22,27 +22,44 @@ namespace AirAmbe
     public partial class EcranUtilisateur : Window
     {
         public string Retour { get; set; }
+        public Utilisateur UsagerActuel { get; set; }
         public EcranUtilisateur()
         {
             InitializeComponent();
 
             Retour = "EcranAdministrateur";
+            btnAction.Content = "Ajouter";
+            lblNouvMdp.Content = "Mot de passe: ";
         }
         public EcranUtilisateur(Utilisateur user, bool peutModifier)
         {
             InitializeComponent();
 
+            UsagerActuel = user;
             lblTitre.Content = lblTitre.Content + ": " + user.NomUtilisateur;
-
+            btnAction.Content = "Modifier";
             if (peutModifier)
             {
                 SetTxtWritable();
+                InitialiseValeur(user);
                 Retour = "EcranAdministrateur";
             }
             else
             {
                 Retour = "EcranControleur";
             }
+        }
+
+        private void InitialiseValeur(Utilisateur user)
+        {
+            txtAdresse.Text = user.Adresse;
+            txtCour.Text = user.Courriel;
+            txtDate.Text = user.DateEmbauche.ToString("d");
+            txtNom.Text = user.Nom;
+            txtPrenom.Text = user.Prenom;
+            txtType.Text = user.TypeUtilisateur;
+            txtPoste.Text = user.Poste;
+            txtNum.Text = user.Telephone;
         }
 
         private void SetTxtWritable()
@@ -65,13 +82,13 @@ namespace AirAmbe
                 case "EcranAdministrateur":
                     win = new EcranAdministrateur();
                     win.Show();
-                    this.Close();
                     break;
                 case "EcranControleur":
+                    win = new EcranControleur(UsagerActuel);
+                    win.Show();
                     break;
             }
-            
-
+            this.Close();
         }
     }
 }
