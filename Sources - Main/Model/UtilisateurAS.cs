@@ -84,8 +84,21 @@ namespace AirAmbe.Model
         /// <returns></returns>
         public Utilisateur Recuperer(string user, string mdp)
         {
-
-            string sel = "SELECT * FROM utilisateurs WHERE nomUtilisateur LIKE '" + user + "' AND motPasse LIKE '" + mdp + "'";
+            string sel = "SELECT u.idUtilisateur" +
+                    ",t.typeUtilisateur" +
+                    ",u.nomUtilisateur" +
+                    ",u.motPasse" +
+                    ",u.prenom" +
+                    ",u.nom" +
+                    ",u.poste" +
+                    ",u.dateEmbauche" +
+                    ",u.telephone" +
+                    ",u.courriel" +
+                    ",u.adresse" +
+                    ",u.photo " +
+             "FROM utilisateurs u " +
+                    "INNER JOIN types t ON t.idType=u.idType "+
+                    "WHERE u.nomUtilisateur LIKE '" + user + "' AND u.motPasse LIKE '" + mdp + "'";
 
             DataSet dsUtilisateurs = MaBd.Selection(sel);
 
