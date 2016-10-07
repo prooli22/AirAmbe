@@ -73,7 +73,7 @@ namespace AirAmbe
                 return;
             }
 
-            // Pour test. À modifier.
+            // Si le type de l'utilisateur est admin, on affiche l'écran admin, sinon on affiche l'écran controleur.
             if (U.TypeUtilisateur == Type.Administrateur.ToString())
                 AfficherEcranAdministrateur();
             else

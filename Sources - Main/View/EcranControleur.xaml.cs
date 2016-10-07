@@ -21,29 +21,45 @@ namespace AirAmbe
     /// </summary>
     public partial class EcranControleur : Window
     {
+        public Utilisateur Controleur { get; set; }
+
+
         public EcranControleur(Utilisateur U)
         {
             InitializeComponent();
-
-            Label lblUser = new Label();
-            lblUser.Content = U.NomUtilisateur;
-            lblUser.Width = 300;
-            lblUser.Height = 30;
-            lblUser.VerticalAlignment = VerticalAlignment.Top;
-            grdPrincipale.Children.Add(lblUser);
-
-
-            Label lblMDP = new Label();
-            lblMDP.Content = U.MotPasse;
-            lblMDP.Width = 300;
-            lblMDP.Height = 30;
-            grdPrincipale.Children.Add(lblMDP);
+            ChargerDataGrid();
+            Controleur = U;
         }
 
 
         public EcranControleur()
         {
             InitializeComponent();
+            ChargerDataGrid();
+
+            btnProfil.Visibility = Visibility.Hidden;
+        }
+
+
+        private void ChargerDataGrid()
+        {
+            
+        }
+
+
+        private void btnDeconnexion_Click(object sender, RoutedEventArgs e)
+        {
+            EcranConnexion eCon = new EcranConnexion();
+            this.Close();
+            eCon.Show();
+        }
+
+
+        private void btnProfil_Click(object sender, RoutedEventArgs e)
+        {
+            EcranUtilisateur eUser = new EcranUtilisateur(Controleur, false);
+            this.Close();
+            eUser.Show();
         }
     }
 }

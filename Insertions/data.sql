@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS Aeroports;
 
 CREATE TABLE Types (
 	idType	        INT				NOT NULL AUTO_INCREMENT,
-	nom				VARCHAR(20)		NOT NULL UNIQUE,
+	typeUtilisateur VARCHAR(20)		NOT NULL UNIQUE,
 	
 	PRIMARY KEY (idType)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci;
@@ -27,7 +27,7 @@ CREATE TABLE Utilisateurs (
 	nom				VARCHAR(20),
 	poste			VARCHAR(4),
 	dateEmbauche	DATE,
-	numeroTelephone VARCHAR(10),
+	telephone		VARCHAR(10),
 	courriel		VARCHAR(50),
 	adresse			VARCHAR(50),
 	photo			BLOB,
@@ -120,7 +120,7 @@ CREATE TABLE VolScenarios (
 ###############################################################################
 
 INSERT INTO Types
-(nom)
+(typeUtiliateur)
 VALUES
 ('Administrateur'),
 ('Contrôleur');

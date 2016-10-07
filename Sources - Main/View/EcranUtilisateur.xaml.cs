@@ -49,6 +49,7 @@ namespace AirAmbe
             }
             else
             {
+                InitialiseValeur(user);
                 Retour = "EcranControleur";
             }
         }

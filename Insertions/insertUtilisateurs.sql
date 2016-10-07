@@ -1,8 +1,8 @@
 INSERT INTO Utilisateurs
-(idType, nomUtilisateur, motPasse, prenom, nom, poste, dateEmbauche, numeroTelephone, courriel, adresse)
+(idType, nomUtilisateur, motPasse, prenom, nom, poste, dateEmbauche, telephone, courriel, adresse)
 VALUES
 (
-    1,
+    2,
     'oprovost',
     md5('ecotopia++'),
     'Olivier',
@@ -14,7 +14,7 @@ VALUES
 	'1251 rue Fournier, Saint-Jérôme, Qc'
 ),
 (
-    2,
+    1,
     'vdesilets',
     md5('bonjour'),
     'Vincent',
