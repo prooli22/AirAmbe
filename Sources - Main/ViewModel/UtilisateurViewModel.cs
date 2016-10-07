@@ -105,9 +105,9 @@ namespace AirAmbe.ViewModel
             }
         }
 
-        private Nullable<DateTime> dateEmbauche;
+        private DateTime dateEmbauche;
 
-        public Nullable<DateTime> DateEmbauche
+        public DateTime DateEmbauche
         {
             get { return dateEmbauche; }
             set
@@ -175,7 +175,7 @@ namespace AirAmbe.ViewModel
                     Prenom = null;
                     Nom = null;
                     Poste = null;
-                    DateEmbauche = null;
+                    DateEmbauche = new DateTime(0000-00-00);
                     Telephone = null;
                     courriel = null;
                     //Manque attribut Photo

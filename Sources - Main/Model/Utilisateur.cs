@@ -25,7 +25,7 @@ namespace AirAmbe.Model
         public string Prenom { get; set; }
         public string Nom { get; set; }
         public string Poste { get; set; }
-        public Nullable<DateTime> DateEmbauche { get; set; }
+        public DateTime DateEmbauche { get; set; }
         public string Telephone { get; set; }
         public string Courriel { get; set; }
 
