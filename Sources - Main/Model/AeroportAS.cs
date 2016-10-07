@@ -81,11 +81,11 @@ namespace AirAmbe.Model
         /// Une méthode pour sélectionner toutes les adresses
         /// </summary>
         /// <returns></returns>
-        public ObservableCollection<Adresse> RecupererTous()
+        public ObservableCollection<Aeroport> RecupererTous()
         {
 
             string sel = "SELECT * FROM adresses";
-            ObservableCollection<Adresse> ObservableDesAdresses = new ObservableCollection<Adresse>();
+            ObservableCollection<Aeroport> ObservableDesAdresses = new ObservableCollection<Aeroport>();
 
             DataSet dsAdresses = MaBd.Selection(sel);
 
@@ -93,7 +93,7 @@ namespace AirAmbe.Model
 
             foreach (DataRow RowAdresse in dtAdresses.Rows)
             {
-                ObservableDesAdresses.Add(new Adresse(RowAdresse));
+                ObservableDesAdresses.Add(new Aeroport(RowAdresse));
             }
 
             return ObservableDesAdresses;

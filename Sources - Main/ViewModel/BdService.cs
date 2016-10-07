@@ -34,7 +34,9 @@ namespace AirAmbe.ViewModel
 
                 BdInterne = new MySqlConnection(connexionString);
 
-                //MessageBox.Show("Connexion OK");                
+                //MessageBox.Show("Connexion OK");
+
+                
             }
             catch (Exception e)
             {
@@ -50,7 +52,7 @@ namespace AirAmbe.ViewModel
         public long Commande(string requete)
         {
             long retVal = 0;
-
+            MessageBox.Show(requete.ToString());
             try
             {
                 if (OuvrirConnexion())
@@ -64,7 +66,7 @@ namespace AirAmbe.ViewModel
             }
             catch (Exception e)
             {
-                MessageBox.Show("Erreur d'insertion :" + e.Message);
+                MessageBox.Show("Erreur de requete SQL :" + e.Message);
             }
 
             return retVal;

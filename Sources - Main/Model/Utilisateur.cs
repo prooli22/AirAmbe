@@ -25,7 +25,7 @@ namespace AirAmbe.Model
         public string Prenom { get; set; }
         public string Nom { get; set; }
         public string Poste { get; set; }
-        public DateTime DateEmbauche { get; set; }
+        public Nullable<DateTime> DateEmbauche { get; set; }
         public string Telephone { get; set; }
         public string Courriel { get; set; }
 
@@ -46,42 +46,8 @@ namespace AirAmbe.Model
         /// <param name="unUtilisateur">Indique les données a récupérer dans une rangée</param>
         public Utilisateur(DataRow unUtilisateur)
         {
-            IdUtilisateur = (int)unUtilisateur["IdUtilisateur"];
-
-            // MessageBox.Show(IdUtilisateur.ToString());
-
-            //if (unUtilisateur["IdType"] == null)
-            //{
-            //    IdType = new Type();
-            //}
-            //else
-            //{
-            //int typeTemp;
-            //TypeAS tas = new TypeAS();
-            //Type t=new Type();
-            //MessageBox.Show(unUtilisateur["IdType"].ToString());
-
-            //t=tas.Recuperer(Convert.ToInt32(unUtilisateur["IdType"]));
-            //MessageBox.Show(t.Nom.ToString());
-
-            //IdType = (Type)tas.Recuperer(Convert.ToInt32(unUtilisateur["IdType"]));
-
-            //MessageBox.Show(IdType.Nom.ToString());
-
-            //typeTemp = Convert((Type)unUtilisateur["IdType"]);
-            // IdType = (Type)unUtilisateur["IdType"];
-            //IdType = (Type)tas.Recuperer(Convert.ToInt32(unUtilisateur["IdType"]));
-            //typeTemp = Convert((Type)unUtilisateur["IdType"]);
-
-            //MessageBox.Show(typeTemp.ToString());
-
-            //tas.Recuperer();
-
-
-            TypeUtilisateur = (string)unUtilisateur["TypeUtilisateur"];           
-            //}
-
-
+            IdUtilisateur = (int)unUtilisateur["IdUtilisateur"];         
+            TypeUtilisateur = (string)unUtilisateur["TypeUtilisateur"];                   
             NomUtilisateur = (string)unUtilisateur["NomUtilisateur"];
             MotPasse = (string)unUtilisateur["MotPasse"];
             Prenom = (string)unUtilisateur["Prenom"];

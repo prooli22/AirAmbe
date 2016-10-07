@@ -61,19 +61,22 @@ namespace AirAmbe.Model
         /// <param name="UtilisateurModification">Un utilisateur</param>
         public void Modifier(Utilisateur UtilisateurModification)
         {
-            string amod = "UPDATE utilisateurs SET 'idType = '" + UtilisateurModification.TypeUtilisateur + 
-                                                "',nomUtilisateur = '" + UtilisateurModification.NomUtilisateur + 
-                                                "',motPasse = '" + UtilisateurModification.MotPasse + 
-                                                "',prenom = '" + UtilisateurModification.Prenom +
-                                                "',nom = '" + UtilisateurModification.Nom +
-                                                "',poste = '" + UtilisateurModification.Poste +
-                                                "',dateEmbauche = '" + UtilisateurModification.DateEmbauche +
-                                                "',telephone = '" + UtilisateurModification.Telephone +
-                                                "',courriel = '" + UtilisateurModification.Courriel +
-                                                "',courriel = '" + UtilisateurModification.Adresse +
+            string sel = " (SELECT t.idType FROM types t WHERE t.typeUtilisateur LIKE '" + UtilisateurModification.TypeUtilisateur + "')";
 
-                                                "' WHERE idUtilisateur = " +
+            string amod = "UPDATE utilisateurs u SET u.idType = " + sel + 
+                                                ",u.nomUtilisateur = '" + UtilisateurModification.NomUtilisateur + 
+                                                "',u.motPasse = '" + UtilisateurModification.MotPasse + 
+                                                "',u.prenom = '" + UtilisateurModification.Prenom +
+                                                "',u.nom = '" + UtilisateurModification.Nom +
+                                                "',u.poste = '" + UtilisateurModification.Poste +
+                                                "',u.dateEmbauche = '" + UtilisateurModification.DateEmbauche +
+                                                "',u.telephone = '" + UtilisateurModification.Telephone +
+                                                "',u.courriel = '" + UtilisateurModification.Courriel +
+                                                "',u.adresse = '" + UtilisateurModification.Adresse +
+
+                                                "' WHERE u.idUtilisateur = " +
                                                 UtilisateurModification.IdUtilisateur;
+            
             MaBd.Commande(amod);
         }
 
