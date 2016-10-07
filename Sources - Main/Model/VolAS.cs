@@ -31,8 +31,10 @@ namespace AirAmbe.Model
         /// <param name="VolInsertion">Un vol</param>
         public void Inserer(Vol VolInsertion)
         {
-            string ins = "INSERT INTO vols VALUE(NULL,'" + VolInsertion.IdAvion + "','" +
-                                                                     VolInsertion.IdAeroport + "','" +
+            //Manque la requete de select pour les 2 id
+
+            string ins = "INSERT INTO vols VALUE(NULL,'" + VolInsertion.ModeleAvion + "','" +
+                                                                     VolInsertion.Aeroport + "','" +
                                                                      VolInsertion.NumeroVol + "','" +
                                                                      VolInsertion.EstAtterissage + "')";
             MaBd.Commande(ins);
@@ -44,7 +46,7 @@ namespace AirAmbe.Model
         /// <param name="VolSuppression">Un vol</param>
         public void Supprimer(int VolSuppression)
         {
-            string asup = "DELETE from vols WHERE idType=" + VolSuppression;
+            string asup = "DELETE from vols WHERE idVol=" + VolSuppression;
             MaBd.Commande(asup);
         }
 
@@ -54,8 +56,10 @@ namespace AirAmbe.Model
         /// <param name="UtilisateurModification">Un vol</param>
         public void Modifier(Vol VolModification)
         {
-            string amod = "UPDATE vols SET idAvion = '" + VolModification.IdAvion +
-                                                "',idAeroport = '" + VolModification.IdAeroport +
+            //Manque la requete de select pour les 2 id
+
+            string amod = "UPDATE vols SET idAvion = '" + VolModification.ModeleAvion +
+                                                "',idAeroport = '" + VolModification.Aeroport +
                                                 "',numeroVol = '" + VolModification.NumeroVol +
                                                 "',estAtterissage = '" + VolModification.EstAtterissage +
                                           
@@ -88,7 +92,14 @@ namespace AirAmbe.Model
         public ObservableCollection<Vol> RecupererTous()
         {
 
-            string sel = "SELECT * FROM vols";
+            string sel = "SELECT v.idVol" +
+                                "av.marque + ' ' + av.modele AS modeleAvion" +
+                                "aero.codeAITA + ' - ' + aero.ville AS aeroport" +
+                                "v.numeroVol" +
+                                "v.estAtterissage" +
+                         "FROM vols v "+
+                                "INNER JOIN aeroports aero ON aero.idAeroport=v.idAeroport " + 
+                                "INNER JOIN avions av ON av.idAvion=v.idAvion";
             ObservableCollection<Vol> ObservableDesVols = new ObservableCollection<Vol>();
 
             DataSet dsVols = MaBd.Selection(sel);

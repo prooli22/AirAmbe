@@ -14,11 +14,11 @@ namespace AirAmbe.Model
     /// </summary>
     public class AeroportAS
     {
-        //Déclaration des attributs de la classe AdresseAS
+        //Déclaration des attributs de la classe AeroportAS
         private BdService MaBd;
 
         /// <summary>
-        /// Constructeur par défaut de la classe AdresseAS
+        /// Constructeur par défaut de la classe AeroportAS
         /// </summary>
         public AeroportAS()
         {
@@ -68,7 +68,7 @@ namespace AirAmbe.Model
         public Aeroport Recuperer(int AeroportSelection)
         {
 
-            string sel = "SELECT * FROM adresses WHERE idAdresse = " + AeroportSelection;
+            string sel = "SELECT * FROM aeroports WHERE idAeroport = " + AeroportSelection;
 
             DataSet dsAeroport = MaBd.Selection(sel);
 
@@ -78,25 +78,25 @@ namespace AirAmbe.Model
         }
 
         /// <summary>
-        /// Une méthode pour sélectionner toutes les adresses
+        /// Une méthode pour sélectionner tous les aeroports
         /// </summary>
         /// <returns></returns>
         public ObservableCollection<Aeroport> RecupererTous()
         {
 
-            string sel = "SELECT * FROM adresses";
-            ObservableCollection<Aeroport> ObservableDesAdresses = new ObservableCollection<Aeroport>();
+            string sel = "SELECT * FROM aeroports";
+            ObservableCollection<Aeroport> ObservableDesAeroports = new ObservableCollection<Aeroport>();
 
-            DataSet dsAdresses = MaBd.Selection(sel);
+            DataSet dsAeroports = MaBd.Selection(sel);
 
-            DataTable dtAdresses = dsAdresses.Tables[0];
+            DataTable dtAeroports = dsAeroports.Tables[0];
 
-            foreach (DataRow RowAdresse in dtAdresses.Rows)
+            foreach (DataRow RowAeroport in dtAeroports.Rows)
             {
-                ObservableDesAdresses.Add(new Aeroport(RowAdresse));
+                ObservableDesAeroports.Add(new Aeroport(RowAeroport));
             }
 
-            return ObservableDesAdresses;
+            return ObservableDesAeroports;
         }
     }
 

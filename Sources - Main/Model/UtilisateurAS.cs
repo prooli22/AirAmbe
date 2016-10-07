@@ -33,7 +33,9 @@ namespace AirAmbe.Model
         /// <param name="UtilisateurInsertion">Un utilisateur</param>
         public void Inserer(Utilisateur UtilisateurInsertion)
         {
-            string ins = "INSERT INTO utilisateurs VALUE(NULL,'" + UtilisateurInsertion.TypeUtilisateur + "','" +                                                                   UtilisateurInsertion.NomUtilisateur + "','" +
+            string sel = " (SELECT t.idType FROM types t WHERE t.typeUtilisateur LIKE '" + UtilisateurInsertion.TypeUtilisateur + "')";
+
+            string ins = "INSERT INTO utilisateurs VALUE(NULL," + sel + ",'" +                                                                   UtilisateurInsertion.NomUtilisateur + "','" +
                                                                    UtilisateurInsertion.MotPasse + "','" +
                                                                    UtilisateurInsertion.Prenom + "','" +
                                                                    UtilisateurInsertion.Nom + "','" +

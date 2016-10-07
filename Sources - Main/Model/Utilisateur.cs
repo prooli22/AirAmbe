@@ -16,9 +16,6 @@ namespace AirAmbe.Model
         //Déclaration des attributs de la classe 
         public int IdUtilisateur { get; set; }
         public string Adresse { get; set; }
-        //public int Type { get; set; }
-        //public int TypeUtilisateur { get; set; }
-        //public int IdAdresse { get; set; }
         public string TypeUtilisateur { get; set; }
         public string NomUtilisateur { get; set; }
         public string MotPasse { get; set; }
@@ -58,8 +55,5 @@ namespace AirAmbe.Model
             Courriel = (string)unUtilisateur["Courriel"];
             Adresse = (string)unUtilisateur["Adresse"];
         }
-
-      
-
     }
 }

@@ -14,8 +14,8 @@ namespace AirAmbe
     {
         //Déclaration des attributs de la classe
         public int IdVol { get; set; }
-        public int IdAvion { get; set; }
-        public int IdAeroport { get; set; }
+        public string ModeleAvion { get; set; } //Attribut IdAvion
+        public string Aeroport { get; set; } //Attribut IdAeroport
         public string NumeroVol { get; set; }
         public bool EstAtterissage { get; set; }
 
@@ -34,8 +34,8 @@ namespace AirAmbe
         public Vol(DataRow unVol)
         {
             IdVol = (int)unVol["IdVol"];
-            IdAvion = (int)unVol["IdAvion"];
-            IdAeroport = (int)unVol["IdAeroport"];
+            ModeleAvion = (string)unVol["ModeleAvion"];
+            Aeroport = (string)unVol["Aeroport"];
             NumeroVol = (string)unVol["NumeroVol"];
             EstAtterissage = (bool)unVol["EstAtterissage"];
         }

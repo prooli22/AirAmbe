@@ -19,6 +19,113 @@ namespace AirAmbe.ViewModel
 
         private UtilisateurAS Utilisateur_Service;
 
+
+        public UtilisateurViewModel()
+        {
+            Utilisateur_Service = new UtilisateurAS();
+            SommaireUtilisateurs = Utilisateur_Service.RecupererTous();
+            cmdVider = new Commande(ActionVider);
+            cmdModifier = new Commande(ActionModifier);
+            cmdAjouter = new Commande(ActionAjouter);
+            cmdSupprimer = new Commande(ActionSupprimer);
+        }
+
+        private void ActionVider(object param)
+        {
+            UtilisateurSelectionne = null;
+        }
+
+        private void ActionAjouter(object param)
+        {
+            Utilisateur u = new Utilisateur();
+
+            u.Adresse = Adresse;
+            u.TypeUtilisateur = TypeUtilisateur;
+            u.NomUtilisateur = NomUtilisateur;
+            u.MotPasse = MotPasse;
+            u.Prenom = Prenom;
+            u.Nom = Nom;
+            u.Poste = Poste;
+            u.DateEmbauche = DateEmbauche;
+            u.Telephone = Telephone;
+            u.Courriel = Courriel;
+            //Manque attribut Photo
+
+            SommaireUtilisateurs.Add(u);
+            Utilisateur_Service.Inserer(u);
+        }
+        private void ActionSupprimer(object param)
+        {
+            Utilisateur_Service.Supprimer(UtilisateurSelectionne.IdUtilisateur);
+            SommaireUtilisateurs.Remove(UtilisateurSelectionne);
+        }
+        private void ActionModifier(object param)
+        {
+            Utilisateur u = new Utilisateur();
+
+            u.IdUtilisateur = UtilisateurSelectionne.IdUtilisateur;
+            u.Adresse = Adresse;
+            u.TypeUtilisateur = TypeUtilisateur;
+            u.NomUtilisateur = NomUtilisateur;
+            u.MotPasse = MotPasse;
+            u.Prenom = Prenom;
+            u.Nom = Nom;
+            u.Poste = Poste;
+            u.DateEmbauche = DateEmbauche;
+            u.Telephone = Telephone;
+            u.Courriel = Courriel;
+            //Manque attribut Photo
+
+            Utilisateur_Service.Modifier(u);
+            SommaireUtilisateurs = Utilisateur_Service.RecupererTous();
+            UtilisateurSelectionne = u;
+        }
+
+        private Utilisateur utilisateurSelectionne;
+
+        public Utilisateur UtilisateurSelectionne
+        {
+            get { return utilisateurSelectionne; }
+            set
+            {
+                if (value == null)
+                {
+                    utilisateurSelectionne = null;
+                    Adresse = null;
+                    TypeUtilisateur = null;
+                    NomUtilisateur = null;
+                    MotPasse = null;
+                    Prenom = null;
+                    Nom = null;
+                    Poste = null;
+                    DateEmbauche = new DateTime(0000 - 00 - 00);
+                    Telephone = null;
+                    courriel = null;
+                    //Manque attribut Photo
+
+                }
+                else
+                {
+                    utilisateurSelectionne = value;
+                    Adresse = utilisateurSelectionne.Adresse;
+                    TypeUtilisateur = utilisateurSelectionne.TypeUtilisateur;
+                    NomUtilisateur = utilisateurSelectionne.NomUtilisateur;
+                    MotPasse = utilisateurSelectionne.MotPasse;
+                    Prenom = utilisateurSelectionne.Prenom;
+                    Nom = utilisateurSelectionne.Nom;
+                    Poste = utilisateurSelectionne.Poste;
+                    DateEmbauche = utilisateurSelectionne.DateEmbauche;
+                    Telephone = utilisateurSelectionne.Telephone;
+                    courriel = utilisateurSelectionne.Courriel;
+                    //Manque attribut Photo
+
+                    OnPropertyChanged("UtilisateurSelectionne");
+                }
+
+            }
+        }
+
+
         private string adresse;
         public string Adresse
         {
@@ -158,110 +265,9 @@ namespace AirAmbe.ViewModel
         }
 
 
-        private Utilisateur utilisateurSelectionne;
+        
 
-        public Utilisateur UtilisateurSelectionne
-        {
-            get { return utilisateurSelectionne; }
-            set
-            {
-                if (value == null)
-                {
-                    utilisateurSelectionne = null;
-                    Adresse = null;
-                    TypeUtilisateur = null;
-                    NomUtilisateur = null;
-                    MotPasse = null;
-                    Prenom = null;
-                    Nom = null;
-                    Poste = null;
-                    DateEmbauche = new DateTime(0000-00-00);
-                    Telephone = null;
-                    courriel = null;
-                    //Manque attribut Photo
-
-                }
-                else
-                {
-                    utilisateurSelectionne = value;
-                    Adresse = utilisateurSelectionne.Adresse;
-                    TypeUtilisateur = utilisateurSelectionne.TypeUtilisateur;
-                    NomUtilisateur = utilisateurSelectionne.NomUtilisateur;
-                    MotPasse = utilisateurSelectionne.MotPasse;
-                    Prenom = utilisateurSelectionne.Prenom;
-                    Nom = utilisateurSelectionne.Nom;
-                    Poste = utilisateurSelectionne.Poste;
-                    DateEmbauche = utilisateurSelectionne.DateEmbauche;
-                    Telephone = utilisateurSelectionne.Telephone;
-                    courriel = utilisateurSelectionne.Courriel;
-                    //Manque attribut Photo
-
-                    OnPropertyChanged("UtilisateurSelectionne");
-                }
-
-            }
-        }
-
-        public UtilisateurViewModel()
-        {
-            Utilisateur_Service = new UtilisateurAS();
-            SommaireUtilisateurs = Utilisateur_Service.RecupererTous();
-            cmdVider = new Commande(ActionVider);
-            cmdModifier = new Commande(ActionModifier);
-            cmdAjouter = new Commande(ActionAjouter);
-            cmdSupprimer = new Commande(ActionSupprimer);
-        }
-
-        private void ActionVider(object param)
-        {
-            UtilisateurSelectionne = null;
-        }
-
-        private void ActionAjouter(object param)
-        {
-            Utilisateur u = new Utilisateur();
-
-            u.Adresse = Adresse;
-            u.TypeUtilisateur = TypeUtilisateur;
-            u.NomUtilisateur = NomUtilisateur;
-            u.MotPasse = MotPasse;
-            u.Prenom = Prenom;
-            u.Nom = Nom;
-            u.Poste = Poste;
-            u.DateEmbauche = DateEmbauche;
-            u.Telephone = Telephone;
-            u.Courriel = Courriel;
-            //Manque attribut Photo
-
-            SommaireUtilisateurs.Add(u);
-            Utilisateur_Service.Inserer(u);
-        }
-        private void ActionSupprimer(object param)
-        {
-            Utilisateur_Service.Supprimer(UtilisateurSelectionne.IdUtilisateur);
-            SommaireUtilisateurs.Remove(UtilisateurSelectionne);
-        }
-        private void ActionModifier(object param)
-        {
-            Utilisateur u = new Utilisateur();
-
-            u.IdUtilisateur = UtilisateurSelectionne.IdUtilisateur;
-            u.Adresse = Adresse;
-            u.TypeUtilisateur = TypeUtilisateur;
-            u.NomUtilisateur = NomUtilisateur;
-            u.MotPasse = MotPasse;
-            u.Prenom = Prenom;
-            u.Nom = Nom;
-            u.Poste = Poste;
-            u.DateEmbauche = DateEmbauche;
-            u.Telephone = Telephone;
-            u.Courriel = Courriel;
-            //Manque attribut Photo
-
-            Utilisateur_Service.Modifier(u);
-            SommaireUtilisateurs = Utilisateur_Service.RecupererTous();
-            UtilisateurSelectionne = u;
-        }
+       
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propName)

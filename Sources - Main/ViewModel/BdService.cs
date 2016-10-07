@@ -52,7 +52,7 @@ namespace AirAmbe.ViewModel
         public long Commande(string requete)
         {
             long retVal = 0;
-            MessageBox.Show(requete.ToString());
+          
             try
             {
                 if (OuvrirConnexion())
