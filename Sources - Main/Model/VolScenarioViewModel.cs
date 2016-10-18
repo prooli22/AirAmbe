@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Test.ViewModel
 {
-    public class AvionViewModel
+    public class VolScenarioViewModel
     {
     }
 }
