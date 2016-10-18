@@ -73,10 +73,17 @@ namespace AirAmbe.Model
         /// </summary>
         /// <param name="VolSelection">Un vol</param>
         /// <returns></returns>
-        public Vol Recuperer(int VolSelection)
+        public Vol Recuperer(string NumVol)
         {
-
-            string sel = "SELECT * FROM vols WHERE idVol = " + VolSelection;
+            string sel = "SELECT v.idVol" +
+                    ", v.numeroVol" +
+                    ", CONCAT(av.marque, ' ', av.modele) AS modeleAvion" +
+                    ", CONCAT (ae.codeAITA, ' - ', ae.ville) AS aeroport" +
+                    ", v.estAtterrissage " +
+             "FROM vols v " +
+                    "INNER JOIN aeroports ae ON v.idAeroport = ae.idAeroport " +
+                    "INNER JOIN avions av ON v.idAvion = av.idAvion " +
+                     "WHERE numeroVol like '" + NumVol + "'";
 
             DataSet dsVols = MaBd.Selection(sel);
 

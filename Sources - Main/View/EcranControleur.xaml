@@ -27,7 +27,7 @@
                 
             </Canvas>
 
-            <ScrollViewer Grid.Column="1" Margin="10,10,10,10">
+            <ScrollViewer Grid.Column="1" Margin="10">
                 
             </ScrollViewer>
             
@@ -40,7 +40,7 @@
                         <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Provenance" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Heure d'arrivée" IsReadOnly="True" Binding="{Binding HeureVol, StringFormat='{}{0:H:mm:ss}'}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Heure d'arrivée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:H:mm:ss}'}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd}'}"></DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
@@ -51,7 +51,7 @@
                         <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Destination" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Heure de départ" IsReadOnly="True" Binding="{Binding HeureVol}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Heure de départ" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:H:mm:ss}'}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd}'}"></DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>

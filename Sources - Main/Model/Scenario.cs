@@ -14,7 +14,11 @@ namespace AirAmbe
     {
         //Déclaration des attributs de la classe Scénario
         public int IdScenario { get; set; }
-        
+
+        public int Intervalle { get; set; }
+
+        public string[] NumVol { get; set; }
+
         /// <summary>
         /// Constructeur par défaut de la classe Scenario
         /// </summary>

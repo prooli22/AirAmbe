@@ -30,6 +30,10 @@ namespace AirAmbe
 
         public List<Vol> lstAtterrissages { get; set; }
 
+        public List<Scenario> lstScenarios { get; set; }
+
+        public int NbPistes { get; set; }
+
 
         /// <summary>
         /// Constructeur de la fênetre du contrôleur.
@@ -38,8 +42,12 @@ namespace AirAmbe
         public EcranControleur(Utilisateur U)
         {
             InitializeComponent();
-            ChargerDataGrid();
             Controleur = U;
+
+            ChargerScenarios();
+            ChargerVols();
+            ModifierHeures();
+            ChargerDataGrid();
         }
 
 
@@ -49,46 +57,90 @@ namespace AirAmbe
         public EcranControleur()
         {
             InitializeComponent();
-            ChargerDataGrid();
-
             btnProfil.Visibility = Visibility.Hidden;
+
+
+            ChargerScenarios();
+            ChargerVols();
+            ModifierHeures();
+            ChargerDataGrid();
+        }
+
+
+        private void ChargerScenarios()
+        {
+            lstScenarios = new List<Scenario>();
+
+            string[] scenarios = System.IO.File.ReadAllLines(@".\scenarios.txt");
+
+            // On charge le nombre de pistes.
+            NbPistes = Int32.Parse(scenarios[0]);
+
+            for (int i = 1; i < scenarios.Length; i++)
+            {
+                Scenario S = new Scenario();
+
+                // Get l'intervalle de temps et la supprime de la chaine.
+                int position = scenarios[i].IndexOf(';');
+                S.Intervalle = Int32.Parse(scenarios[i].Substring(0, position));
+                scenarios[i] = scenarios[i].Remove(0, position + 1);
+
+                // Split la chaine en tableau de string;
+                S.NumVol = scenarios[i].Split(';');
+
+                // On ajoute le scénario à la liste.
+                lstScenarios.Add(S);
+            }
+        }
+
+
+        private void ChargerVols()
+        {
+            lstVols = new List<Vol>();
+            VolAS VA = new VolAS();
+
+            for (int i = 0; i < lstScenarios.Count; i++)
+            {
+                for (int j = 0; j < lstScenarios[i].NumVol.Count(); j++)
+                {
+                    Vol V = VA.Recuperer(lstScenarios[i].NumVol[j]);
+                    V.Intervalle = lstScenarios[i].Intervalle;
+                    lstVols.Add(V);
+                }
+            }
+        }
+
+
+        private void ModifierHeures()
+        {
+            for (int i = 0; i < lstVols.Count; i++)
+            {
+                if (i > 0 && (lstVols[i].Intervalle != lstVols[i - 1].Intervalle))
+                    lstVols[i].Intervalle += (lstVols[i - 1].Intervalle * i) + 5;
+                
+
+                MessageBox.Show((60 - lstVols[i].DateVol.Second).ToString());
+                MessageBox.Show((lstVols[i].Intervalle * i).ToString());
+
+                lstVols[i].DateVol.AddSeconds(System.Convert.ToDouble(60 - lstVols[i].DateVol.Second));
+                lstVols[i].DateVol.AddMinutes(System.Convert.ToDouble(lstVols[i].Intervalle * i));
+            }
+
         }
 
 
         private void ChargerDataGrid()
         {
-            lstVols = new List<Vol>();
             lstDecollages = new List<Vol>();
             lstAtterrissages = new List<Vol>();
 
-            Vol v1 = new Vol();
-            v1.IdVol = 1;
-            v1.Aeroport = "Mirabel";
-            v1.ModeleAvion = "Airbus 203";
-            v1.NumeroVol = "CAN69";
-            v1.EstAtterissage = false;
-
-            Vol v2 = new Vol();
-            v2.IdVol = 2;
-            v2.Aeroport = "Montréal";
-            v2.ModeleAvion = "Boeing 69";
-            v2.NumeroVol = "DICK70";
-            v2.EstAtterissage = true;
-
-            for (int i = 0; i < 5; i++)
-            {
-                lstVols.Add(v1);
-                lstVols.Add(v2);
-            }
-
             for (int i = 0; i < lstVols.Count; i++)
             {
-                if (lstVols[i].EstAtterissage)
+                if (lstVols[i].EstAtterrissage)
                     lstAtterrissages.Add(lstVols[i]);
 
                 else
                     lstDecollages.Add(lstVols[i]);
-
             }
 
             dgAtterissages.ItemsSource = lstAtterrissages;
