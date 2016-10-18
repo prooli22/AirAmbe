@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AirAmbe.ViewModel;
+using System.Data;
+using System.Collections.ObjectModel;
 
-namespace Test.ViewModel
+namespace AirAmbe.Model
 {
-    public class ScenarioViewModel
+    public class ScenarioAS
     {
     }
 }
