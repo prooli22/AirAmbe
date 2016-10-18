@@ -45,13 +45,19 @@ namespace AirAmbe
 
         private void btnObservateur_Click(object sender, RoutedEventArgs e)
         {
-            AfficherEcranObservateur();
+            EcranControleur C = new EcranControleur();
+            this.Close();
+            C.ShowDialog();
         }
 
 
         private void btnQuitter_Click(object sender, RoutedEventArgs e)
         {
-            QuitterApplication();
+            // Demande une confirmation à l'utilisateur avant de quitter.
+            MessageBoxResult resultat = MessageBox.Show("Voulez-vous vraiment quitter l'application ?", "Quitter", MessageBoxButton.YesNo, MessageBoxImage.Stop);
+
+            if (resultat == MessageBoxResult.Yes)
+                this.Close();
         }
 
 
@@ -98,23 +104,5 @@ namespace AirAmbe
         }
 
 
-        private void AfficherEcranObservateur()
-        {
-            EcranControleur C = new EcranControleur();
-            this.Close();
-            C.ShowDialog();
-        }
-
-
-        private void QuitterApplication()
-        {
-            // Demande une confirmation à l'utilisateur avant de quitter.
-            MessageBoxResult resultat = MessageBox.Show("Voulez-vous vraiment quitter l'application ?", "Quitter", MessageBoxButton.YesNo, MessageBoxImage.Stop);
-
-            if (resultat == MessageBoxResult.Yes)
-                this.Close();
-        }
-
-        
     }
 }
