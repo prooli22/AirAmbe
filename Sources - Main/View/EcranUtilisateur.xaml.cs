@@ -32,6 +32,7 @@ namespace AirAmbe
             Retour = "EcranAdministrateur";
             btnAction.Content = "Ajouter";
             lblNouvMdp.Content = "Mot de passe: ";
+            txtCour.Text = "L'adresse courriel est créée toute seule.";
         }
         public EcranUtilisateur(Utilisateur user, bool peutModifier)
         {
@@ -75,7 +76,6 @@ namespace AirAmbe
         private void SetTxtWritable(bool ajout)
         {
             txtAdresse.IsReadOnly = false;
-            txtCour.IsReadOnly = false;
             txtDate.IsReadOnly = false;
             txtNom.IsReadOnly = false;
             txtNum.IsReadOnly = false;
@@ -112,15 +112,15 @@ namespace AirAmbe
         private void Modifier(Utilisateur user)
         {
             user.Adresse = txtAdresse.Text;
-            user.Courriel = txtCour.Text;
             user.DateEmbauche = Convert.ToDateTime(txtDate.Text);
             if (txtNouvMdp.Password != "" && txtNouvMdp.Password == txtConfMdp.Password)
             {
                 user.MotPasse = MD5.Hash(txtNouvMdp.Password);
             }
             user.Nom = txtNom.Text;
-
             user.NomUtilisateur = (txtPrenom.Text.Substring(0, 1) + txtNom.Text).ToLower();
+            user.Courriel = user.NomUtilisateur + "@airambe.com";
+            
             user.Poste = txtPoste.Text;
             user.Prenom = txtPrenom.Text;
             user.Telephone = txtNum.Text;
@@ -135,7 +135,6 @@ namespace AirAmbe
             Utilisateur user = new Utilisateur();
 
             user.Adresse = txtAdresse.Text;
-            user.Courriel = txtCour.Text;
             user.DateEmbauche = Convert.ToDateTime(txtDate.Text);
             if (txtNouvMdp.Password == txtConfMdp.Password)
             {
@@ -143,6 +142,7 @@ namespace AirAmbe
             }
             user.Nom = txtNom.Text;
             user.NomUtilisateur = (txtPrenom.Text.Substring(0, 1) + txtNom.Text).ToLower();
+            user.Courriel = user.NomUtilisateur + "@airambe.com";
             user.Poste = txtPoste.Text;
             user.Prenom = txtPrenom.Text;
             user.Telephone = txtNum.Text;

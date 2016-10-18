@@ -18,9 +18,9 @@ namespace ApplicationScenario
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class EcranScenario : Window
     {
-        public MainWindow()
+        public EcranScenario()
         {
             InitializeComponent();
 
@@ -167,7 +167,9 @@ namespace ApplicationScenario
 
         private void btnCreer_Click(object sender, RoutedEventArgs e)
         {
-
+            EcranAjoutScenario eAjoutScenario = new EcranAjoutScenario();
+            this.Close();
+            eAjoutScenario.Show();
         }
 
         private void btnGenerer_Click(object sender, RoutedEventArgs e)
