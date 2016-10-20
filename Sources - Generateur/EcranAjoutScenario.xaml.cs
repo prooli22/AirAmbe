@@ -59,18 +59,25 @@ namespace AirAmbe
             lstVols.Add(v3);
         }
 
+        private void RemplirCombobox(ComboBox cbo)
+        {
+            for (int i = 0; i < lstVols.Count; i++)
+            {
+                ComboBoxItem cbi = new ComboBoxItem();
+                cbi.Content = lstVols[i].NumeroVol;
+                cbo.Items.Add(cbi);
+                cbo.SelectedItem = cbi;
+            }
+        }
+
         private void AjouterVol()
         {
             RowDefinition gridRow = new RowDefinition();
             gridVols.RowDefinitions.Add(gridRow);
 
             Label lblVol = new Label();
-
-            //REGISTER NAME IMPORTANT
-            lblVol.Name = "nomTest";
+            lblVol.Name = "lblVol"+nbVol;
             gridVols.RegisterName(lblVol.Name, lblVol);
-            Label lblTest = (Label)gridVols.FindName("nomTest");
-
             lblVol.Content = "Vol" + nbVol;
             lblVol.Width = 50;
             lblVol.Height = 25;
@@ -79,72 +86,47 @@ namespace AirAmbe
             Grid.SetColumn(lblVol, 0);
 
             ComboBox cboVols = new ComboBox();
-            for (int i = 0; i < lstVols.Count; i++)
-            {
-                ComboBoxItem cbi = new ComboBoxItem();
-                cbi.Content = lstVols[i].NumeroVol;
-                cboVols.Items.Add(cbi);
-                cboVols.SelectedItem = cbi;
-            }
+            cboVols.Name = "cboVols" + nbVol;
+            gridVols.RegisterName(cboVols.Name, cboVols);
+            RemplirCombobox(cboVols);
             cboVols.Height = 25;
             cboVols.Width = 75;
             cboVols.Margin = new Thickness(10, 0, 0, 0);
             Grid.SetRow(cboVols, nbVol);
-            Grid.SetColumn(cboVols, 0);
-
-            /*Label lblAttDec = new Label();
-            int compteur = 0;
-            Vol vCourant = new Vol();
-            vCourant = lstVols[compteur];
-            while (lstVols[compteur].NumeroVol != ((ComboBoxItem)cboVols.SelectedItem).Content.ToString())
-            {
-                if (lstVols[compteur].NumeroVol == ((ComboBoxItem)cboVols.SelectedItem).Content.ToString())
-                {
-                    vCourant = lstVols[compteur];
-                }
-                else
-                {
-                    compteur++;
-                    vCourant = lstVols[compteur];
-                }
-            }
-            if (vCourant.EstAtterrissage)
-            {
-                lblAttDec.Content = "Atterrissage";
-            }
-            else
-            {
-                lblAttDec.Content = "Décollage";
-            }
-            lblAttDec.Width = 75;
-            lblAttDec.Height = 25;
-            lblAttDec.Margin = new Thickness(75, 0, 0, 0);
-            lblAttDec.HorizontalAlignment = HorizontalAlignment.Left;
-            Grid.SetRow(lblAttDec, nbVol);
-            Grid.SetColumn(lblAttDec, 0);*/
+            Grid.SetColumn(cboVols, 0);                        
 
             cboVols.SelectionChanged += new SelectionChangedEventHandler(CboSelectionChange);
 
             gridVols.Children.Add(lblVol);
-            //gridVols.Children.Add(lblAttDec);
             gridVols.Children.Add(cboVols);
-
-            
-
-
-
 
             nbVol++;
         }
 
         private void CboSelectionChange(object sender, RoutedEventArgs e)
         {
+            ComboBox cbo = sender as ComboBox;
+            int nb = -1;
+            nb = Int32.Parse(cbo.Name.ToString().Substring(7));
 
+            MessageBox.Show("#" + nb + " Nom:" + cbo.Name);
         }
 
         private void btnAjouterVol_Click(object sender, RoutedEventArgs e)
         {
             AjouterVol();
+        }
+
+        private void btnAjouterScenario_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnAnnuler_Click(object sender, RoutedEventArgs e)
+        {
+            EcranScenario eS = new EcranScenario();
+            this.Close();
+            eS.Show();
         }
     }
 }
