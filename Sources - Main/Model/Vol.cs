@@ -23,6 +23,7 @@ namespace AirAmbe
         public int NumScenario { get; set; }
         public Etat EtatVol { get; set; }
         public int Delais { get; set; }
+        public Piste PisteAssigne { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Vol

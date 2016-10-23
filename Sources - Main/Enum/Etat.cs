@@ -12,6 +12,7 @@ namespace AirAmbe
         Assigne,
         Decollage,
         Atterrissage,
-        Critique
+        Critique,
+        Echoue
     }
 }
