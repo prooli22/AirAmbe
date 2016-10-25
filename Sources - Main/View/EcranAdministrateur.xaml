@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AirAmbe"
         mc:Ignorable="d"
-        Title="Air-Ambe" Height="Auto" Width="600">
+        Title="Air-Ambe" Height="Auto" Width="600" ResizeMode="NoResize">
     <Grid Name="gridPrincipal">
         <Grid.RowDefinitions>
             <RowDefinition Height="75"></RowDefinition>

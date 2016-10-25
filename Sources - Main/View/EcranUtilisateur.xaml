@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AirAmbe"
         mc:Ignorable="d"
-        Title="EcranUtilisateur" Height="500" Width="450">
+        Title="EcranUtilisateur" Height="500" Width="550" ResizeMode="NoResize">
     <Grid>
         <Label FontSize="20" Name="lblTitre">Profil utilisateur</Label>
 
@@ -14,7 +14,7 @@
         <Label Height="25" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,75,0,0">Nom:</Label>
         <TextBox Name="txtNom" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,75,0,0" Height="25" Width="200" IsReadOnly="True"></TextBox>
         <Label Height="25" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,105,0,0">Poste:</Label>
-        <TextBox Name="txtPoste" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,105,0,0" Height="25" Width="200" IsReadOnly="True"></TextBox>
+        <TextBox Name="txtPoste" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,105,0,0" Height="25" Width="200" IsReadOnly="True">0000</TextBox>
         
         <Label Height="25" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,145,0,0">Type d'utilisateur:</Label>
         <ComboBox Name="cboType" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,145,0,0" Height="25" Width="200" IsEnabled="False">
@@ -23,17 +23,20 @@
         <Label Height="25" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,185,0,0">Date d'embauche:</Label>
         <TextBox Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,185,0,0" Height="25" Width="200" IsReadOnly="True"></TextBox>
         <Label Height="25" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,225,0,0">Numéro de téléphone:</Label>
-        <TextBox Name="txtNum" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,225,0,0" Height="25" Width="200" IsReadOnly="True"></TextBox>
+        <TextBox Name="txtNum" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,225,0,0" Height="25" Width="200" IsReadOnly="True">4504360615</TextBox>
         <Label Height="25" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,265,0,0">Courriel:</Label>
-        <TextBox Name="txtCour" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,265,0,0" Height="25" Width="200" IsReadOnly="True"></TextBox>
+        <TextBox Name="txtCour" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,265,0,0" Height="25" Width="225" IsReadOnly="True"></TextBox>
         <Label Height="25" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,305,0,0">Adresse:</Label>
-        <TextBox Name="txtAdresse" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,305,0,0" Height="25" Width="200" IsReadOnly="True"></TextBox>
+        <TextBox Name="txtAdresse" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,305,0,0" Height="25" Width="200" IsReadOnly="True">Rue du Gorille</TextBox>
 
         <Label Name="lblNouvMdp" Height="25" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,345,0,0">Nouveau mot de passe:</Label>
         <PasswordBox Name="txtNouvMdp" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,345,0,0" Height="25" Width="200"></PasswordBox>
         <Label Height="25" Width="150"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,385,0,0">Confirmez le mot de passe:</Label>
         <PasswordBox Name="txtConfMdp" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,385,0,0" Height="25" Width="200"></PasswordBox>
-        
+
+        <Image Source="pack://application:,,,/AirAmbe-test;component/Images/Avatar.png" Height="125" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="25" />
+        <Button Name="btnParcourir" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="50,160,50,50" Click="btnParcourir_Click">Parcourir</Button>
+
         <Button Name="btnAction" Height="25" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Click="btnAction_Click"></Button>
         <Button Name="btnRetour" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="btnRetour_Click">Retour</Button>
     </Grid>
