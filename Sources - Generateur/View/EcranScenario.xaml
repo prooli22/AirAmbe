@@ -20,7 +20,7 @@
 
         <Label Name="lblPistes" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,70" Grid.Row="2">Nombre de pistes:</Label>
         <ComboBox Name="cboPistes" Height="25" Width="35" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="120,0,0,70" Grid.Row="2">
-            <ComboBoxItem>2</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">2</ComboBoxItem>
             <ComboBoxItem>3</ComboBoxItem>
             <ComboBoxItem>4</ComboBoxItem>
             <!--<ComboBoxItem>5</ComboBoxItem>

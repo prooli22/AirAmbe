@@ -21,15 +21,22 @@ namespace AirAmbe.Model
 
         public void Inserer(Scenario Sc)
         {
+            string ins = "INSERT INTO Scenarios (description)VALUES('" + Sc.Description + "');";
+            long idScen = MaBd.Commande(ins);            
 
-            string ins = "INSERT INTO Scenarios (description)VALUES(" + Sc.Description + ");";
-            MaBd.Commande(ins);
+            
 
-            for (int i = 0; i < Sc.lstVols.Count; i++)
+            for (int i = 0; i < Sc.lstVolsAtt.Count; i++)
             {
-                string insVol = "INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + Sc.lstVols[i].NumeroVol + "')," + Sc.IdScenario + ");";
+                string insVol = "INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + Sc.lstVolsAtt[i] + "')," + idScen + ");";
                 MaBd.Commande(insVol);
-            }            
+            }
+
+            for (int i = 0; i < Sc.lstVolsDec.Count; i++)
+            {
+                string insVol = "INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + Sc.lstVolsDec[i] + "')," + idScen + ");";
+                MaBd.Commande(insVol);
+            }
         }
         public ObservableCollection<Scenario> RecupererTous()
         {
@@ -41,20 +48,34 @@ namespace AirAmbe.Model
             DataTable dtScen = dsScen.Tables[0];
 
             int compt = 0;
-            foreach (DataRow RowVol in dtScen.Rows)
+            foreach (DataRow RowScen in dtScen.Rows)
             {
-                ObservableScenario.Add(new Scenario(RowVol));
+                ObservableScenario.Add(new Scenario(RowScen));
 
                 string selVolsAtt = "SELECT v.numeroVol FROM Vols v INNER JOIN volScenarios vs ON vs.idVol = v.idVol WHERE v.estAtterrissage = 1 AND vs.idScenario = " + ObservableScenario[compt].IdScenario + ";";
 
-                DataSet dsScen = MaBd.Selection(sel);
+                DataSet dsVolAtt = MaBd.Selection(selVolsAtt);
 
-                DataTable dtScen = dsScen.Tables[0];
+                DataTable dtVolAtt = dsVolAtt.Tables[0];
+
+                foreach (DataRow RowVol in dtVolAtt.Rows)
+                {
+                    ObservableScenario[compt].lstVolsAtt.Add(RowVol[0].ToString());
+                }
+
+                string selVolDec = "SELECT v.numeroVol FROM Vols v INNER JOIN volScenarios vs ON vs.idVol = v.idVol WHERE v.estAtterrissage = 0 AND vs.idScenario = " + ObservableScenario[compt].IdScenario + ";";
+
+                DataSet dsVolDec = MaBd.Selection(selVolDec);
+
+                DataTable dtVolDec = dsVolDec.Tables[0];
+
+                foreach (DataRow RowVol in dtVolDec.Rows)
+                {
+                    ObservableScenario[compt].lstVolsDec.Add(RowVol[0].ToString());
+                }
+
                 compt++;
             }
-
-
-            
 
             return ObservableScenario;
         }

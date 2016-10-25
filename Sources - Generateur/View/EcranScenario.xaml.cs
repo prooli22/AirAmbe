@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AirAmbe.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +22,24 @@ namespace AirAmbe
     /// </summary>
     public partial class EcranScenario : Window
     {
+        public ObservableCollection<Scenario> lstScenarios { get; set; }
+        public List<Scenario> lstScenarioAjouter { get; set; }
+        public int NbChk { get; set; } = 0;
+
         public EcranScenario()
         {
             InitializeComponent();
 
-            AfficherScenarios(7);
+            ChercherScenarios();
+
+            AfficherScenarios(lstScenarios.Count);
+        }
+
+        private void ChercherScenarios()
+        {
+            ScenarioAS sAS = new ScenarioAS();
+
+            lstScenarios = sAS.RecupererTous();
         }
 
         /// <summary>
@@ -42,22 +57,8 @@ namespace AirAmbe
                 gridRow.Height = new GridLength(100);
                 gridScen.RowDefinitions.Add(gridRow);
 
-                AfficherScenarioDetails(i+1, "Test", 3, 5, i);
+                AfficherScenarioDetails(lstScenarios[i].IdScenario,lstScenarios[i].Description, lstScenarios[i].lstVolsAtt.Count, lstScenarios[i].lstVolsDec.Count, i);
             }
-        }
-
-        //TODO: à effacer
-        /// <summary>
-        /// Désuet à effacer
-        /// </summary>
-        /// <param name="compteurRow"></param>
-        private void GenererBoutons(int compteurRow)
-        {
-            Grid.SetRow(lblPistes, compteurRow);
-            Grid.SetRow(cboPistes, compteurRow);
-            Grid.SetRow(btnCreer, compteurRow);
-            Grid.SetRow(btnGenerer, compteurRow);
-            Grid.SetRow(btnQuitter, compteurRow);
         }
 
         /// <summary>
@@ -95,6 +96,10 @@ namespace AirAmbe
             //affichage des infos du scénario
             CheckBox chkBoxScenario = new CheckBox();
             chkBoxScenario.VerticalAlignment = VerticalAlignment.Center;
+            chkBoxScenario.Checked += ChkBoxScenario_Checked;
+            chkBoxScenario.Unchecked += ChkBoxScenario_Unchecked;
+            chkBoxScenario.Name = "chkBox" + compteurScenario;
+            gridScen.RegisterName(chkBoxScenario.Name, chkBoxScenario);
             Grid.SetRow(chkBoxScenario, 0);
             Grid.SetColumn(chkBoxScenario, 0);
 
@@ -108,7 +113,7 @@ namespace AirAmbe
 
             Label lblDesc = new Label();
             lblDesc.Content = desc;
-            lblDesc.Width = 100;
+            lblDesc.Width = 200;
             lblDesc.Height = 50;
             lblDesc.HorizontalAlignment = HorizontalAlignment.Left;
             lblDesc.VerticalAlignment = VerticalAlignment.Top;
@@ -144,12 +149,15 @@ namespace AirAmbe
 
             ComboBox cboMin = new ComboBox();
             cboMin.Items.Add(2);
+            cboMin.SelectedIndex = 0;
             cboMin.Items.Add(5);
             cboMin.Items.Add(10);
             cboMin.Width = 50;
             cboMin.Height = 25;
             cboMin.HorizontalAlignment = HorizontalAlignment.Left;
             cboMin.VerticalAlignment = VerticalAlignment.Top;
+            cboMin.Name = "cboMin" + compteurScenario;
+            gridScen.RegisterName(cboMin.Name, cboMin);
             Grid.SetRow(cboMin, 1);
             Grid.SetColumn(cboMin, 3);
 
@@ -165,6 +173,16 @@ namespace AirAmbe
             gridScen.Children.Add(gridScenario);
         }
 
+        private void ChkBoxScenario_Unchecked(object sender, RoutedEventArgs e)
+        {
+            NbChk--;
+        }
+
+        private void ChkBoxScenario_Checked(object sender, RoutedEventArgs e)
+        {
+            NbChk++;
+        }
+
         private void btnCreer_Click(object sender, RoutedEventArgs e)
         {
             EcranAjoutScenario eAjoutScenario = new EcranAjoutScenario();
@@ -174,7 +192,71 @@ namespace AirAmbe
 
         private void btnGenerer_Click(object sender, RoutedEventArgs e)
         {
+            lstScenarioAjouter = new List<Scenario>();
+            ChargerListeScen();
 
+            /*if (lstScenarioAjouter.Count > 0)
+            {
+                EcrireFichier();
+            }*/
+            EcrireFichier();
+        }
+
+        private void EcrireFichier()
+        {
+            string[] lines = ChargerTabString();
+
+            System.IO.File.WriteAllLines(@".\Scenarios.txt", lines);
+
+            MessageBox.Show("Le fichier Scenarios.txt est prêt pour l'application AirAmbe");
+        }
+
+        private string[] ChargerTabString()
+        {
+            List<string> lstString = new List<string>();
+            ComboBox cbo = (ComboBox)gridPrincipal.FindName("cboPistes");            
+
+            lstString.Add(cbo.Text);
+
+            for (int i = 0; i < lstScenarioAjouter.Count; i++)
+            {
+                string ligne = "";
+                ligne = ligne + lstScenarioAjouter[i].Intervalle;
+                for (int j = 0; j < lstScenarioAjouter[i].lstVolsAtt.Count; j++)
+                {
+                    ligne = ligne + ";" + lstScenarioAjouter[i].lstVolsAtt[j];
+                }
+                for (int j = 0; j < lstScenarioAjouter[i].lstVolsDec.Count; j++)
+                {
+                    ligne = ligne + ";" + lstScenarioAjouter[i].lstVolsDec[j];
+                }
+                lstString.Add(ligne);
+            }
+
+            string[] lignes = new string[lstString.Count];
+
+            for (int i = 0; i < lstString.Count; i++)
+            {
+                lignes[i] = lstString[i];
+            }
+
+            return lignes;
+        }
+
+        private void ChargerListeScen()
+        {
+            for (int i = 0; i < lstScenarios.Count; i++)
+            {
+                CheckBox chk = (CheckBox)gridScen.FindName("chkBox" + i);
+                ComboBox cbo = (ComboBox)gridScen.FindName("cboMin" + i);
+
+
+                if (chk.IsChecked == true)
+                {
+                    lstScenarios[i].Intervalle = Int32.Parse(cbo.Text);
+                    lstScenarioAjouter.Add(lstScenarios[i]);
+                }
+            }
         }
 
         private void btnQuitter_Click(object sender, RoutedEventArgs e)

@@ -15,8 +15,8 @@ namespace AirAmbe
         //Déclaration des attributs de la classe Scénario
         public int IdScenario { get; set; }
         public string Description { get; set; }
-        public List<String> lstVolsAtt { get; set; }
-        public List<String> lstVolsDec { get; set; }
+        public List<String> lstVolsAtt { get; set; } = new List<string>();
+        public List<String> lstVolsDec { get; set; } = new List<string>();
 
         public int Intervalle { get; set; }
 
