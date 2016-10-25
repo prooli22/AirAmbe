@@ -15,10 +15,14 @@
 
         <Label FontSize="25" Grid.Row="0">Ajout d'un scénario</Label>
 
+        <Label Grid.Row="0" Margin="0,50,0,0" HorizontalAlignment="Left" Height="25">Description:</Label>
+        <TextBox Name="txtDesc" Grid.Row="0" Margin="75,50,0,0" HorizontalAlignment="Left" Height="25" Width="250"></TextBox>
+
+
         <Button Name="btnAjouterVol" Grid.Row="2" Height="25" Width="25" Click="btnAjouterVol_Click">+</Button>
 
         <Button Name="btnAjouterScenario" Grid.Row="2" Height="25" Width="125" HorizontalAlignment="Left" Click="btnAjouterScenario_Click">Ajouter</Button>
-        <Button Name="btnAnnuler" Grid.Row="2" Height="25" Width="125" HorizontalAlignment="Left" Margin="0,35,0,0" Click="btnAnnuler_Click">Annuler</Button>
+        <Button Name="btnAnnuler" Grid.Row="2" Height="25" Width="125" HorizontalAlignment="Left" Margin="0,65,0,0" Click="btnAnnuler_Click">Annuler</Button>
         
         
         <ScrollViewer MaxHeight="500" Grid.Row="1">
@@ -28,6 +32,5 @@
                 </Grid.ColumnDefinitions>
             </Grid>
         </ScrollViewer>
-
     </Grid>
 </Window>

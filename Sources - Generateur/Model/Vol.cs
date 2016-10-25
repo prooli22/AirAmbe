@@ -19,7 +19,10 @@ namespace AirAmbe
         public string NumeroVol { get; set; }
         public bool EstAtterrissage { get; set; }
         public DateTime DateVol { get; set; }
-        public DateTime HeureVol {get; set; }
+        public int Intervalle { get; set; }
+        public int NumScenario { get; set; }
+        public Etat EtatVol { get; set; }
+        public int Delais { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Vol
@@ -39,9 +42,19 @@ namespace AirAmbe
             ModeleAvion = (string)unVol["ModeleAvion"];
             Aeroport = (string)unVol["Aeroport"];
             NumeroVol = (string)unVol["NumeroVol"];
-            EstAtterrissage = (bool)unVol["EstAtterissage"];
+            EstAtterrissage = (bool)unVol["EstAtterrissage"];
             DateVol = DateTime.Now;
-            HeureVol = DateTime.Now;
+            EtatVol = Etat.Attente;
+        }
+
+
+        public void TrouverDelais()
+        {
+            if (DateVol.Minute < DateTime.Now.Minute)
+                Delais = (DateVol.Minute + 60) - DateTime.Now.Minute;
+
+            else
+                Delais = DateVol.Minute - DateTime.Now.Minute;
         }
     }
 }
