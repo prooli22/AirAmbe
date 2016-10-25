@@ -27,7 +27,7 @@ namespace AirAmbe
         /// <summary>
         /// Le constructeur met les utilisateurs de la BD dans une datagrid.
         /// </summary>
-        public EcranAdministrateur(Utilisateur u,bool estAjouter)
+        public EcranAdministrateur(Utilisateur u, bool estAjouter)
         {
             InitializeComponent();
 
@@ -88,6 +88,22 @@ namespace AirAmbe
             EcranUtilisateur eUser = new EcranUtilisateur(lstUser);
             this.Close();
             eUser.Show();
+        }
+
+
+        private void btn_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.Height += 2;
+            btn.Width += 2;
+        }
+
+
+        private void btn_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.Height -= 2;
+            btn.Width -= 2;
         }
     }
 }

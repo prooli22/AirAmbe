@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AirAmbe"
         mc:Ignorable="d"
+        ResizeMode="CanMinimize"
         Title="Air-Ambe" Height="600" Width="1000">
 
     <Window.Resources>
@@ -44,15 +45,21 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.5*"></ColumnDefinition>
                 <ColumnDefinition Width="0.1*"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="0.1*"></ColumnDefinition>
                 <ColumnDefinition Width="0.1*"></ColumnDefinition>
                 <ColumnDefinition Width="20"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Label FontSize="25" Grid.Column="0" Width="300" HorizontalAlignment="left">Centre de Contrôle</Label>
-            <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" Width="35" Height="35" Margin="0, 10, 0, 0" Grid.Column="2" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+
+            <Button Name="btnRefresh" Style="{DynamicResource NoChromeButton}" Width="35" Height="35" Margin="0, 10, 0, 0" Grid.Column="1" Click="btnRefresh_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                <Image Source="pack://application:,,,/SolutionTest;component/Images/refresh.png" />
+            </Button>
+            <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" Width="35" Height="35" Margin="0, 10, 0, 0" Grid.Column="4" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
                 <Image Source="pack://application:,,,/SolutionTest;component/Images/deconnexion.png" />
             </Button>
-            <Button Name="btnProfil" Style="{DynamicResource NoChromeButton}" Width="35" Height="35" Margin="0, 10, 0, 0" Grid.Column="1" Click="btnProfil_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Button Name="btnProfil" Style="{DynamicResource NoChromeButton}" Width="35" Height="35" Margin="0, 10, 0, 0" Grid.Column="3" Click="btnProfil_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
                 <Image Source="pack://application:,,,/SolutionTest;component/Images/parametre.png" />
             </Button>
 
@@ -66,25 +73,36 @@
                 <ColumnDefinition Width="0.4*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Border Name="brdCanvas" BorderBrush="Black" Margin="10" Grid.Column="0" BorderThickness="1">
-                <Canvas Name="cnvCarte">
-                
+            <Border Name="brdCanvas" BorderBrush="Black" Margin="10, 10, 0, 10" Grid.Column="0" BorderThickness="1">
+                <Canvas Name="cnvCarte" Background="Green">
+                    <Rectangle Name="Asphalthe1"></Rectangle>
+                    <Rectangle Name="Asphalthe2"></Rectangle>
+                    <Rectangle Name="AsphalthePrincipale"></Rectangle>
+                    <Rectangle Name="Piste1"></Rectangle>
+                    <Rectangle Name="Piste2"></Rectangle>
+                    <Rectangle Name="Piste3"></Rectangle>
+                    <Rectangle Name="Piste4"></Rectangle>
+                    <Rectangle Name="hangar"></Rectangle>
                 </Canvas>
             </Border>
 
-            <Border Name="brdScrollViewer" BorderBrush="Black" Margin="10" Grid.Column="1" BorderThickness="1">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0">Prochains vols</Label>
-                    <ScrollViewer Grid.Row="1">
-                        <Grid Name="grdProchainsVols">
-                        </Grid>
-                    </ScrollViewer>
-                </Grid>
-            </Border>
+            <Grid Grid.Column="1" Background="White">
+                <Border Name="brdScrollViewer" BorderBrush="Black" Margin="10" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0">Prochains vols</Label>
+                        <ScrollViewer Grid.Row="1">
+                            <Grid Name="grdProchainsVols">
+                            </Grid>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+            
+
             
             
         </Grid>

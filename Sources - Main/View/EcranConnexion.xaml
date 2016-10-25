@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AirAmbe"
         mc:Ignorable="d"
+        ResizeMode="CanMinimize"
         Title="Air-Ambe" Height="350" Width="525">
     <Grid>
         <Label Name="lblUser" Width="120" Height="30" FontSize="12" Margin="130, 50, 0, 0" HorizontalAlignment="Left" VerticalAlignment="top">Nom d'utilisateur : </Label>

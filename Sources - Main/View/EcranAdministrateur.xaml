@@ -5,7 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AirAmbe"
         mc:Ignorable="d"
-        Title="Air-Ambe" Height="Auto" Width="600" ResizeMode="NoResize">
+        ResizeMode="CanMinimize"
+        Title="Air-Ambe" Height="Auto" Width="600">
+
+    <Window.Resources>
+        <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                                <Setter Property="Opacity" TargetName="Chrome" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid Name="gridPrincipal">
         <Grid.RowDefinitions>
             <RowDefinition Height="75"></RowDefinition>
@@ -13,8 +41,11 @@
             <RowDefinition Height="100"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label FontSize="25" Grid.Row="0">Administration des utilisateurs</Label>        
-        <Button Name="btnDeconnexion" Width="30" Height="30" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0" Click="btnDeconnexion_Click">Decon</Button>
+        <Label FontSize="25" Grid.Row="0">Administration des utilisateurs</Label>
+        
+        <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" Width="35" Height="35" Margin="10" HorizontalAlignment="Right" Grid.Row="0" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/SolutionTest;component/Images/deconnexion.png" />
+        </Button>
 
         <DataGrid Name="dgUtilisateur" RowHeight="30" VerticalAlignment="Top" HorizontalAlignment="Center" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" Grid.Row="1">
             <DataGrid.Columns>
@@ -26,14 +57,19 @@
                 <DataGridTemplateColumn Header="Modifier">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Name="btnModifier" Click="btnModifier_Click">Modifier</Button>
+                            <Button Name="btnModifier" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnModifier_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                                <Image Source="pack://application:,,,/SolutionTest;component/Images/parametre.png" />
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Name="btnAjouter" Width="30" Height="30" Margin="0,0,10,30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="2" Click="btnAjouter_Click">Add</Button>
+        <Button Name="btnAjouter" Style="{DynamicResource NoChromeButton}" Width="35" Height="35" Margin="0, 0, 10, 30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="2" Click="btnAjouter_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/SolutionTest;component/Images/plus.png" />
+        </Button>
+        
         <Rectangle Fill="Black" Width="auto" Height="1" Margin="0,0,0,20" VerticalAlignment="Bottom" Grid.Row="2"></Rectangle>
     </Grid>
 </Window>

@@ -98,7 +98,7 @@ namespace AirAmbe
 
         private void AfficherEcranAdministrateur()
         {
-            EcranAdministrateur A = new EcranAdministrateur();
+            EcranAdministrateur A = new EcranAdministrateur(null, false);
             this.Close();
             A.ShowDialog();
         }

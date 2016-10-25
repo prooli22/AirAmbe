@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AirAmbe
 {
@@ -37,14 +38,26 @@ namespace AirAmbe
 
         public bool EstObservateur { get; set; }
 
-
-
         // ---------------------------------------------------------------------------------- \\
+        // Variables Antho
 
+        private DispatcherTimer GereDroit;
 
-        // Liens utiles.
-        //http://stackoverflow.com/questions/12690400/digital-clock-on-a-form-should-show-time-changing-datetime-now-shows-only-still
-        //http://stackoverflow.com/questions/1329900/net-event-every-minute-on-the-minute-is-a-timer-the-best-option
+        private DispatcherTimer GereGauche;
+
+        private DispatcherTimer GereHautA;
+
+        private DispatcherTimer GereHautD;
+
+        private DispatcherTimer GereBas;
+
+        int HorizontalA = 700;
+
+        int HorizontalD = 10;   
+         
+        int VerticalA;
+
+        int VerticalD = 176;
 
 
         // ---------------------------------------------------------------------------------- \\
@@ -60,12 +73,14 @@ namespace AirAmbe
             Controleur = U;
             EstObservateur = false;
 
-
             ChargerScenarios();
             ChargerVols();
             ModifierHeures();
             ChargerDataGrid();
             ChargerProchainsVols();
+
+            GererDessinPiste(LstPistes.Count);
+            DessinerVoieService();
         }
 
 
@@ -84,6 +99,10 @@ namespace AirAmbe
             ModifierHeures();
             ChargerDataGrid();
             ChargerProchainsVols();
+
+
+            GererDessinPiste(LstPistes.Count);
+            DessinerVoieService();
         }
 
 
@@ -141,7 +160,6 @@ namespace AirAmbe
         }
 
 
-        // REVOIR LES SECONDES.
         private void ModifierHeures()
         {
             int nbVols = 1;
@@ -150,7 +168,7 @@ namespace AirAmbe
             {
                 // Met les secondes à 00
                 if (LstVols[i].DateVol.Second != 0)
-                    //LstVols[i].DateVol.Second = (60 - LstVols[i].DateVol.Second);
+                    LstVols[i].DateVol = LstVols[i].DateVol.AddSeconds(-LstVols[i].DateVol.Second);
 
                 // Ajoute 5 minutes entre chaque scénario
                 if (i > 0 && (LstVols[i].NumScenario != LstVols[i - 1].NumScenario))
@@ -165,7 +183,6 @@ namespace AirAmbe
 
                 LstVols[i].TrouverDelais();
             }
-
         }
 
 
@@ -190,14 +207,13 @@ namespace AirAmbe
 
         private void ChargerProchainsVols()
         {
-            for (int i = 0; i < LstVols.Count; i++)
+            for (int i = 0; LstVols.Count > 10 ? i < 10 : i < LstVols.Count; i++)
             {
                 RowDefinition gridRow = new RowDefinition();
                 gridRow.Height = GridLength.Auto;
                 grdProchainsVols.RowDefinitions.Add(gridRow);
 
                 AfficherDetailsVols(LstVols[i], i);
-
                 TesterEtat(LstVols[i]);
             }
         }
@@ -230,7 +246,6 @@ namespace AirAmbe
 
             else
                 grdVol.Background = Brushes.LightGreen;
-
 
             grdVol = AfficherDetailsVolsH(grdVol, vol);
             grdVol = AfficherDetailsVolsB(grdVol, vol);
@@ -369,7 +384,14 @@ namespace AirAmbe
             cboPistes.HorizontalAlignment = HorizontalAlignment.Left;
             cboPistes.Margin = new Thickness(14, 30, 0, 0);
             cboPistes.Items.Add(cmbItem);
-            cboPistes.SelectedItem = cmbItem;
+
+            if (vol.PisteAssigne == null)
+                cboPistes.SelectedIndex = 0;
+
+            else
+                cboPistes.SelectedIndex = vol.PisteAssigne.NumPiste;
+
+            //cboPistes.SelectedItem = cmbItem;
             cboPistes.SelectionChanged += new SelectionChangedEventHandler((sender, e) => cboPistes_Selection(sender, e, vol));
 
             if (vol.EstAtterrissage)
@@ -452,11 +474,11 @@ namespace AirAmbe
 
             foreach (Image img in TrouverEnfant<Image>(grdProchainsVols))
             {
-                if (img.Name == "imgEtat" + vol.NumeroVol)
+                if (img.Name.Contains(vol.NumeroVol))
                 {
                     grd = img.Parent as Grid;
 
-                    if (vol.Delais <= 5 && vol.EtatVol == Etat.Attente)
+                    if (vol.Delais <= 5 && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
                     {
                         vol.EtatVol = Etat.Critique;
                         grd.Background = Brushes.Firebrick;
@@ -476,9 +498,10 @@ namespace AirAmbe
         }
 
 
+        // À TERMINER.
         private void TesterPiste(Vol vol)
         {
-            for (int i = 0; i < LstVols.Count; i++)
+            for (int i = 0; LstVols.Count > 20 ? i < 20 : i < LstVols.Count; i++)
             {
                 if (LstVols[i] != vol)
                 {
@@ -510,9 +533,27 @@ namespace AirAmbe
 
         private void btnProfil_Click(object sender, RoutedEventArgs e)
         {
-            EcranUtilisateur eUser = new EcranUtilisateur(Controleur, false);
+            EcranUtilisateur eUser = new EcranUtilisateur(Controleur, false, null);
             this.Close();
             eUser.Show();
+        }
+
+
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            grdProchainsVols.Children.Clear();
+
+            for (int i = 0; LstVols.Count > 10 ? i < 10 : i < LstVols.Count; i++)
+            {
+                if (LstVols[i].EtatVol == Etat.Atterrissage || LstVols[i].EtatVol == Etat.Decollage || LstVols[i].EtatVol == Etat.Echoue)
+                    LstVols.Remove(LstVols[i]);
+            }
+
+            for (int i = 0; LstVols.Count > 10 ? i < 10 : i < LstVols.Count; i++)
+            {
+                AfficherDetailsVols(LstVols[i], i);
+                TesterEtat(LstVols[i]);
+            }
         }
 
 
@@ -540,51 +581,55 @@ namespace AirAmbe
         private void cboPistes_Selection(object sender, SelectionChangedEventArgs e, Vol vol)
         {
             ComboBox cbo = sender as ComboBox;
+            ComboBoxItem cboi = cbo.Items[cbo.SelectedIndex] as ComboBoxItem;
             Grid grd = new Grid();
+            Image imgVol = new Image();
 
             foreach (Image img in TrouverEnfant<Image>(grdProchainsVols))
             {
-                if (img.Name == "imgEtat" + vol.NumeroVol)
+                if (img.Name.Contains(vol.NumeroVol))
                 {
+                    imgVol = img;
                     grd = img.Parent as Grid;
-
-                    // Si l'utilisateur choisi une piste. On change l'état a ASSIGNE.
-                    if (cbo.SelectedIndex > 0)
-                    {
-                        img.Source = TrouverEtat(Etat.Assigne);
-                        img.Margin = new Thickness(9, 0, 0, 0);
-
-                        if (grd.Background == Brushes.Firebrick)
-                        {
-                            if (vol.EstAtterrissage)
-                                grd.Background = Brushes.LightBlue;
-
-                            else
-                                grd.Background = Brushes.LightGreen;
-                        }
-
-                        vol.EtatVol = Etat.Assigne;
-                        vol.PisteAssigne = LstPistes[cbo.SelectedIndex - 1];
-                        TesterPiste(vol);
-                    }
-
-                    // Sinon on remet l'état a ATTENTE.
-                    else
-                    {
-                        img.Source = TrouverEtat(Etat.Attente);
-                        img.Margin = new Thickness(10, 0, 0, 0);
-
-                        vol.EtatVol = Etat.Attente;
-                        TesterPiste(vol);
-                        vol.PisteAssigne = null;
-                        TesterEtat(vol);
-                        
-                    }
-
-                    
+                    break;
                 }
+            }
 
-            } 
+            // Si la piste n'est pas disponible et qu'on veut la forcer.
+            if(cboi.Foreground == Brushes.Red)
+            {
+                EcranConfirmation eC = new EcranConfirmation(Controleur);
+                eC.ShowDialog();
+            }
+
+            // Si l'utilisateur choisi une piste. On change l'état a ASSIGNE.
+            if (cbo.SelectedIndex > 0)
+            {
+                imgVol.Source = TrouverEtat(Etat.Assigne);
+                imgVol.Margin = new Thickness(9, 0, 0, 0);
+
+                if (vol.EstAtterrissage)
+                    grd.Background = Brushes.LightBlue;
+
+                else
+                    grd.Background = Brushes.LightGreen;
+                
+                vol.EtatVol = Etat.Assigne;
+                vol.PisteAssigne = LstPistes[cbo.SelectedIndex - 1];
+                TesterPiste(vol);
+            }
+
+            // Sinon on remet l'état a ATTENTE.
+            else
+            {
+                imgVol.Source = TrouverEtat(Etat.Attente);
+                imgVol.Margin = new Thickness(10, 0, 0, 0);
+
+                vol.EtatVol = Etat.Attente;
+                TesterPiste(vol);
+                vol.PisteAssigne = null;
+                TesterEtat(vol);
+            }
         }
 
 
@@ -606,74 +651,78 @@ namespace AirAmbe
 
         private void t_Elapsed(object sender, ElapsedEventArgs e, Vol vol, Timer t)
         {
-            vol.TrouverDelais();
-
-
             this.Dispatcher.Invoke(() =>
             {
+                Grid grd = new Grid();
+                Label lblVol = new Label();
+
+                vol.TrouverDelais();
+
                 foreach (Label lbl in TrouverEnfant<Label>(grdProchainsVols))
                 {
-                    if (lbl.Name == "lblDelais" + vol.NumeroVol)
+                    if (lbl.Name.Contains(vol.NumeroVol))
                     {
-                        // Changer quand le vol est terminée.
-                        if (vol.Delais <= 0)
-                        {
-                            Grid grd = lbl.Parent as Grid;
-
-                            foreach (Button btn in TrouverEnfant<Button>(grdProchainsVols))
-                                if (btn.Name == "btnDetails" + vol.NumeroVol)
-                                    grd.Children.Remove(btn);
-                            
-                            if(vol.EtatVol == Etat.Critique)
-                            {
-                                lbl.Content = "Le vol a échoué!";
-                                vol.EtatVol = Etat.Echoue;
-                            }
-                            
-                            else if(vol.EstAtterrissage)
-                            {
-                                lbl.Content = "Attérit sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-                                lbl.Width = 170;
-                                lbl.Margin = new Thickness(58, 0, 0, 0);
-                                vol.EtatVol = Etat.Atterrissage;
-                            }
-
-                            else
-                            {
-                                lbl.Content = "Décollé sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-                                lbl.Width = 170;
-                                lbl.Margin = new Thickness(58, 0, 0, 0);
-                                vol.EtatVol = Etat.Decollage;
-                            }
-
-                            grd.Height = 60;
-                            grd.Background = Brushes.LightGray;
-                            TesterEtat(vol);
-                            TesterPiste(vol);
-
-                            vol.PisteAssigne = null;
-                        }
-
-                        // Changer les secondes.
-                        else if (vol.Delais <= 1)
-                        {
-                            lbl.Content = "Dans " + (60 - DateTime.Now.Second) .ToString() + " secondes";
-
-                            t.Interval = 1000;
-                            t.Start();
-                        }
-
-                        // Changer les minutes.
-                        else
-                        {
-                            lbl.Content = "Dans " + vol.Delais.ToString() + " minutes";
-
-                            t.Interval = (60 - DateTime.Now.Second) * 1000 - DateTime.Now.Millisecond;
-                            t.Start();
-                        }
-
+                        grd = lbl.Parent as Grid;
+                        lblVol = lbl;
                         break;
                     }
+                }
+
+                // Changer quand le vol est terminée.
+                if (vol.Delais <= 0)
+                {
+                    foreach (Button btn in TrouverEnfant<Button>(grdProchainsVols))
+                        if (btn.Name.Contains(vol.NumeroVol))
+                            grd.Children.Remove(btn);
+                    
+                    if(vol.EtatVol == Etat.Critique)
+                    {
+                        lblVol.Content = "Le vol a échoué!";
+                        vol.EtatVol = Etat.Echoue;
+                    }
+                    
+                    else if(vol.EstAtterrissage)
+                    {
+                        DemarreAtterrissage(vol.PisteAssigne.NumPiste);
+                        lblVol.Content = "Attérit sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                        lblVol.Width = 170;
+                        lblVol.Margin = new Thickness(58, 0, 0, 0);
+                        vol.EtatVol = Etat.Atterrissage;
+                    }
+
+                    else
+                    {
+                        DemarreDecollage(vol.PisteAssigne.NumPiste);
+                        lblVol.Content = "Décollé sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                        lblVol.Width = 170;
+                        lblVol.Margin = new Thickness(58, 0, 0, 0);
+                        vol.EtatVol = Etat.Decollage;
+                    }
+
+                    grd.Height = 60;
+                    grd.Background = Brushes.LightGray;
+                    TesterEtat(vol);
+                    TesterPiste(vol);
+
+                    vol.PisteAssigne = null;
+                }
+
+                // Changer les secondes.
+                else if (vol.Delais <= 1)
+                {
+                    lblVol.Content = "Dans " + (60 - DateTime.Now.Second) .ToString() + " secondes";
+
+                    t.Interval = 1000;
+                    t.Start();
+                }
+
+                // Changer les minutes.
+                else
+                {
+                    lblVol.Content = "Dans " + vol.Delais.ToString() + " minutes";
+
+                    t.Interval = (60 - DateTime.Now.Second) * 1000 - DateTime.Now.Millisecond;
+                    t.Start();
                 }
 
                 TesterEtat(vol);
@@ -700,5 +749,408 @@ namespace AirAmbe
                 }
             }
         }
+
+
+        // ---------------------------------------------------------------------------------- \\
+        // Méthodes Antho
+        // ---------------------------------------------------------------------------------- \\
+
+
+        /// <summary>
+        /// Une méthode pour dessiner les pistes en fonction du nombre choisi 
+        /// </summary>
+        /// <param name="NbPistes">Nombre de piste choisi par l'utilisateur</param>
+        private void GererDessinPiste(int NbPistes)
+        {
+            ImageBrush ImagePiste = new ImageBrush();
+            ImagePiste.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/SolutionTest;component/Images/piste.png"));
+
+            if (NbPistes == 2)
+            {
+                DessinerPiste1(ImagePiste);
+                DessinerPiste2(ImagePiste);
+            }
+            else if (NbPistes == 3)
+            {
+                DessinerPiste1(ImagePiste);
+                DessinerPiste2(ImagePiste);
+                DessinerPiste3(ImagePiste);
+            }
+            else if (NbPistes == 4)
+            {
+                DessinerPiste1(ImagePiste);
+                DessinerPiste2(ImagePiste);
+                DessinerPiste3(ImagePiste);
+                DessinerPiste4(ImagePiste);
+            }
+        }
+
+        /// <summary>
+        /// Une méthode pour dessiner la piste 1
+        /// </summary>
+        /// <param name="ib">L'image d'une piste</param>
+        private void DessinerPiste1(ImageBrush ib)
+        {
+            Piste1.Stroke = new SolidColorBrush(Colors.Black);
+            Piste1.StrokeThickness = 2;
+            Piste1.Fill = ib;
+            Piste1.Width = 370;
+            Piste1.Height = 50;
+            Canvas.SetLeft(Piste1, 95);
+            Canvas.SetTop(Piste1, 10);
+        }
+
+        /// <summary>
+        /// Une méthode pour dessiner la piste 2
+        /// </summary>
+        /// <param name="ib">L'image d'une piste</param>
+        private void DessinerPiste2(ImageBrush ib)
+        {
+            Piste2.Stroke = new SolidColorBrush(Colors.Black);
+            Piste2.StrokeThickness = 2;
+            Piste2.Fill = ib;
+            Piste2.Width = 370;
+            Piste2.Height = 50;
+            Canvas.SetLeft(Piste2, 137);
+            Canvas.SetTop(Piste2, 100);
+        }
+
+        /// <summary>
+        /// Une méthode pour dessiner la piste 3
+        /// </summary>
+        /// <param name="ib">L'image d'une piste</param>
+        private void DessinerPiste3(ImageBrush ib)
+        {
+            Piste3.Stroke = new SolidColorBrush(Colors.Black);
+            Piste3.StrokeThickness = 2;
+            Piste3.Fill = ib;
+            Piste3.Width = 370;
+            Piste3.Height = 50;
+            Canvas.SetLeft(Piste3, 137);
+            Canvas.SetTop(Piste3, 185);
+        }
+
+        /// <summary>
+        /// Une méthode pour dessiner la piste 4
+        /// </summary>
+        /// <param name="ib">L'image d'une piste</param>
+        private void DessinerPiste4(ImageBrush ib)
+        {
+            Piste4.Stroke = new SolidColorBrush(Colors.Black);
+            Piste4.StrokeThickness = 2;
+            Piste4.Fill = ib;
+            Piste4.Width = 370;
+            Piste4.Height = 50;
+            Canvas.SetLeft(Piste4, 95);
+            Canvas.SetTop(Piste4, 260);
+        }
+
+        /// <summary>
+        /// Une méthode pour dessiner les voies de service
+        /// </summary>
+        private void DessinerVoieService()
+        {
+            Rectangle rectRotation = new Rectangle();
+            ImageBrush a = new ImageBrush();
+            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/SolutionTest;component/Images/asphalte.jpg"));
+
+            Asphalthe1.Stroke = new SolidColorBrush(Colors.Black);
+            Asphalthe1.StrokeThickness = 2;
+            Asphalthe1.Fill = a;
+            Asphalthe1.Width = 35;
+            Asphalthe1.Height = 40;
+            Canvas.SetLeft(Asphalthe1, 80);
+            Canvas.SetTop(Asphalthe1, 100);
+
+            Asphalthe2.Stroke = new SolidColorBrush(Colors.Black);
+            Asphalthe2.StrokeThickness = 2;
+            Asphalthe2.Fill = a;
+            Asphalthe2.Width = 35;
+            Asphalthe2.Height = 40;
+            Canvas.SetLeft(Asphalthe2, 80);
+            Canvas.SetTop(Asphalthe2, 175);
+
+            RotateTransform rotation = new RotateTransform(90, 14, 14);
+            AsphalthePrincipale.RenderTransform = rotation;
+            AsphalthePrincipale.Stroke = new SolidColorBrush(Colors.Black);
+            AsphalthePrincipale.StrokeThickness = 2;
+            AsphalthePrincipale.Fill = a;
+            AsphalthePrincipale.Width = 210;
+            AsphalthePrincipale.Height = 30;
+            Canvas.SetLeft(AsphalthePrincipale, 110);
+            Canvas.SetTop(AsphalthePrincipale, 60);
+        }
+
+
+        /// <summary>
+        /// Une méthode pour dessiner le hangar d'avion
+        /// </summary>
+        private void DessinerHangar()
+        {
+            hangar.Stroke = new SolidColorBrush(Colors.Black);
+            hangar.StrokeThickness = 2;
+            hangar.Fill = new SolidColorBrush(Colors.Black);
+            hangar.Width = 80;
+            hangar.Height = 270;
+
+            Canvas.SetTop(hangar, 29);
+        }
+
+
+        /// <summary>
+        /// Une méthode pour gérer les décollages uniquement (VERSION 0.5) 
+        /// </summary>
+        private void GererDecollage(Image avionDecollage, int piste)
+        {
+            GereDroit = new DispatcherTimer();
+
+            //Ici l'avion quitte le hangar pour aller se placer sur une piste
+            GereDroit.Start();
+            GereDroit.Tick += new EventHandler((sender, e) => DeplacementDroitHangar(sender, e, avionDecollage, piste));
+            GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+        }
+
+        /// <summary>
+        /// Une méthode temporaire qui permet de déplacer un avion du hangar jusqua la voie de service (VERSION 0.5)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DeplacementDroitHangar(object sender, EventArgs e, Image avionDecollage, int piste)
+        {
+            if (HorizontalD >= 0)
+            {
+                if (HorizontalD == 100)
+                {
+                    GereHautD = new DispatcherTimer();
+
+                    GereDroit.Stop();
+                    GereHautD.Start();
+                    GereHautD.Tick += new EventHandler((senderD, eD) => DeplacementHautVoieServiceD(sender, e, avionDecollage, piste));
+                    GereHautD.Interval = TimeSpan.FromMilliseconds(50);
+                }
+                else
+                {
+                    HorizontalD += 1;
+                }
+            }
+
+            Canvas.SetLeft(avionDecollage, HorizontalD);
+        }
+
+        /// <summary>
+        /// Une méthode temporaire qui permet de déplacer un avion de la voie de service jusqu'à la piste pour le décollage(VERSION 0.5)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DeplacementHautVoieServiceD(object sender, EventArgs e, Image avionDecollage, int piste)
+        {
+            if (VerticalD <= 700)
+            {
+                if ((VerticalD == 15 && piste == 1) || (VerticalD == 110 && piste == 2) || (VerticalD == 190 && piste == 3) || (VerticalD == 264 && piste == 4))
+                {
+                    GereDroit = new DispatcherTimer();
+                    GereHautD.Stop();
+                    GereDroit.Start();
+                    GereDroit.Tick += new EventHandler((senderHD, eHD) => DeplacementDroitPisteD(sender, e, avionDecollage));
+                    GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+                }
+                else
+                {
+                    switch (piste)
+                    {
+                        case 1:
+                            VerticalD -= 1;
+                            break;
+                        case 2:
+                            VerticalD -= 1;
+                            break;
+                        case 3:
+                            VerticalD += 1;
+                            break;
+                        case 4:
+                            VerticalD += 1;
+                            break;
+                    }
+
+                    Canvas.SetTop(avionDecollage, VerticalD);
+                }
+            }
+
+        }
+
+
+        private void DeplacementDroitPisteD(object sender, EventArgs e, Image avionDecollage)
+        {
+
+            if (HorizontalD >= 0)
+            {
+                if (HorizontalD == 400)
+                {
+                    GereDroit.Stop();
+                    cnvCarte.Children.Remove(avionDecollage);
+
+                }
+                else
+                {
+                    HorizontalD += 1;
+                }
+
+                Canvas.SetLeft(avionDecollage, HorizontalD);
+            }
+
+
+
+        }
+
+
+        /// <summary>
+        /// Une méthode pour gérer les attérissages uniquement (VERSION 0.5) 
+        /// </summary>
+        private void GererAtterrissage(Image avionAtterrissage, int piste)
+        {
+            GereGauche = new DispatcherTimer();
+
+            GereGauche.Start();
+            GereGauche.Tick += new EventHandler((sender, e) => DeplacementGauchetAtterrissage(sender, e, avionAtterrissage, piste));
+            GereGauche.Interval = TimeSpan.FromMilliseconds(50);
+        }
+
+        private void DeplacementGauchetAtterrissage(object sender, EventArgs e, Image avionAtterrissage, int piste)
+        {
+            if (HorizontalA >= 0)
+            {
+
+                //Pour tester la longueur de la distance horizontale à parcourir
+                if (HorizontalA == 100)
+                {
+                    GereHautA = new DispatcherTimer();
+
+                    GereGauche.Stop();
+                    GereHautA.Start();
+                    GereHautA.Tick += new EventHandler((senderHaut, eHaut) => DeplacementHautVoieServiceA(sender, e, avionAtterrissage, piste));   
+                    GereHautA.Interval = TimeSpan.FromMilliseconds(50);
+                }
+                else
+                {
+                    HorizontalA -= 1;
+                }
+            }
+
+
+            Canvas.SetLeft(avionAtterrissage, HorizontalA);
+        }
+
+        private void DeplacementHautVoieServiceA(object sender, EventArgs e, Image avionAtterrissage, int piste)
+        {
+
+
+            if (VerticalA >= 0)
+            {
+
+                if (VerticalA == 100)
+                {
+                    GereGauche = new DispatcherTimer();
+                    GereHautA.Stop();
+                    GereGauche.Start();
+                    GereGauche.Tick += new EventHandler((senderHaut, eHaut) => DeplacementGauchetHangarA(sender, e, avionAtterrissage));
+                    GereGauche.Interval = TimeSpan.FromMilliseconds(50);
+                }
+                else
+                {
+
+                    if (piste == 1)
+                    {
+                        VerticalA += 1;
+                    }
+                    else
+                    {
+                        VerticalA -= 1;
+                    }
+
+                    Canvas.SetTop(avionAtterrissage, VerticalA);
+                }
+            }
+
+        }
+
+        private void DeplacementGauchetHangarA(object sender, EventArgs e, Image avionAtterrissage)
+        {
+            if (HorizontalA >= 0)
+            {
+                //Pour tester la longueur de la distance horizontale à parcourir
+                if (HorizontalA == 40)
+                {
+                    GereGauche.Stop();
+                    cnvCarte.Children.Remove(avionAtterrissage);
+                    HorizontalA = 700;
+                }
+                else
+                {
+                    HorizontalA -= 1;
+                }
+
+                Canvas.SetLeft(avionAtterrissage, HorizontalA);
+            }
+        }
+
+        private void DemarreAtterrissage(int piste)
+        {
+            HorizontalA = 700;
+
+            Image AvionA = new Image();
+            BitmapImage b = new BitmapImage();
+            b.BeginInit();
+            b.UriSource = new Uri("pack://application:,,,/SolutionTest;component/Images/avion.png");
+            b.EndInit();
+            AvionA.Source = b;
+            AvionA.Width = 40;
+
+            switch (piste)
+            {
+                case 1:
+                    VerticalA = 15;
+                    Canvas.SetTop(AvionA, 15);
+
+                    break;
+                case 2:
+                    VerticalA = 110;
+                    Canvas.SetTop(AvionA, 110);
+
+                    break;
+                case 3:
+                    VerticalA = 190;
+                    Canvas.SetTop(AvionA, 190);
+                    break;
+                case 4:
+                    VerticalA = 264;
+                    Canvas.SetTop(AvionA, 264);
+                    break;
+            }
+
+            Canvas.SetLeft(AvionA, HorizontalA);
+            cnvCarte.Children.Add(AvionA);
+            GererAtterrissage(AvionA, piste);
+        }
+
+        private void DemarreDecollage(int piste)
+        {
+            VerticalD = 176;
+            HorizontalD = 0;
+            Image AvionD = new Image();
+            BitmapImage b = new BitmapImage();
+            b.BeginInit();
+            b.UriSource = new Uri("pack://application:,,,/SolutionTest;component/Images/avion.png");
+            b.EndInit();
+            AvionD.Source = b;
+            AvionD.Width = 40;
+
+            Canvas.SetTop(AvionD, VerticalD);
+
+            cnvCarte.Children.Add(AvionD);
+
+            GererDecollage(AvionD, piste);
+        }
+
+
     }
 }
