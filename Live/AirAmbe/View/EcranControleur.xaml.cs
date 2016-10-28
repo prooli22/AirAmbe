@@ -36,30 +36,9 @@ namespace AirAmbe
 
         public List<Piste> LstPistes { get; set; }
 
-        // ---------------------------------------------------------------------------------- \\
-        // Variables Antho
-
-        private DispatcherTimer GereDroit;
-
-        private DispatcherTimer GereGauche;
-
-        private DispatcherTimer GereHautA;
-
-        private DispatcherTimer GereHautD;
-
-        private DispatcherTimer GereBas;
-
-        int HorizontalA = 700;
-
-        int HorizontalD = 10;   
-         
-        int VerticalA;
-
-        int VerticalD = 176;
-
+        public Animation Anim { get; set; }
 
         // ---------------------------------------------------------------------------------- \\
-
 
         /// <summary>
         /// Constructeur de la fênetre du contrôleur.
@@ -69,6 +48,7 @@ namespace AirAmbe
         {
             InitializeComponent();
             Controleur = U;
+            Anim = new Animation(this);
 
             if (Controleur == null)
                 btnProfil.Visibility = Visibility.Hidden;
@@ -76,14 +56,17 @@ namespace AirAmbe
 
             if (ChargerScenarios())
             {
-                ChargerVols();
-                ModifierHeures();
-                ChargerDataGrid();
-                ChargerProchainsVols();
+                if (LstScenarios.Count > 0)
+                {
+                    ChargerVols();
+                    ModifierHeures();
+                    ChargerDataGrid();
+                    ChargerProchainsVols();
+                }
 
-                DessinerHangar();
-                GererDessinPiste(LstPistes.Count);
-                DessinerVoieService();
+                Anim.DessinerHangar();
+                Anim.GererDessinPiste(LstPistes.Count);
+                Anim.DessinerVoieService();
             }
 
             else
@@ -106,18 +89,23 @@ namespace AirAmbe
 
             try { scenarios = System.IO.File.ReadAllLines(@".\scenarios.txt"); }
 
-            catch(Exception e)
+            catch (Exception e)
             {
                 return false;
             }
 
+            if (scenarios.Length == 0)
+                return false;
+
             // On charge le nombre de pistes dans la liste.
-            for(int i = 0; i < Int32.Parse(scenarios[0]); i++)
+            for (int i = 0; i < Int32.Parse(scenarios[0]); i++)
             {
                 LstPistes.Add(new Piste());
                 LstPistes[i].NumPiste = i + 1;
             }
 
+            if (scenarios.Length == 1)
+                return true;
 
             for (int i = 1; i < scenarios.Length; i++)
             {
@@ -392,7 +380,7 @@ namespace AirAmbe
             cboPistes.SelectionChanged += new SelectionChangedEventHandler((sender, e) => cboPistes_Selection(sender, e, vol));
 
             if (vol.EstAtterrissage)
-                cboPistes.Name = "cbo"+ Etat.Atterrissage.ToString() + vol.NumeroVol;
+                cboPistes.Name = "cbo" + Etat.Atterrissage.ToString() + vol.NumeroVol;
 
             else
                 cboPistes.Name = "cbo" + Etat.Decollage.ToString() + vol.NumeroVol;
@@ -429,17 +417,17 @@ namespace AirAmbe
             BitmapImage b = new BitmapImage();
             b.BeginInit();
 
-            switch(A)
+            switch (A)
             {
-                case Etat.Attente :
+                case Etat.Attente:
                     b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/x.png");
                     break;
 
-                case Etat.Assigne :
+                case Etat.Assigne:
                     b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/crochet.png");
                     break;
 
-                case Etat.Critique :
+                case Etat.Critique:
                     b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/exclamation.png");
                     break;
 
@@ -478,17 +466,19 @@ namespace AirAmbe
                     if (vol.Delais <= 5 && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
                     {
                         vol.EtatVol = Etat.Critique;
-                        grd.Background = Brushes.Firebrick;
-                    } 
+                        this.Dispatcher.Invoke(() => { grd.Background = Brushes.Firebrick; });
+                    }
 
                     else if (vol.EtatVol == Etat.Atterrissage || vol.EtatVol == Etat.Decollage)
                     {
-                        img.Height = 37;
-                        img.Margin = new Thickness(12, 0, 0, 0);
+                        this.Dispatcher.Invoke(() => 
+                        {
+                            img.Height = 37;
+                            img.Margin = new Thickness(12, 0, 0, 0);
+                        });
                     }
 
-                    img.Source = TrouverEtat(vol.EtatVol);
-
+                    this.Dispatcher.Invoke(() => { img.Source = TrouverEtat(vol.EtatVol); });
                     break;
                 }
             }
@@ -504,19 +494,19 @@ namespace AirAmbe
                 {
                     TimeSpan t = LstVols[i].DateVol - vol.DateVol;
 
-                    if(t.TotalSeconds <= 180 && t.TotalSeconds >= -180)
+                    if (t.TotalSeconds <= 180 && t.TotalSeconds >= -180)
                     {
                         foreach (ComboBox cboT in TrouverEnfant<ComboBox>(grdProchainsVols))
                         {
-                            if(cboT.Name.Contains(LstVols[i].NumeroVol))
+                            if (cboT.Name.Contains(LstVols[i].NumeroVol))
                             {
                                 ComboBoxItem cboI = cboT.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
 
                                 if (vol.EtatVol == Etat.Assigne)
-                                    cboI.Foreground = Brushes.Red;
-                                
+                                    this.Dispatcher.Invoke(() => { cboI.Foreground = Brushes.Red; }); 
+
                                 else
-                                    cboI.Foreground = Brushes.Black;
+                                    this.Dispatcher.Invoke(() => { cboI.Foreground = Brushes.Black; });
                             }
                         }
                     }
@@ -593,7 +583,7 @@ namespace AirAmbe
             }
 
             // Si la piste n'est pas disponible et qu'on veut la forcer.
-            if(cboi.Foreground == Brushes.Red)
+            if (cboi.Foreground == Brushes.Red)
             {
                 EcranConfirmation eC = new EcranConfirmation(Controleur);
                 eC.ShowDialog();
@@ -610,7 +600,7 @@ namespace AirAmbe
 
                 else
                     grd.Background = Brushes.LightGreen;
-                
+
                 vol.EtatVol = Etat.Assigne;
                 vol.PisteAssigne = LstPistes[cbo.SelectedIndex - 1];
                 TesterPiste(vol);
@@ -648,82 +638,95 @@ namespace AirAmbe
 
         private void t_Elapsed(object sender, ElapsedEventArgs e, Vol vol, Timer t)
         {
-            this.Dispatcher.Invoke(() =>
+            Grid grd = new Grid();
+            Label lblVol = new Label();
+
+            vol.TrouverDelais();
+
+            foreach (Label lbl in TrouverEnfant<Label>(grdProchainsVols))
             {
-                Grid grd = new Grid();
-                Label lblVol = new Label();
-
-                vol.TrouverDelais();
-
-                foreach (Label lbl in TrouverEnfant<Label>(grdProchainsVols))
+                if (lbl.Name.Contains(vol.NumeroVol))
                 {
-                    if (lbl.Name.Contains(vol.NumeroVol))
-                    {
-                        grd = lbl.Parent as Grid;
-                        lblVol = lbl;
-                        break;
-                    }
+                    grd = lbl.Parent as Grid;
+                    lblVol = lbl;
+                    break;
                 }
+            }
 
-                // Changer quand le vol est terminée.
-                if (vol.Delais <= 0)
+            // Changer quand le vol est terminée.
+            if (vol.Delais <= 0)
+            {
+                foreach (Button btn in TrouverEnfant<Button>(grdProchainsVols))
+                    if (btn.Name.Contains(vol.NumeroVol))
+                        this.Dispatcher.Invoke(() => {grd.Children.Remove(btn);});
+            
+                if(vol.EtatVol == Etat.Critique)
                 {
-                    foreach (Button btn in TrouverEnfant<Button>(grdProchainsVols))
-                        if (btn.Name.Contains(vol.NumeroVol))
-                            grd.Children.Remove(btn);
-                    
-                    if(vol.EtatVol == Etat.Critique)
+                    this.Dispatcher.Invoke(() => 
                     {
                         lblVol.Content = "Le vol a échoué!";
                         vol.EtatVol = Etat.Echoue;
-                    }
-                    
-                    else if(vol.EstAtterrissage)
+                    });
+                }
+            
+                else if(vol.EstAtterrissage)
+                {
+                    Anim.DemarreAtterrissage(vol.PisteAssigne.NumPiste);
+
+                    this.Dispatcher.Invoke(() =>
                     {
-                        DemarreAtterrissage(vol.PisteAssigne.NumPiste);
                         lblVol.Content = "Attérit sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
                         lblVol.Width = 170;
                         lblVol.Margin = new Thickness(58, 0, 0, 0);
-                        vol.EtatVol = Etat.Atterrissage;
-                    }
+                    });
+                    
+                    vol.EtatVol = Etat.Atterrissage;
+                }
 
-                    else
+                else
+                {
+                    Anim.DemarreDecollage(vol.PisteAssigne.NumPiste);
+
+                    this.Dispatcher.Invoke(() =>
                     {
-                        DemarreDecollage(vol.PisteAssigne.NumPiste);
                         lblVol.Content = "Décolle sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
                         lblVol.Width = 170;
                         lblVol.Margin = new Thickness(58, 0, 0, 0);
-                        vol.EtatVol = Etat.Decollage;
-                    }
+                    });
 
+                    vol.EtatVol = Etat.Decollage;
+                }
+
+                this.Dispatcher.Invoke(() =>
+                {
                     grd.Height = 60;
                     grd.Background = Brushes.LightGray;
-                    TesterEtat(vol);
-                    TesterPiste(vol);
-
-                    vol.PisteAssigne = null;
-                }
-
-                // Changer les secondes.
-                else if (vol.Delais <= 1)
-                {
-                    lblVol.Content = "Dans " + (60 - DateTime.Now.Second) .ToString() + " secondes";
-
-                    t.Interval = 1000;
-                    t.Start();
-                }
-
-                // Changer les minutes.
-                else
-                {
-                    lblVol.Content = "Dans " + vol.Delais.ToString() + " minutes";
-
-                    t.Interval = (60 - DateTime.Now.Second) * 1000 - DateTime.Now.Millisecond;
-                    t.Start();
-                }
+                });
 
                 TesterEtat(vol);
-            });
+                TesterPiste(vol);
+                vol.PisteAssigne = null;
+            }
+
+            // Changer les secondes.
+            else if (vol.Delais <= 1)
+            {
+                this.Dispatcher.Invoke(() => { lblVol.Content = "Dans " + (60 - DateTime.Now.Second).ToString() + " secondes"; }); 
+
+                t.Interval = 1000;
+                t.Start();
+            }
+
+            // Changer les minutes.
+            else
+            {
+                this.Dispatcher.Invoke(() => { lblVol.Content = "Dans " + vol.Delais.ToString() + " minutes"; }); 
+
+                t.Interval = (60 - DateTime.Now.Second) * 1000 - DateTime.Now.Millisecond;
+                t.Start();
+            }
+
+            TesterEtat(vol);
         }
 
 
@@ -749,400 +752,5 @@ namespace AirAmbe
 
 
         // ---------------------------------------------------------------------------------- \\
-        // Méthodes Antho
-        // ---------------------------------------------------------------------------------- \\
-
-
-        /// <summary>
-        /// Une méthode pour dessiner les pistes en fonction du nombre choisi 
-        /// </summary>
-        /// <param name="NbPistes">Nombre de piste choisi par l'utilisateur</param>
-        private void GererDessinPiste(int NbPistes)
-        {
-            ImageBrush ImagePiste = new ImageBrush();
-            ImagePiste.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/piste.png"));
-
-            if (NbPistes == 2)
-            {
-                DessinerPiste1(ImagePiste);
-                DessinerPiste2(ImagePiste);
-            }
-            else if (NbPistes == 3)
-            {
-                DessinerPiste1(ImagePiste);
-                DessinerPiste2(ImagePiste);
-                DessinerPiste3(ImagePiste);
-            }
-            else if (NbPistes == 4)
-            {
-                DessinerPiste1(ImagePiste);
-                DessinerPiste2(ImagePiste);
-                DessinerPiste3(ImagePiste);
-                DessinerPiste4(ImagePiste);
-            }
-        }
-
-        /// <summary>
-        /// Une méthode pour dessiner la piste 1
-        /// </summary>
-        /// <param name="ib">L'image d'une piste</param>
-        private void DessinerPiste1(ImageBrush ib)
-        {
-            Piste1.Stroke = new SolidColorBrush(Colors.Black);
-            Piste1.StrokeThickness = 2;
-            Piste1.Fill = ib;
-            Piste1.Width = 370;
-            Piste1.Height = 50;
-            Canvas.SetLeft(Piste1, 95);
-            Canvas.SetTop(Piste1, 10);
-        }
-
-        /// <summary>
-        /// Une méthode pour dessiner la piste 2
-        /// </summary>
-        /// <param name="ib">L'image d'une piste</param>
-        private void DessinerPiste2(ImageBrush ib)
-        {
-            Piste2.Stroke = new SolidColorBrush(Colors.Black);
-            Piste2.StrokeThickness = 2;
-            Piste2.Fill = ib;
-            Piste2.Width = 370;
-            Piste2.Height = 50;
-            Canvas.SetLeft(Piste2, 137);
-            Canvas.SetTop(Piste2, 100);
-        }
-
-        /// <summary>
-        /// Une méthode pour dessiner la piste 3
-        /// </summary>
-        /// <param name="ib">L'image d'une piste</param>
-        private void DessinerPiste3(ImageBrush ib)
-        {
-            Piste3.Stroke = new SolidColorBrush(Colors.Black);
-            Piste3.StrokeThickness = 2;
-            Piste3.Fill = ib;
-            Piste3.Width = 370;
-            Piste3.Height = 50;
-            Canvas.SetLeft(Piste3, 137);
-            Canvas.SetTop(Piste3, 185);
-        }
-
-        /// <summary>
-        /// Une méthode pour dessiner la piste 4
-        /// </summary>
-        /// <param name="ib">L'image d'une piste</param>
-        private void DessinerPiste4(ImageBrush ib)
-        {
-            Piste4.Stroke = new SolidColorBrush(Colors.Black);
-            Piste4.StrokeThickness = 2;
-            Piste4.Fill = ib;
-            Piste4.Width = 370;
-            Piste4.Height = 50;
-            Canvas.SetLeft(Piste4, 95);
-            Canvas.SetTop(Piste4, 260);
-        }
-
-        /// <summary>
-        /// Une méthode pour dessiner les voies de service
-        /// </summary>
-        private void DessinerVoieService()
-        {
-            Rectangle rectRotation = new Rectangle();
-            ImageBrush a = new ImageBrush();
-            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/asphalte.jpg"));
-
-            Asphalthe1.Stroke = new SolidColorBrush(Colors.Black);
-            Asphalthe1.StrokeThickness = 2;
-            Asphalthe1.Fill = a;
-            Asphalthe1.Width = 35;
-            Asphalthe1.Height = 40;
-            Canvas.SetLeft(Asphalthe1, 80);
-            Canvas.SetTop(Asphalthe1, 100);
-
-            Asphalthe2.Stroke = new SolidColorBrush(Colors.Black);
-            Asphalthe2.StrokeThickness = 2;
-            Asphalthe2.Fill = a;
-            Asphalthe2.Width = 35;
-            Asphalthe2.Height = 40;
-            Canvas.SetLeft(Asphalthe2, 80);
-            Canvas.SetTop(Asphalthe2, 175);
-
-            RotateTransform rotation = new RotateTransform(90, 14, 14);
-            AsphalthePrincipale.RenderTransform = rotation;
-            AsphalthePrincipale.Stroke = new SolidColorBrush(Colors.Black);
-            AsphalthePrincipale.StrokeThickness = 2;
-            AsphalthePrincipale.Fill = a;
-            AsphalthePrincipale.Width = 210;
-            AsphalthePrincipale.Height = 30;
-            Canvas.SetLeft(AsphalthePrincipale, 110);
-            Canvas.SetTop(AsphalthePrincipale, 60);
-        }
-
-
-        private void DessinerHangar()
-        {
-            hangar.Fill = Brushes.Black;
-            hangar.Width = 80;
-            hangar.Height = 270;
-
-            Canvas.SetTop(hangar, 29);
-            Canvas.SetZIndex(hangar, 100);
-        }
-
-        /// <summary>
-        /// Une méthode pour gérer les décollages uniquement (VERSION 0.5) 
-        /// </summary>
-        private void GererDecollage(Image avionDecollage, int piste)
-        {
-            GereDroit = new DispatcherTimer();
-
-            //Ici l'avion quitte le hangar pour aller se placer sur une piste
-            GereDroit.Start();
-            GereDroit.Tick += new EventHandler((sender, e) => DeplacementDroitHangar(sender, e, avionDecollage, piste));
-            GereDroit.Interval = TimeSpan.FromMilliseconds(50);
-        }
-
-        /// <summary>
-        /// Une méthode temporaire qui permet de déplacer un avion du hangar jusqua la voie de service (VERSION 0.5)
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DeplacementDroitHangar(object sender, EventArgs e, Image avionDecollage, int piste)
-        {
-            if (HorizontalD >= 0)
-            {
-                if (HorizontalD == 100)
-                {
-                    GereHautD = new DispatcherTimer();
-
-                    GereDroit.Stop();
-                    GereHautD.Start();
-                    GereHautD.Tick += new EventHandler((senderD, eD) => DeplacementHautVoieServiceD(sender, e, avionDecollage, piste));
-                    GereHautD.Interval = TimeSpan.FromMilliseconds(50);
-                }
-                else
-                {
-                    HorizontalD += 1;
-                }
-            }
-
-            Canvas.SetLeft(avionDecollage, HorizontalD);
-        }
-
-        /// <summary>
-        /// Une méthode temporaire qui permet de déplacer un avion de la voie de service jusqu'à la piste pour le décollage(VERSION 0.5)
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DeplacementHautVoieServiceD(object sender, EventArgs e, Image avionDecollage, int piste)
-        {
-            if (VerticalD <= 700)
-            {
-                if ((VerticalD == 15 && piste == 1) || (VerticalD == 110 && piste == 2) || (VerticalD == 190 && piste == 3) || (VerticalD == 264 && piste == 4))
-                {
-                    GereDroit = new DispatcherTimer();
-                    GereHautD.Stop();
-                    GereDroit.Start();
-                    GereDroit.Tick += new EventHandler((senderHD, eHD) => DeplacementDroitPisteD(sender, e, avionDecollage));
-                    GereDroit.Interval = TimeSpan.FromMilliseconds(50);
-                }
-                else
-                {
-                    switch (piste)
-                    {
-                        case 1:
-                            VerticalD -= 1;
-                            break;
-                        case 2:
-                            VerticalD -= 1;
-                            break;
-                        case 3:
-                            VerticalD += 1;
-                            break;
-                        case 4:
-                            VerticalD += 1;
-                            break;
-                    }
-
-                    Canvas.SetTop(avionDecollage, VerticalD);
-                }
-            }
-
-        }
-
-
-        private void DeplacementDroitPisteD(object sender, EventArgs e, Image avionDecollage)
-        {
-
-            if (HorizontalD >= 0)
-            {
-                if (HorizontalD == 800)
-                {
-                    GereDroit.Stop();
-                    cnvCarte.Children.Remove(avionDecollage);
-
-                }
-                else
-                {
-                    HorizontalD += 1;
-                }
-
-                Canvas.SetLeft(avionDecollage, HorizontalD);
-            }
-
-
-
-        }
-
-
-        /// <summary>
-        /// Une méthode pour gérer les attérissages uniquement (VERSION 0.5) 
-        /// </summary>
-        private void GererAtterrissage(Image avionAtterrissage, int piste)
-        {
-            GereGauche = new DispatcherTimer();
-
-            GereGauche.Start();
-            GereGauche.Tick += new EventHandler((sender, e) => DeplacementGauchetAtterrissage(sender, e, avionAtterrissage, piste));
-            GereGauche.Interval = TimeSpan.FromMilliseconds(50);
-        }
-
-        private void DeplacementGauchetAtterrissage(object sender, EventArgs e, Image avionAtterrissage, int piste)
-        {
-            if (HorizontalA >= 0)
-            {
-
-                //Pour tester la longueur de la distance horizontale à parcourir
-                if (HorizontalA == 100)
-                {
-                    GereHautA = new DispatcherTimer();
-
-                    GereGauche.Stop();
-                    GereHautA.Start();
-                    GereHautA.Tick += new EventHandler((senderHaut, eHaut) => DeplacementHautVoieServiceA(sender, e, avionAtterrissage, piste));   
-                    GereHautA.Interval = TimeSpan.FromMilliseconds(50);
-                }
-                else
-                {
-                    HorizontalA -= 1;
-                }
-            }
-
-
-            Canvas.SetLeft(avionAtterrissage, HorizontalA);
-        }
-
-        private void DeplacementHautVoieServiceA(object sender, EventArgs e, Image avionAtterrissage, int piste)
-        {
-
-
-            if (VerticalA >= 0)
-            {
-
-                if (VerticalA == 100)
-                {
-                    GereGauche = new DispatcherTimer();
-                    GereHautA.Stop();
-                    GereGauche.Start();
-                    GereGauche.Tick += new EventHandler((senderHaut, eHaut) => DeplacementGauchetHangarA(sender, e, avionAtterrissage));
-                    GereGauche.Interval = TimeSpan.FromMilliseconds(50);
-                }
-                else
-                {
-
-                    if (piste == 1)
-                    {
-                        VerticalA += 1;
-                    }
-                    else
-                    {
-                        VerticalA -= 1;
-                    }
-
-                    Canvas.SetTop(avionAtterrissage, VerticalA);
-                }
-            }
-
-        }
-
-        private void DeplacementGauchetHangarA(object sender, EventArgs e, Image avionAtterrissage)
-        {
-            if (HorizontalA >= 0)
-            {
-                //Pour tester la longueur de la distance horizontale à parcourir
-                if (HorizontalA == 40)
-                {
-                    GereGauche.Stop();
-                    cnvCarte.Children.Remove(avionAtterrissage);
-                    HorizontalA = 700;
-                }
-                else
-                {
-                    HorizontalA -= 1;
-                }
-
-                Canvas.SetLeft(avionAtterrissage, HorizontalA);
-            }
-        }
-
-        private void DemarreAtterrissage(int piste)
-        {
-            HorizontalA = 700;
-
-            Image AvionA = new Image();
-            BitmapImage b = new BitmapImage();
-            b.BeginInit();
-            b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/avion.png");
-            b.EndInit();
-            AvionA.Source = b;
-            AvionA.Width = 40;
-
-            switch (piste)
-            {
-                case 1:
-                    VerticalA = 15;
-                    Canvas.SetTop(AvionA, 15);
-
-                    break;
-                case 2:
-                    VerticalA = 110;
-                    Canvas.SetTop(AvionA, 110);
-
-                    break;
-                case 3:
-                    VerticalA = 190;
-                    Canvas.SetTop(AvionA, 190);
-                    break;
-                case 4:
-                    VerticalA = 264;
-                    Canvas.SetTop(AvionA, 264);
-                    break;
-            }
-
-            Canvas.SetLeft(AvionA, HorizontalA);
-            cnvCarte.Children.Add(AvionA);
-            GererAtterrissage(AvionA, piste);
-        }
-
-        private void DemarreDecollage(int piste)
-        {
-            VerticalD = 176;
-            HorizontalD = 0;
-            Image AvionD = new Image();
-            BitmapImage b = new BitmapImage();
-            b.BeginInit();
-            b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/avion.png");
-            b.EndInit();
-            AvionD.Source = b;
-            AvionD.Width = 40;
-
-            Canvas.SetTop(AvionD, VerticalD);
-
-            cnvCarte.Children.Add(AvionD);
-
-            GererDecollage(AvionD, piste);
-        }
-
-
     }
 }
