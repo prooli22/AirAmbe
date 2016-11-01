@@ -37,9 +37,8 @@ namespace AirAmbe
         public List<Piste> LstPistes { get; set; }
 
         public Animation Anim { get; set; }
-
-        // ---------------------------------------------------------------------------------- \\
-
+       
+       
         /// <summary>
         /// Constructeur de la fênetre du contrôleur.
         /// </summary>
@@ -49,6 +48,7 @@ namespace AirAmbe
             InitializeComponent();
             Controleur = U;
             Anim = new Animation(this);
+            
 
             if (Controleur == null)
                 btnProfil.Visibility = Visibility.Hidden;
@@ -56,17 +56,14 @@ namespace AirAmbe
 
             if (ChargerScenarios())
             {
-                if (LstScenarios.Count > 0)
-                {
-                    ChargerVols();
-                    ModifierHeures();
-                    ChargerDataGrid();
-                    ChargerProchainsVols();
-                }
+                ChargerVols();
+                ModifierHeures();
+                ChargerDataGrid();
+                ChargerProchainsVols();
 
                 Anim.DessinerHangar();
                 Anim.GererDessinPiste(LstPistes.Count);
-                Anim.DessinerVoieService();
+                //Anim.DessinerVoieService();
             }
 
             else
@@ -94,9 +91,6 @@ namespace AirAmbe
                 return false;
             }
 
-            if (scenarios.Length == 0)
-                return false;
-
             // On charge le nombre de pistes dans la liste.
             for (int i = 0; i < Int32.Parse(scenarios[0]); i++)
             {
@@ -104,8 +98,6 @@ namespace AirAmbe
                 LstPistes[i].NumPiste = i + 1;
             }
 
-            if (scenarios.Length == 1)
-                return true;
 
             for (int i = 1; i < scenarios.Length; i++)
             {
@@ -466,19 +458,17 @@ namespace AirAmbe
                     if (vol.Delais <= 5 && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
                     {
                         vol.EtatVol = Etat.Critique;
-                        this.Dispatcher.Invoke(() => { grd.Background = Brushes.Firebrick; });
+                        grd.Background = Brushes.Firebrick;
                     }
 
                     else if (vol.EtatVol == Etat.Atterrissage || vol.EtatVol == Etat.Decollage)
                     {
-                        this.Dispatcher.Invoke(() => 
-                        {
-                            img.Height = 37;
-                            img.Margin = new Thickness(12, 0, 0, 0);
-                        });
+                        img.Height = 37;
+                        img.Margin = new Thickness(12, 0, 0, 0);
                     }
 
-                    this.Dispatcher.Invoke(() => { img.Source = TrouverEtat(vol.EtatVol); });
+                    img.Source = TrouverEtat(vol.EtatVol);
+
                     break;
                 }
             }
@@ -503,10 +493,10 @@ namespace AirAmbe
                                 ComboBoxItem cboI = cboT.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
 
                                 if (vol.EtatVol == Etat.Assigne)
-                                    this.Dispatcher.Invoke(() => { cboI.Foreground = Brushes.Red; }); 
+                                    cboI.Foreground = Brushes.Red;
 
                                 else
-                                    this.Dispatcher.Invoke(() => { cboI.Foreground = Brushes.Black; });
+                                    cboI.Foreground = Brushes.Black;
                             }
                         }
                     }
@@ -638,95 +628,82 @@ namespace AirAmbe
 
         private void t_Elapsed(object sender, ElapsedEventArgs e, Vol vol, Timer t)
         {
-            Grid grd = new Grid();
-            Label lblVol = new Label();
-
-            vol.TrouverDelais();
-
-            foreach (Label lbl in TrouverEnfant<Label>(grdProchainsVols))
+            this.Dispatcher.Invoke(() =>
             {
-                if (lbl.Name.Contains(vol.NumeroVol))
+                Grid grd = new Grid();
+                Label lblVol = new Label();
+
+                vol.TrouverDelais();
+
+                foreach (Label lbl in TrouverEnfant<Label>(grdProchainsVols))
                 {
-                    grd = lbl.Parent as Grid;
-                    lblVol = lbl;
-                    break;
+                    if (lbl.Name.Contains(vol.NumeroVol))
+                    {
+                        grd = lbl.Parent as Grid;
+                        lblVol = lbl;
+                        break;
+                    }
                 }
-            }
 
-            // Changer quand le vol est terminée.
-            if (vol.Delais <= 0)
-            {
-                foreach (Button btn in TrouverEnfant<Button>(grdProchainsVols))
-                    if (btn.Name.Contains(vol.NumeroVol))
-                        this.Dispatcher.Invoke(() => {grd.Children.Remove(btn);});
-            
-                if(vol.EtatVol == Etat.Critique)
+                // Changer quand le vol est terminée.
+                if (vol.Delais <= 0)
                 {
-                    this.Dispatcher.Invoke(() => 
+                    foreach (Button btn in TrouverEnfant<Button>(grdProchainsVols))
+                        if (btn.Name.Contains(vol.NumeroVol))
+                            grd.Children.Remove(btn);
+
+                    if (vol.EtatVol == Etat.Critique)
                     {
                         lblVol.Content = "Le vol a échoué!";
                         vol.EtatVol = Etat.Echoue;
-                    });
-                }
-            
-                else if(vol.EstAtterrissage)
-                {
-                    Anim.DemarreAtterrissage(vol.PisteAssigne.NumPiste);
+                    }
 
-                    this.Dispatcher.Invoke(() =>
+                    else if (vol.EstAtterrissage)
                     {
+                        Anim.DemarreAtterrissage(vol.PisteAssigne.NumPiste);
                         lblVol.Content = "Attérit sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
                         lblVol.Width = 170;
                         lblVol.Margin = new Thickness(58, 0, 0, 0);
-                    });
-                    
-                    vol.EtatVol = Etat.Atterrissage;
-                }
+                        vol.EtatVol = Etat.Atterrissage;
+                    }
 
-                else
-                {
-                    Anim.DemarreDecollage(vol.PisteAssigne.NumPiste);
-
-                    this.Dispatcher.Invoke(() =>
+                    else
                     {
+                        Anim.DemarreDecollage(vol.PisteAssigne.NumPiste);
                         lblVol.Content = "Décolle sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
                         lblVol.Width = 170;
                         lblVol.Margin = new Thickness(58, 0, 0, 0);
-                    });
+                        vol.EtatVol = Etat.Decollage;
+                    }
 
-                    vol.EtatVol = Etat.Decollage;
-                }
-
-                this.Dispatcher.Invoke(() =>
-                {
                     grd.Height = 60;
                     grd.Background = Brushes.LightGray;
-                });
+                    TesterEtat(vol);
+                    TesterPiste(vol);
+
+                    vol.PisteAssigne = null;
+                }
+
+                // Changer les secondes.
+                else if (vol.Delais <= 1)
+                {
+                    lblVol.Content = "Dans " + (60 - DateTime.Now.Second).ToString() + " secondes";
+
+                    t.Interval = 1000;
+                    t.Start();
+                }
+
+                // Changer les minutes.
+                else
+                {
+                    lblVol.Content = "Dans " + vol.Delais.ToString() + " minutes";
+
+                    t.Interval = (60 - DateTime.Now.Second) * 1000 - DateTime.Now.Millisecond;
+                    t.Start();
+                }
 
                 TesterEtat(vol);
-                TesterPiste(vol);
-                vol.PisteAssigne = null;
-            }
-
-            // Changer les secondes.
-            else if (vol.Delais <= 1)
-            {
-                this.Dispatcher.Invoke(() => { lblVol.Content = "Dans " + (60 - DateTime.Now.Second).ToString() + " secondes"; }); 
-
-                t.Interval = 1000;
-                t.Start();
-            }
-
-            // Changer les minutes.
-            else
-            {
-                this.Dispatcher.Invoke(() => { lblVol.Content = "Dans " + vol.Delais.ToString() + " minutes"; }); 
-
-                t.Interval = (60 - DateTime.Now.Second) * 1000 - DateTime.Now.Millisecond;
-                t.Start();
-            }
-
-            TesterEtat(vol);
+            });
         }
 
 
@@ -749,8 +726,5 @@ namespace AirAmbe
                 }
             }
         }
-
-
-        // ---------------------------------------------------------------------------------- \\
     }
 }
