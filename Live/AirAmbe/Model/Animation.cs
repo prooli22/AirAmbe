@@ -19,9 +19,9 @@ namespace AirAmbe
     public class Animation
     {
         //Déclaration des constantes de la classe Animation
-        public const int vitesse = 2;
+        public const int VITESSE = 2;
 
-        public const int vitesseAtterissage = 4;
+        public const int VITESSEATTERRISSAGE = 4;
 
         //Déclaration des attributs de la classe Animation
         public DispatcherTimer GereDroit;
@@ -36,16 +36,16 @@ namespace AirAmbe
 
         public EcranControleur Ec { get; set; }
 
-       
-        //public int HorizontalA = 700;
 
-        //public int HorizontalD = 10;
+        public int HorizontalA = 700;
 
-        //public int VerticalA;
+        public int HorizontalD = 10;
 
-        //public int VerticalD = 176;
+        public int VerticalA;
 
-       
+        public int VerticalD = 176;
+
+        public int CoordY { get; set; }
         /// <summary>
         /// Constructeur de la classe Animation
         /// </summary>
@@ -53,7 +53,7 @@ namespace AirAmbe
         public Animation(EcranControleur ec)
         {
             Ec = ec;
-
+           
 
         }
 
@@ -233,261 +233,313 @@ namespace AirAmbe
             Canvas.SetZIndex(Ec.hangar, 100);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// Une méthode pour gérer les décollages uniquement (VERSION 0.5) 
         /// </summary>
-        public void GererDecollage(Image avionDecollage, int piste)
-        {
-            GereDroit = new DispatcherTimer();
+        //public void GererDecollage(Image avionDecollage, int piste)
+        //{
+        //    GereDroit = new DispatcherTimer();
 
-            //Ici l'avion quitte le hangar pour aller se placer sur une piste
-            GereDroit.Start();
-            GereDroit.Tick += new EventHandler((sender, e) => DeplacementDroitHangar(sender, e, avionDecollage, piste));
-            GereDroit.Interval = TimeSpan.FromMilliseconds(50);
-        }
+        //    //Ici l'avion quitte le hangar pour aller se placer sur une piste
+        //    GereDroit.Start();
+        //    GereDroit.Tick += new EventHandler((sender, e) => DeplacementDroitHangar(sender, e, avionDecollage, piste));
+        //    GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+        //}
 
         /// <summary>
         /// Une méthode temporaire qui permet de déplacer un avion du hangar jusqua la voie de service (VERSION 0.5)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void DeplacementDroitHangar(object sender, EventArgs e, Image avionDecollage, int piste)
-        {
-            if (HorizontalD >= 0)
-            {
-                if (HorizontalD == 100)
-                {
-                    GereHautD = new DispatcherTimer();
+        //public void DeplacementDroitHangar(object sender, EventArgs e, Image avionDecollage, int piste)
+        //{
+        //    if (HorizontalD >= 0)
+        //    {
+        //        if (HorizontalD == 100)
+        //        {
+        //            GereHautD = new DispatcherTimer();
 
-                    GereDroit.Stop();
-                    GereHautD.Start();
-                    GereHautD.Tick += new EventHandler((senderD, eD) => DeplacementHautVoieServiceD(sender, e, avionDecollage, piste));
-                    GereHautD.Interval = TimeSpan.FromMilliseconds(50);
-                }
-                else
-                {
-                    HorizontalD += 1;
-                }
-            }
+        //            GereDroit.Stop();
+        //            GereHautD.Start();
+        //            GereHautD.Tick += new EventHandler((senderD, eD) => DeplacementHautVoieServiceD(sender, e, avionDecollage, piste));
+        //            GereHautD.Interval = TimeSpan.FromMilliseconds(50);
+        //        }
+        //        else
+        //        {
+        //            HorizontalD += 1;
+        //        }
+        //    }
 
-            Canvas.SetLeft(avionDecollage, HorizontalD);
-        }
+        //    Canvas.SetLeft(avionDecollage, HorizontalD);
+        //}
 
         /// <summary>
         /// Une méthode temporaire qui permet de déplacer un avion de la voie de service jusqu'à la piste pour le décollage(VERSION 0.5)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void DeplacementHautVoieServiceD(object sender, EventArgs e, Image avionDecollage, int piste)
-        {
-            if (VerticalD <= 700)
-            {
-                if ((VerticalD == 15 && piste == 1) || (VerticalD == 110 && piste == 2) || (VerticalD == 190 && piste == 3) || (VerticalD == 264 && piste == 4))
-                {
-                    GereDroit = new DispatcherTimer();
-                    GereHautD.Stop();
-                    GereDroit.Start();
-                    GereDroit.Tick += new EventHandler((senderHD, eHD) => DeplacementDroitPisteD(sender, e, avionDecollage));
-                    GereDroit.Interval = TimeSpan.FromMilliseconds(50);
-                }
-                else
-                {
-                    switch (piste)
-                    {
-                        case 1:
-                            VerticalD -= 1;
-                            break;
-                        case 2:
-                            VerticalD -= 1;
-                            break;
-                        case 3:
-                            VerticalD += 1;
-                            break;
-                        case 4:
-                            VerticalD += 1;
-                            break;
-                    }
+        //public void DeplacementHautVoieServiceD(object sender, EventArgs e, Image avionDecollage, int piste)
+        //{
+        //    if (VerticalD <= 700)
+        //    {
+        //        if ((VerticalD == 15 && piste == 1) || (VerticalD == 110 && piste == 2) || (VerticalD == 190 && piste == 3) || (VerticalD == 264 && piste == 4))
+        //        {
+        //            GereDroit = new DispatcherTimer();
+        //            GereHautD.Stop();
+        //            GereDroit.Start();
+        //            GereDroit.Tick += new EventHandler((senderHD, eHD) => DeplacementDroitPisteD(sender, e, avionDecollage));
+        //            GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+        //        }
+        //        else
+        //        {
+        //            switch (piste)
+        //            {
+        //                case 1:
+        //                    VerticalD -= 1;
+        //                    break;
+        //                case 2:
+        //                    VerticalD -= 1;
+        //                    break;
+        //                case 3:
+        //                    VerticalD += 1;
+        //                    break;
+        //                case 4:
+        //                    VerticalD += 1;
+        //                    break;
+        //            }
 
-                    Canvas.SetTop(avionDecollage, VerticalD);
-                }
-            }
+        //            Canvas.SetTop(avionDecollage, VerticalD);
+        //        }
+        //    }
 
-        }
-
-
-        public void DeplacementDroitPisteD(object sender, EventArgs e, Image avionDecollage)
-        {
-
-            if (HorizontalD >= 0)
-            {
-                if (HorizontalD == 800)
-                {
-                    GereDroit.Stop();
-                    Ec.cnvCarte.Children.Remove(avionDecollage);
-
-                }
-                else
-                {
-                    HorizontalD += 1;
-                }
-
-                Canvas.SetLeft(avionDecollage, HorizontalD);
-            }
+        //}
 
 
+        //public void DeplacementDroitPisteD(object sender, EventArgs e, Image avionDecollage)
+        //{
 
-        }
+        //    if (HorizontalD >= 0)
+        //    {
+        //        if (HorizontalD == 800)
+        //        {
+        //            GereDroit.Stop();
+        //            Ec.cnvCarte.Children.Remove(avionDecollage);
+
+        //        }
+        //        else
+        //        {
+        //            HorizontalD += 1;
+        //        }
+
+        //        Canvas.SetLeft(avionDecollage, HorizontalD);
+        //    }
+
+
+
+        //}
 
 
         /// <summary>
-        /// Une méthode pour gérer les attérissages uniquement (VERSION 0.5) 
+        /// Une méthode pour gérer les attérissages uniquement 
         /// </summary>
-        public void GererAtterrissage(Image avionAtterrissage, int piste, int coordX, int coordY)
+        public void GererAtterrissage(Image avionAtterrissage, int piste, int coordX,int coordY)
         {
-            //Si il s'agit de la piste 1 ou 3
-            if(piste==1 || piste==3)
-            {
-                GereBas = new DispatcherTimer();
+            //Déclaration des variables
+            GereBas = new DispatcherTimer();
+            CoordY = coordY;
 
+            //Si il s'agit de la piste 1 ou 3
+            if (piste == 1 || piste == 3)
+            {              
                 GereBas.Start(); 
                 GereBas.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+                GereBas.Interval = TimeSpan.FromMilliseconds(50);
             }
-            else if(piste==2 || piste==4 || piste ==5)  //Si il s'agit de la piste 2, 4 ou 5
+            else if (piste == 2 || piste == 4 || piste == 5)  //Si il s'agit de la piste 2, 4 ou 5
             {
                 GereGauche = new DispatcherTimer();
 
                 GereGauche.Start();
-                GereGauche.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+                GereGauche.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX,coordY));
                 GereGauche.Interval = TimeSpan.FromMilliseconds(50);
-            }          
+            }
         }
     
+        /// <summary>
+        /// Une méthode pour le déplacement des avions en atterrissage seulement
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="avionAtterrissage"></param>
+        /// <param name="piste"></param>
+        /// <param name="coordX"></param>
+        /// <param name="coordY"></param>
         public void DeplacementAtterrissage(object sender, EventArgs e, Image avionAtterrissage, int piste, int coordX, int coordY)
         {
-            //Déclaration des variables
-            int coordYMax=500;
-
+         
             //Si il s'agit de la piste 1 ou 3
-            if(piste==1 || piste ==3)
+            if (piste == 1 || piste == 3)
             {
-                if(coordY < coordYMax)
+                if (CoordY <= 500)
                 {
-                    GereDroit = new DispatcherTimer();
+                    
+                    if(CoordY == 350)
+                    {
+                        GereBas.Stop();
 
-                    GereBas.Stop();
-                    GereDroit.Start();
+                        GereDroit = new DispatcherTimer();
 
-                }
-
-
-
-
-            }else if(piste==2 || piste == 4 || piste==5)    //Si il s'agit de la piste 2, 4 ou 5
+                        GereDroit.Start();
+                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+                        GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+                    }
+                    else
+                    {                      
+                        CoordY = CoordY + VITESSE;                  
+                    }          
+               }
+            
+               //On génère le mouvement 
+               Canvas.SetTop(avionAtterrissage, CoordY);
+            }
+            else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2, 4 ou 5
             {
 
             }
 
 
-            if (HorizontalA >= 0)
-            {
+            //if (HorizontalA >= 0)
+            //{
 
-                //Pour tester la longueur de la distance horizontale à parcourir
-                if (HorizontalA == 100)
-                {
-                    GereHautA = new DispatcherTimer();
+            //    //Pour tester la longueur de la distance horizontale à parcourir
+            //    if (HorizontalA == 100)
+            //    {
+            //        GereHautA = new DispatcherTimer();
 
-                    GereGauche.Stop();
-                    GereHautA.Start();
-                    GereHautA.Tick += new EventHandler((senderHaut, eHaut) => DeplacementHautVoieServiceA(sender, e, avionAtterrissage, piste));
-                    GereHautA.Interval = TimeSpan.FromMilliseconds(50);
-                }
-                else
-                {
-                    HorizontalA -= 1;
-                }
-            }
-
-
-            Canvas.SetLeft(avionAtterrissage, HorizontalA);
+            //        GereGauche.Stop();
+            //        GereHautA.Start();
+            //        GereHautA.Tick += new EventHandler((senderHaut, eHaut) => DeplacementHautVoieServiceA(sender, e, avionAtterrissage, piste));
+            //        GereHautA.Interval = TimeSpan.FromMilliseconds(50);
+            //    }
+            //    else
+            //    {
+            //        HorizontalA -= 1;
+            //    }
+            //}
         }
 
-        public void DeplacementHautVoieServiceA(object sender, EventArgs e, Image avionAtterrissage, int piste)
+        public void DeplacementAtterrissageHaut(object sender, EventArgs e, Image avionAtterrissage, int piste, int coordX, int coordY)
         {
+            //Déclaration des variables
 
 
-            if (VerticalA >= 0)
+            if (piste == 1 || piste == 3)
             {
-
-                if (VerticalA == 100)
+                if (CoordY <= 500)
                 {
-                    GereGauche = new DispatcherTimer();
-                    GereHautA.Stop();
-                    GereGauche.Start();
-                    GereGauche.Tick += new EventHandler((senderHaut, eHaut) => DeplacementGauchetHangarA(sender, e, avionAtterrissage));
-                    GereGauche.Interval = TimeSpan.FromMilliseconds(50);
-                }
-                else
-                {
+                    //GereDroit = new DispatcherTimer();
 
-                    if (piste == 1)
+                    //GereBas.Stop();
+                    // GereDroit.Start();
+
+                    if (CoordY == 350)
                     {
-                        VerticalA += 1;
+                        GereBas.Stop();
+
+                        GereDroit = new DispatcherTimer();
+
+                        GereDroit.Start();
+                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+                        GereDroit.Interval = TimeSpan.FromMilliseconds(50);
                     }
                     else
                     {
-                        VerticalA -= 1;
+                        CoordY = CoordY + VITESSE;
                     }
-
-                    Canvas.SetTop(avionAtterrissage, VerticalA);
                 }
+                Canvas.SetTop(avionAtterrissage, CoordY);
             }
-
-        }
-
-        public void DeplacementGauchetHangarA(object sender, EventArgs e, Image avionAtterrissage)
-        {
-            if (HorizontalA >= 0)
+            else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2, 4 ou 5
             {
-                //Pour tester la longueur de la distance horizontale à parcourir
-                if (HorizontalA == 40)
-                {
-                    GereGauche.Stop();
-                    Ec.cnvCarte.Children.Remove(avionAtterrissage);
-                    HorizontalA = 700;
-                }
-                else
-                {
-                    HorizontalA -= 1;
-                }
 
-                Canvas.SetLeft(avionAtterrissage, HorizontalA);
             }
+
+
+            //if (HorizontalA >= 0)
+            //{
+
+            //    //Pour tester la longueur de la distance horizontale à parcourir
+            //    if (HorizontalA == 100)
+            //    {
+            //        GereHautA = new DispatcherTimer();
+
+            //        GereGauche.Stop();
+            //        GereHautA.Start();
+            //        GereHautA.Tick += new EventHandler((senderHaut, eHaut) => DeplacementHautVoieServiceA(sender, e, avionAtterrissage, piste));
+            //        GereHautA.Interval = TimeSpan.FromMilliseconds(50);
+            //    }
+            //    else
+            //    {
+            //        HorizontalA -= 1;
+            //    }
+            //}
         }
+
+
+
+
+        //public void DeplacementHautVoieServiceA(object sender, EventArgs e, Image avionAtterrissage, int piste)
+        //{
+
+
+        //    if (VerticalA >= 0)
+        //    {
+
+        //        if (VerticalA == 100)
+        //        {
+        //            GereGauche = new DispatcherTimer();
+        //            GereHautA.Stop();
+        //            GereGauche.Start();
+        //            GereGauche.Tick += new EventHandler((senderHaut, eHaut) => DeplacementGauchetHangarA(sender, e, avionAtterrissage));
+        //            GereGauche.Interval = TimeSpan.FromMilliseconds(50);
+        //        }
+        //        else
+        //        {
+
+        //            if (piste == 1)
+        //            {
+        //                VerticalA += 1;
+        //            }
+        //            else
+        //            {
+        //                VerticalA -= 1;
+        //            }
+
+        //            Canvas.SetTop(avionAtterrissage, VerticalA);
+        //        }
+        //    }
+
+        //}
+
+        //public void DeplacementGauchetHangarA(object sender, EventArgs e, Image avionAtterrissage)
+        //{
+        //    if (HorizontalA >= 0)
+        //    {
+        //        //Pour tester la longueur de la distance horizontale à parcourir
+        //        if (HorizontalA == 40)
+        //        {
+        //            GereGauche.Stop();
+        //            Ec.cnvCarte.Children.Remove(avionAtterrissage);
+        //            HorizontalA = 700;
+        //        }
+        //        else
+        //        {
+        //            HorizontalA -= 1;
+        //        }
+
+        //        Canvas.SetLeft(avionAtterrissage, HorizontalA);
+        //    }
+        //}
 
         /// <summary>
         /// Une méthode qui permet de démarrer un atterrissage
@@ -496,54 +548,56 @@ namespace AirAmbe
         public void DemarreAtterrissage(int piste)
         {
             //Déclaration des variables
-            int idVol = 69;//----------------->Variable temporaire en attente d'oli
+            string idVol = "69";//----------------->Variable temporaire en attente d'oli
             int coordY=0;
             int coordX=0;
-           
+     
             Image AvionA = new Image();
             BitmapImage b = new BitmapImage();
             b.BeginInit();
             b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/avion.png");
             b.EndInit();
             AvionA.Source = b;
-            AvionA.Width = 40;
-            AvionA.Name = idVol.ToString(); //Le nom de l'image
+            AvionA.Width = 35;
+            AvionA.Name = "imgAvion" + idVol; //Le nom de l'image
 
             ////On réinitialise les variables par défaut
             //HorizontalA = 700;
 
             //foreach(Image img in TrouverEnfant<Image>(Ec.cnvCarte))
             //{
-                
+
             //}
 
             //Selon le numéro de la piste
             switch (piste)
             {
                 case 1:
-                    coordX = 0;
-                    coordY = 0;                                 
+                    coordX = 36;
+                    coordY = 0;
                     break;
 
                 case 2:
                     coordX = 0;
-                    coordY = 0;                 
+                    coordY = 0;
                     break;
 
                 case 3:
-                    coordX = 0;
-                    coordY = 0;                
+                    coordX = 56;
+                    coordY = 0;
                     break;
 
                 case 4:
                     coordX = 0;
-                    coordY = 0;                 
+                    coordY = 0;
                     break;
 
                 case 5:
                     coordX = 0;
                     coordY = 0;
                     break;
+
+
             }
 
             //On dessine l'avion en fonction des coordonnées de la piste
@@ -563,8 +617,8 @@ namespace AirAmbe
         /// <param name="piste"></param>
         public void DemarreDecollage(int piste)
         {
-            VerticalD = 176;
-            HorizontalD = 0;
+            //VerticalD = 176;
+            //HorizontalD = 0;
             Image AvionD = new Image();
             BitmapImage b = new BitmapImage();
             b.BeginInit();
@@ -573,11 +627,11 @@ namespace AirAmbe
             AvionD.Source = b;
             AvionD.Width = 40;
 
-            Canvas.SetTop(AvionD, VerticalD);
+            //Canvas.SetTop(AvionD, VerticalD);
 
             Ec.cnvCarte.Children.Add(AvionD);
 
-            GererDecollage(AvionD, piste);
+            //GererDecollage(AvionD, piste);
         }
 
         public static IEnumerable<T> TrouverEnfant<T>(DependencyObject depObj) where T : DependencyObject
