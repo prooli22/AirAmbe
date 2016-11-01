@@ -10,6 +10,7 @@ namespace AirAmbe
     public class Piste
     {
         public int NumPiste { get; set; }
+        public bool estDisponible { get; set; } = true;
 
 
         public Piste()
