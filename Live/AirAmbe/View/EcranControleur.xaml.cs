@@ -61,7 +61,9 @@ namespace AirAmbe
                 ChargerDataGrid();
                 ChargerProchainsVols();
 
-                Anim.DessinerHangar();
+                //FacteursExterieurs.StartTimer(this);
+
+                //Anim.DessinerHangar();
                 Anim.GererDessinPiste(LstPistes.Count);
                 //Anim.DessinerVoieService();
             }
@@ -91,13 +93,15 @@ namespace AirAmbe
                 return false;
             }
 
+            if (scenarios.Length == 0)
+                return false;
+
             // On charge le nombre de pistes dans la liste.
             for (int i = 0; i < Int32.Parse(scenarios[0]); i++)
             {
                 LstPistes.Add(new Piste());
                 LstPistes[i].NumPiste = i + 1;
             }
-
 
             for (int i = 1; i < scenarios.Length; i++)
             {
