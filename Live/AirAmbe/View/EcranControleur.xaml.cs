@@ -56,12 +56,15 @@ namespace AirAmbe
 
             if (ChargerScenarios())
             {
-                ChargerVols();
-                ModifierHeures();
-                ChargerDataGrid();
-                ChargerProchainsVols();
+                if(LstScenarios.Count > 0)
+                {
+                    ChargerVols();
+                    ModifierHeures();
+                    ChargerDataGrid();
+                    ChargerProchainsVols();
 
-                //FacteursExterieurs.StartTimer(this);
+                    //FacteursExterieurs.StartTimer(this);
+                }
 
                 //Anim.DessinerHangar();
                 //Anim.GererDessinPiste(LstPistes.Count);
@@ -102,6 +105,9 @@ namespace AirAmbe
                 LstPistes.Add(new Piste());
                 LstPistes[i].NumPiste = i + 1;
             }
+
+            if (scenarios.Length == 1)
+                return true;
 
             for (int i = 1; i < scenarios.Length; i++)
             {
