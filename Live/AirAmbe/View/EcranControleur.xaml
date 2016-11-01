@@ -63,6 +63,7 @@
                 <Rectangle Name="Piste2"></Rectangle>
                 <Rectangle Name="Piste3"></Rectangle>
                 <Rectangle Name="Piste4"></Rectangle>
+                <Rectangle Name="Piste5"></Rectangle>
                 <Rectangle Name="hangar"></Rectangle>
             </Canvas>
         </Border>
@@ -75,6 +76,7 @@
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Label FontSize="18" Margin="10,0,0,0" Grid.Row="0" VerticalAlignment="Center">Prochains vols</Label>
+                    <Rectangle Height="1" Fill="Black" Grid.Row="0" VerticalAlignment="Bottom"></Rectangle>
                     <Button Name="btnRefresh" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" Width="35" Height="35" Margin="0,0,15,0" Grid.Row="0" Click="btnRefresh_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
                         <Image Source="pack://application:,,,/AirAmbe;component/Images/refresh.png" />
                     </Button>
@@ -111,17 +113,40 @@
             </TabItem>
         </TabControl>
 
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Grid.Column="1" Margin="10,32,10,10" Width="280" HorizontalAlignment="Left">
-            <Grid Name="grdLegende" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+        <TabControl Name="tabInfo" Grid.Row="2" Grid.Column="1" Margin="10">
+            <TabItem Header="Pistes">
+                
+            </TabItem>
 
-                <Label FontSize="18" Margin="10,0,0,0" Grid.Row="0" VerticalAlignment="Center">Légende</Label>
-            </Grid>
-        </Border>
-        
+            <TabItem Header="Légende">
+
+                <Grid Name="grdLegende" >
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Ellipse Grid.Column="0" Grid.Row="0" Width="30" Height="30" Fill="LightBlue" Stroke="Black" StrokeThickness="2"></Ellipse>
+                        <Ellipse Grid.Column="0" Grid.Row="1" Width="30" Height="30" Fill="LightGreen" Stroke="Black" StrokeThickness="2"></Ellipse>
+                        <Ellipse Grid.Column="0" Grid.Row="2" Width="30" Height="30" Fill="Firebrick" Stroke="Black" StrokeThickness="2"></Ellipse>
+                        <Ellipse Grid.Column="0" Grid.Row="3" Width="30" Height="30" Fill="LightGray" Stroke="Black" StrokeThickness="2"></Ellipse>
+
+                        <Label FontSize="14" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center">Atterrissage</Label>
+                        <Label FontSize="14" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">Décollage</Label>
+                        <Label FontSize="14" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">Critique</Label>
+                        <Label FontSize="14" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center">Terminée</Label>
+                    </Grid>
+                </Grid>
+            
+            </TabItem>
+        </TabControl>
 
     </Grid>
 

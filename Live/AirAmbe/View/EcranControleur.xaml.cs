@@ -36,7 +36,7 @@ namespace AirAmbe
 
         public List<Piste> LstPistes { get; set; }
 
-        public Animation Anim { get; set; }
+        //public Animation Anim { get; set; }
        
        
         /// <summary>
@@ -47,7 +47,7 @@ namespace AirAmbe
         {
             InitializeComponent();
             Controleur = U;
-            Anim = new Animation(this);
+            //Anim = new Animation(this);
             
 
             if (Controleur == null)
@@ -64,7 +64,7 @@ namespace AirAmbe
                 //FacteursExterieurs.StartTimer(this);
 
                 //Anim.DessinerHangar();
-                Anim.GererDessinPiste(LstPistes.Count);
+                //Anim.GererDessinPiste(LstPistes.Count);
                 //Anim.DessinerVoieService();
             }
 
@@ -188,14 +188,19 @@ namespace AirAmbe
 
         private void ChargerProchainsVols()
         {
-            for (int i = 0; LstVols.Count > 10 ? i < 10 : i < LstVols.Count; i++)
+            for (int i = 0; i < LstVols.Count; i++)
             {
                 RowDefinition gridRow = new RowDefinition();
                 gridRow.Height = GridLength.Auto;
                 grdProchainsVols.RowDefinitions.Add(gridRow);
 
-                AfficherDetailsVols(LstVols[i], i);
-                TesterEtat(LstVols[i]);
+                LstVols[i].IdVol = i + 1;
+
+                if (i < 10)
+                {
+                    AfficherDetailsVols(LstVols[i], i);
+                    TesterEtat(LstVols[i]);
+                } 
             }
         }
 
@@ -213,7 +218,7 @@ namespace AirAmbe
 
 
             Grid grdVol = new Grid();
-            grdVol.Name = "grd" + vol.NumeroVol;
+            grdVol.Name = "grdVol" + vol.IdVol.ToString();
             grdVol.Height = 60;
             RowDefinition grdRow1 = new RowDefinition();
             RowDefinition grdRow2 = new RowDefinition();
@@ -253,7 +258,7 @@ namespace AirAmbe
 
 
             Image imgEtat = new Image();
-            imgEtat.Name = "imgEtat" + vol.NumeroVol;
+            imgEtat.Name = "imgEtat" + vol.IdVol.ToString();
             imgEtat.Source = TrouverEtat(Etat.Attente);
             imgEtat.Width = 40;
             imgEtat.Height = 40;
@@ -279,7 +284,7 @@ namespace AirAmbe
 
 
             Label lblDelais = new Label();
-            lblDelais.Name = "lblDelais" + vol.NumeroVol;
+            lblDelais.Name = "lblDelais" + vol.IdVol.ToString();
             lblDelais.Content = "Dans " + vol.Delais.ToString() + " minutes";
             lblDelais.Height = 30;
             lblDelais.Width = 110;
@@ -297,7 +302,7 @@ namespace AirAmbe
 
 
             Button btnDetailsVols = new Button();
-            btnDetailsVols.Name = "btnDetails" + vol.NumeroVol;
+            btnDetailsVols.Name = "btnDetails" + vol.IdVol.ToString();
             btnDetailsVols.Content = imgHamburger;
             btnDetailsVols.Style = this.FindResource("NoChromeButton") as Style;
             btnDetailsVols.Click += new RoutedEventHandler(btnDetailsVols_Click);
@@ -376,10 +381,10 @@ namespace AirAmbe
             cboPistes.SelectionChanged += new SelectionChangedEventHandler((sender, e) => cboPistes_Selection(sender, e, vol));
 
             if (vol.EstAtterrissage)
-                cboPistes.Name = "cbo" + Etat.Atterrissage.ToString() + vol.NumeroVol;
+                cboPistes.Name = "cbo" + Etat.Atterrissage.ToString() + vol.IdVol.ToString();
 
             else
-                cboPistes.Name = "cbo" + Etat.Decollage.ToString() + vol.NumeroVol;
+                cboPistes.Name = "cbo" + Etat.Decollage.ToString() + vol.IdVol.ToString();
 
             for (int i = 0; i < LstPistes.Count; i++)
                 cboPistes.Items.Add(new ComboBoxItem() { Content = "Piste #" + (i + 1) });
@@ -455,7 +460,7 @@ namespace AirAmbe
 
             foreach (Image img in TrouverEnfant<Image>(grdProchainsVols))
             {
-                if (img.Name.Contains(vol.NumeroVol))
+                if (img.Name.Contains(vol.IdVol.ToString()))
                 {
                     grd = img.Parent as Grid;
 
@@ -480,7 +485,7 @@ namespace AirAmbe
 
 
         // À TERMINER.
-        private void TesterPiste(Vol vol)
+        public void TesterPiste(Vol vol)
         {
             for (int i = 0; LstVols.Count > 20 ? i < 20 : i < LstVols.Count; i++)
             {
@@ -492,7 +497,7 @@ namespace AirAmbe
                     {
                         foreach (ComboBox cboT in TrouverEnfant<ComboBox>(grdProchainsVols))
                         {
-                            if (cboT.Name.Contains(LstVols[i].NumeroVol))
+                            if (cboT.Name.Contains(LstVols[i].IdVol.ToString()))
                             {
                                 ComboBoxItem cboI = cboT.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
 
@@ -526,15 +531,14 @@ namespace AirAmbe
 
             for (int i = 0; LstVols.Count > 10 ? i < 10 : i < LstVols.Count; i++)
             {
-                if (LstVols[i].EtatVol == Etat.Atterrissage || LstVols[i].EtatVol == Etat.Decollage || LstVols[i].EtatVol == Etat.Echoue)
-                    LstVols.Remove(LstVols[i]);
+                if (LstVols[i].EtatVol != Etat.Atterrissage || LstVols[i].EtatVol != Etat.Decollage || LstVols[i].EtatVol != Etat.Echoue)
+                {
+                    AfficherDetailsVols(LstVols[i], i);
+                    TesterEtat(LstVols[i]);
+                }
             }
 
-            for (int i = 0; LstVols.Count > 10 ? i < 10 : i < LstVols.Count; i++)
-            {
-                AfficherDetailsVols(LstVols[i], i);
-                TesterEtat(LstVols[i]);
-            }
+            LstVols.Sort((a, b) => DateTime.Compare(a.DateVol, b.DateVol));
         }
 
 
@@ -568,7 +572,7 @@ namespace AirAmbe
 
             foreach (Image img in TrouverEnfant<Image>(grdProchainsVols))
             {
-                if (img.Name.Contains(vol.NumeroVol))
+                if (img.Name.Contains(vol.IdVol.ToString()))
                 {
                     imgVol = img;
                     grd = img.Parent as Grid;
@@ -632,86 +636,88 @@ namespace AirAmbe
 
         private void t_Elapsed(object sender, ElapsedEventArgs e, Vol vol, Timer t)
         {
-            this.Dispatcher.Invoke(() =>
+            Grid grd = null;
+            Label lblVol = null;
+
+            vol.TrouverDelais();
+
+
+            foreach (Label lbl in TrouverEnfant<Label>(grdProchainsVols))
             {
-                Grid grd = new Grid();
-                Label lblVol = new Label();
-
-                vol.TrouverDelais();
-
-                foreach (Label lbl in TrouverEnfant<Label>(grdProchainsVols))
+                if (lbl.Name.Contains(vol.IdVol.ToString()))
                 {
-                    if (lbl.Name.Contains(vol.NumeroVol))
-                    {
-                        grd = lbl.Parent as Grid;
-                        lblVol = lbl;
-                        break;
-                    }
+                    grd = lbl.Parent as Grid;
+                    lblVol = lbl;
+                    break;
+                }
+            }
+           
+
+            // Changer quand le vol est terminée.
+            if (vol.Delais <= 0)
+            {
+                foreach (Button btn in TrouverEnfant<Button>(grdProchainsVols))
+                    if (btn.Name.Contains(vol.IdVol.ToString()))
+                        grd.Children.Remove(btn);
+
+                if (vol.EtatVol == Etat.Critique)
+                {
+                    lblVol.Content = "Le vol a échoué!";
+                    vol.EtatVol = Etat.Echoue;
                 }
 
-                // Changer quand le vol est terminée.
-                if (vol.Delais <= 0)
+                else if (vol.EstAtterrissage)
                 {
-                    foreach (Button btn in TrouverEnfant<Button>(grdProchainsVols))
-                        if (btn.Name.Contains(vol.NumeroVol))
-                            grd.Children.Remove(btn);
-
-                    if (vol.EtatVol == Etat.Critique)
-                    {
-                        lblVol.Content = "Le vol a échoué!";
-                        vol.EtatVol = Etat.Echoue;
-                    }
-
-                    else if (vol.EstAtterrissage)
-                    {
-                        Anim.DemarreAtterrissage(vol.PisteAssigne.NumPiste);
-                        lblVol.Content = "Attérit sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-                        lblVol.Width = 170;
-                        lblVol.Margin = new Thickness(58, 0, 0, 0);
-                        vol.EtatVol = Etat.Atterrissage;
-                    }
-
-                    else
-                    {
-                        Anim.DemarreDecollage(vol.PisteAssigne.NumPiste);
-                        lblVol.Content = "Décolle sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-                        lblVol.Width = 170;
-                        lblVol.Margin = new Thickness(58, 0, 0, 0);
-                        vol.EtatVol = Etat.Decollage;
-                    }
-
-                    grd.Height = 60;
-                    grd.Background = Brushes.LightGray;
-                    TesterEtat(vol);
-                    TesterPiste(vol);
-
-                    vol.PisteAssigne = null;
+                    //Anim.DemarreAtterrissage(vol.PisteAssigne.NumPiste);
+                    lblVol.Content = "Attérit sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                    lblVol.Width = 170;
+                    lblVol.Margin = new Thickness(58, 0, 0, 0);
+                    vol.EtatVol = Etat.Atterrissage;
                 }
 
-                // Changer les secondes.
-                else if (vol.Delais <= 1)
-                {
-                    lblVol.Content = "Dans " + (60 - DateTime.Now.Second).ToString() + " secondes";
-
-                    t.Interval = 1000;
-                    t.Start();
-                }
-
-                // Changer les minutes.
                 else
                 {
-                    lblVol.Content = "Dans " + vol.Delais.ToString() + " minutes";
-
-                    t.Interval = (60 - DateTime.Now.Second) * 1000 - DateTime.Now.Millisecond;
-                    t.Start();
+                    //Anim.DemarreDecollage(vol.PisteAssigne.NumPiste);
+                    lblVol.Content = "Décolle sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                    lblVol.Width = 170;
+                    lblVol.Margin = new Thickness(58, 0, 0, 0);
+                    vol.EtatVol = Etat.Decollage;
                 }
 
+                grd.Height = 60;
+                grd.Background = Brushes.LightGray;
                 TesterEtat(vol);
-            });
+                TesterPiste(vol);
+
+                vol.PisteAssigne = null;
+            }
+
+            // Changer les secondes.
+            else if (vol.Delais <= 1)
+            {
+                lblVol.Content = "Dans " + (60 - DateTime.Now.Second).ToString() + " secondes";
+
+                t.Interval = 1000;
+                t.Start();
+            }
+
+            // Changer les minutes.
+            else
+            {
+                //this.Dispatcher.Invoke(() => {  });
+
+                lblVol.Content = "Dans " + vol.Delais.ToString() + " minutes";
+
+                t.Interval = (60 - DateTime.Now.Second) * 1000 - DateTime.Now.Millisecond;
+                t.Start();
+            }
+
+            TesterEtat(vol);
+            
         }
 
 
-        public static IEnumerable<T> TrouverEnfant<T>(DependencyObject depObj) where T : DependencyObject
+        public IEnumerable<T> TrouverEnfant<T>(DependencyObject depObj) where T : DependencyObject
         {
             if (depObj != null)
             {
