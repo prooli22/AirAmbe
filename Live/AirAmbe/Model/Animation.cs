@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -17,6 +18,12 @@ namespace AirAmbe
     /// </summary>
     public class Animation
     {
+        //Déclaration des constantes de la classe Animation
+        public const int vitesse = 2;
+
+        public const int vitesseAtterissage = 4;
+
+        //Déclaration des attributs de la classe Animation
         public DispatcherTimer GereDroit;
 
         public DispatcherTimer GereGauche;
@@ -29,13 +36,14 @@ namespace AirAmbe
 
         public EcranControleur Ec { get; set; }
 
-        public int HorizontalA = 700;
+       
+        //public int HorizontalA = 700;
 
-        public int HorizontalD = 10;
+        //public int HorizontalD = 10;
 
-        public int VerticalA;
+        //public int VerticalA;
 
-        public int VerticalD = 176;
+        //public int VerticalD = 176;
 
        
         /// <summary>
@@ -45,6 +53,8 @@ namespace AirAmbe
         public Animation(EcranControleur ec)
         {
             Ec = ec;
+
+
         }
 
         /// <summary>
@@ -77,10 +87,11 @@ namespace AirAmbe
             DessinerPiste2(ImagePiste);
             DessinerPiste3(ImagePiste);
             DessinerPiste4(ImagePiste);
+            DessinerPiste5(ImagePiste);
         }
 
         /// <summary>
-        /// Une méthode pour dessiner la piste 1
+        /// Une méthode pour dessiner la piste 1 (Horizontale)
         /// </summary>
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste1(ImageBrush ib)
@@ -101,24 +112,22 @@ namespace AirAmbe
         }
 
         /// <summary>
-        /// Une méthode pour dessiner la piste 2
+        /// Une méthode pour dessiner la piste 2 (verticale)
         /// </summary>
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste2(ImageBrush ib)
-        {
-           
-
+        {           
             Ec.Piste2.Stroke = new SolidColorBrush(Colors.Black);
             Ec.Piste2.StrokeThickness = 2;
             Ec.Piste2.Fill = ib;
-            Ec.Piste2.Width = 380;
+            Ec.Piste2.Width = 450;
             Ec.Piste2.Height = 40;
             Canvas.SetLeft(Ec.Piste2, 437);
             Canvas.SetTop(Ec.Piste2, 410);
         }
 
         /// <summary>
-        /// Une méthode pour dessiner la piste 3
+        /// Une méthode pour dessiner la piste 3 (Horizontale)
         /// </summary>
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste3(ImageBrush ib)
@@ -138,7 +147,7 @@ namespace AirAmbe
         }
 
         /// <summary>
-        /// Une méthode pour dessiner la piste 4
+        /// Une méthode pour dessiner la piste 4 (verticale)
         /// </summary>
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste4(ImageBrush ib)
@@ -150,25 +159,27 @@ namespace AirAmbe
             Ec.Piste4.Stroke = new SolidColorBrush(Colors.Black);
             Ec.Piste4.StrokeThickness = 2;
             Ec.Piste4.Fill = ib;
-            Ec.Piste4.Width = 380;
+            Ec.Piste4.Width = 450;
             Ec.Piste4.Height = 40;
             Canvas.SetLeft(Ec.Piste4, 437);
             Canvas.SetTop(Ec.Piste4, 330);
         }
 
         /// <summary>
-        /// Une méthode pour dessiner la piste 5
+        /// Une méthode pour dessiner la piste 5 (Horizontale)
         /// </summary>
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste5(ImageBrush ib)
-        {
-            Ec.Piste4.Stroke = new SolidColorBrush(Colors.Black);
-            Ec.Piste4.StrokeThickness = 2;
-            Ec.Piste4.Fill = ib;
-            Ec.Piste4.Width = 370;
-            Ec.Piste4.Height = 50;
-            Canvas.SetLeft(Ec.Piste4, 95);
-            Canvas.SetTop(Ec.Piste4, 260);
+        {          
+            Ec.Piste5.Stroke = new SolidColorBrush(Colors.Black);
+            Ec.Piste5.StrokeThickness = 2;
+            Ec.Piste5.Fill = ib;
+            Ec.Piste5.Width = 450;
+            Ec.Piste5.Height = 40;
+            Canvas.SetLeft(Ec.Piste5, 337);
+            Canvas.SetTop(Ec.Piste5, 30);
+
+          
         }
 
         /// <summary>
@@ -207,16 +218,45 @@ namespace AirAmbe
             Canvas.SetTop(Ec.AsphalthePrincipale, 60);
         }
 
-
+        /// <summary>
+        /// Une méthode pour dessiner le hangar sur la carte des pistes
+        /// </summary>
         public void DessinerHangar()
-        {
-            Ec.hangar.Fill = Brushes.Black;
-            Ec.hangar.Width = 80;
-            Ec.hangar.Height = 270;
+        {        
+            Ec.hangar.Stroke = new SolidColorBrush(Colors.Black);
+            Ec.hangar.StrokeThickness = 2;
+            Ec.hangar.Width = 500;
+            Ec.hangar.Height = 150;
 
-            Canvas.SetTop(Ec.hangar, 29);
+            Canvas.SetLeft(Ec.hangar, 400);
+            Canvas.SetTop(Ec.hangar, 129);
             Canvas.SetZIndex(Ec.hangar, 100);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         /// <summary>
         /// Une méthode pour gérer les décollages uniquement (VERSION 0.5) 
@@ -327,17 +367,52 @@ namespace AirAmbe
         /// <summary>
         /// Une méthode pour gérer les attérissages uniquement (VERSION 0.5) 
         /// </summary>
-        public void GererAtterrissage(Image avionAtterrissage, int piste)
+        public void GererAtterrissage(Image avionAtterrissage, int piste, int coordX, int coordY)
         {
-            GereGauche = new DispatcherTimer();
+            //Si il s'agit de la piste 1 ou 3
+            if(piste==1 || piste==3)
+            {
+                GereBas = new DispatcherTimer();
 
-            GereGauche.Start();
-            GereGauche.Tick += new EventHandler((sender, e) => DeplacementGauchetAtterrissage(sender, e, avionAtterrissage, piste));
-            GereGauche.Interval = TimeSpan.FromMilliseconds(50);
+                GereBas.Start(); 
+                GereBas.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+            }
+            else if(piste==2 || piste==4 || piste ==5)  //Si il s'agit de la piste 2, 4 ou 5
+            {
+                GereGauche = new DispatcherTimer();
+
+                GereGauche.Start();
+                GereGauche.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+                GereGauche.Interval = TimeSpan.FromMilliseconds(50);
+            }          
         }
-
-        private void DeplacementGauchetAtterrissage(object sender, EventArgs e, Image avionAtterrissage, int piste)
+    
+        public void DeplacementAtterrissage(object sender, EventArgs e, Image avionAtterrissage, int piste, int coordX, int coordY)
         {
+            //Déclaration des variables
+            int coordYMax=500;
+
+            //Si il s'agit de la piste 1 ou 3
+            if(piste==1 || piste ==3)
+            {
+                if(coordY < coordYMax)
+                {
+                    GereDroit = new DispatcherTimer();
+
+                    GereBas.Stop();
+                    GereDroit.Start();
+
+                }
+
+
+
+
+            }else if(piste==2 || piste == 4 || piste==5)    //Si il s'agit de la piste 2, 4 ou 5
+            {
+
+            }
+
+
             if (HorizontalA >= 0)
             {
 
@@ -414,10 +489,17 @@ namespace AirAmbe
             }
         }
 
+        /// <summary>
+        /// Une méthode qui permet de démarrer un atterrissage
+        /// </summary>
+        /// <param name="piste"></param>
         public void DemarreAtterrissage(int piste)
         {
-            HorizontalA = 700;
-
+            //Déclaration des variables
+            int idVol = 69;//----------------->Variable temporaire en attente d'oli
+            int coordY=0;
+            int coordX=0;
+           
             Image AvionA = new Image();
             BitmapImage b = new BitmapImage();
             b.BeginInit();
@@ -425,34 +507,60 @@ namespace AirAmbe
             b.EndInit();
             AvionA.Source = b;
             AvionA.Width = 40;
+            AvionA.Name = idVol.ToString(); //Le nom de l'image
 
+            ////On réinitialise les variables par défaut
+            //HorizontalA = 700;
+
+            //foreach(Image img in TrouverEnfant<Image>(Ec.cnvCarte))
+            //{
+                
+            //}
+
+            //Selon le numéro de la piste
             switch (piste)
             {
                 case 1:
-                    VerticalA = 15;
-                    Canvas.SetTop(AvionA, 15);
-
+                    coordX = 0;
+                    coordY = 0;                                 
                     break;
+
                 case 2:
-                    VerticalA = 110;
-                    Canvas.SetTop(AvionA, 110);
+                    coordX = 0;
+                    coordY = 0;                 
+                    break;
 
-                    break;
                 case 3:
-                    VerticalA = 190;
-                    Canvas.SetTop(AvionA, 190);
+                    coordX = 0;
+                    coordY = 0;                
                     break;
+
                 case 4:
-                    VerticalA = 264;
-                    Canvas.SetTop(AvionA, 264);
+                    coordX = 0;
+                    coordY = 0;                 
+                    break;
+
+                case 5:
+                    coordX = 0;
+                    coordY = 0;
                     break;
             }
 
-            Canvas.SetLeft(AvionA, HorizontalA);
+            //On dessine l'avion en fonction des coordonnées de la piste
+            Canvas.SetLeft(AvionA, coordX);
+            Canvas.SetTop(AvionA, coordY);
+      
+            //On ajoute l'avion au canvas
             Ec.cnvCarte.Children.Add(AvionA);
-            GererAtterrissage(AvionA, piste);
+
+            //On appelle la fonction d'atterrissage en fonction de sa piste ainsi que de ses coordonnées
+            GererAtterrissage(AvionA, piste, coordX, coordY);
         }
 
+        /// <summary>
+        /// Une méthode qui permet de démarrer un décollage 
+        /// </summary>
+        /// <param name="piste"></param>
         public void DemarreDecollage(int piste)
         {
             VerticalD = 176;
@@ -470,6 +578,26 @@ namespace AirAmbe
             Ec.cnvCarte.Children.Add(AvionD);
 
             GererDecollage(AvionD, piste);
+        }
+
+        public static IEnumerable<T> TrouverEnfant<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in TrouverEnfant<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
         }
     }
 }
