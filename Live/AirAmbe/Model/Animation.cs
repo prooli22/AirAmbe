@@ -12,6 +12,9 @@ using System.Windows.Threading;
 
 namespace AirAmbe
 {
+    /// <summary>
+    /// Classe Animation pour gérer les déplacements des avion sur la carte
+    /// </summary>
     public class Animation
     {
         public DispatcherTimer GereDroit;
@@ -24,6 +27,8 @@ namespace AirAmbe
 
         public DispatcherTimer GereBas;
 
+        public EcranControleur Ec { get; set; }
+
         public int HorizontalA = 700;
 
         public int HorizontalD = 10;
@@ -31,8 +36,12 @@ namespace AirAmbe
         public int VerticalA;
 
         public int VerticalD = 176;
-        public EcranControleur Ec { get; set; }
 
+       
+        /// <summary>
+        /// Constructeur de la classe Animation
+        /// </summary>
+        /// <param name="ec">Un objet écran contrôleur</param>
         public Animation(EcranControleur ec)
         {
             Ec = ec;
@@ -47,25 +56,27 @@ namespace AirAmbe
             ImageBrush ImagePiste = new ImageBrush();
             ImagePiste.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/piste.png"));
 
-            if (NbPistes == 2)
-            {
-                DessinerPiste1(ImagePiste);
-                DessinerPiste2(ImagePiste);
-            }
-            else if (NbPistes == 3)
-            {
-                DessinerPiste1(ImagePiste);
-                DessinerPiste2(ImagePiste);
-                DessinerPiste3(ImagePiste);
-            }
-            else if (NbPistes == 4)
-            {
-                DessinerPiste1(ImagePiste);
-                DessinerPiste2(ImagePiste);
-                DessinerPiste3(ImagePiste);
-                DessinerPiste4(ImagePiste);
-            }
-            
+            //if (NbPistes == 2)
+            //{
+
+            //}
+            //else if (NbPistes == 3)
+            //{
+
+            //}
+            //else if (NbPistes == 4)
+            //{
+
+            //}
+            //else if (NbPistes == 5)
+            //{
+
+            //}
+
+            DessinerPiste1(ImagePiste);
+            DessinerPiste2(ImagePiste);
+            DessinerPiste3(ImagePiste);
+            DessinerPiste4(ImagePiste);
         }
 
         /// <summary>
@@ -74,13 +85,18 @@ namespace AirAmbe
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste1(ImageBrush ib)
         {
+            Rectangle rectRotation = new Rectangle();
+
+            RotateTransform rotation = new RotateTransform(90, 14, 14);
+            Ec.Piste1.RenderTransform = rotation;
+
             Ec.Piste1.Stroke = new SolidColorBrush(Colors.Black);
             Ec.Piste1.StrokeThickness = 2;
             Ec.Piste1.Fill = ib;
-            Ec.Piste1.Width = 370;
-            Ec.Piste1.Height = 50;
-            Canvas.SetLeft(Ec.Piste1, 95);
-            Canvas.SetTop(Ec.Piste1, 10);
+            Ec.Piste1.Width = 350;
+            Ec.Piste1.Height = 40;
+            Canvas.SetLeft(Ec.Piste1, 45);
+            Canvas.SetTop(Ec.Piste1, 30);
             
         }
 
@@ -90,13 +106,15 @@ namespace AirAmbe
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste2(ImageBrush ib)
         {
+           
+
             Ec.Piste2.Stroke = new SolidColorBrush(Colors.Black);
             Ec.Piste2.StrokeThickness = 2;
             Ec.Piste2.Fill = ib;
-            Ec.Piste2.Width = 370;
-            Ec.Piste2.Height = 50;
-            Canvas.SetLeft(Ec.Piste2, 137);
-            Canvas.SetTop(Ec.Piste2, 100);
+            Ec.Piste2.Width = 380;
+            Ec.Piste2.Height = 40;
+            Canvas.SetLeft(Ec.Piste2, 437);
+            Canvas.SetTop(Ec.Piste2, 410);
         }
 
         /// <summary>
@@ -105,13 +123,18 @@ namespace AirAmbe
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste3(ImageBrush ib)
         {
+            Rectangle rectRotation = new Rectangle();
+
+            RotateTransform rotation = new RotateTransform(90, 14, 14);
+
+            Ec.Piste3.RenderTransform = rotation;
             Ec.Piste3.Stroke = new SolidColorBrush(Colors.Black);
             Ec.Piste3.StrokeThickness = 2;
             Ec.Piste3.Fill = ib;
-            Ec.Piste3.Width = 370;
-            Ec.Piste3.Height = 50;
+            Ec.Piste3.Width = 350;
+            Ec.Piste3.Height = 40;
             Canvas.SetLeft(Ec.Piste3, 137);
-            Canvas.SetTop(Ec.Piste3, 185);
+            Canvas.SetTop(Ec.Piste3, 30);
         }
 
         /// <summary>
@@ -120,13 +143,17 @@ namespace AirAmbe
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste4(ImageBrush ib)
         {
+            Rectangle rectRotation = new Rectangle();
+
+            RotateTransform rotation = new RotateTransform(90, 14, 14);
+
             Ec.Piste4.Stroke = new SolidColorBrush(Colors.Black);
             Ec.Piste4.StrokeThickness = 2;
             Ec.Piste4.Fill = ib;
-            Ec.Piste4.Width = 370;
-            Ec.Piste4.Height = 50;
-            Canvas.SetLeft(Ec.Piste4, 95);
-            Canvas.SetTop(Ec.Piste4, 260);
+            Ec.Piste4.Width = 380;
+            Ec.Piste4.Height = 40;
+            Canvas.SetLeft(Ec.Piste4, 437);
+            Canvas.SetTop(Ec.Piste4, 330);
         }
 
         /// <summary>
