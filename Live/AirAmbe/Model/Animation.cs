@@ -21,42 +21,30 @@ namespace AirAmbe
         //Déclaration des constantes de la classe Animation
         public const int VITESSE = 2;
 
-        public const int VITESSEATTERRISSAGE = 4;
-
         //Déclaration des attributs de la classe Animation
         public DispatcherTimer GereDroit;
 
         public DispatcherTimer GereGauche;
 
-        public DispatcherTimer GereHautA;
+        public DispatcherTimer GereHaut;
 
-        public DispatcherTimer GereHautD;
+        //public DispatcherTimer GereHautD;
 
         public DispatcherTimer GereBas;
-
         public EcranControleur Ec { get; set; }
-
-        public int i=0;
-        //public int HorizontalA = 700;
-
-        //public int HorizontalD = 10;
-
-        //public int VerticalA;
-
-        //public int VerticalD = 176;
-
         public int CoordY { get; set; }
 
         public int CoordX { get; set; }
+
+        public int i=0;
+      
         /// <summary>
         /// Constructeur de la classe Animation
         /// </summary>
         /// <param name="ec">Un objet écran contrôleur</param>
         public Animation(EcranControleur ec)
         {
-            Ec = ec;
-           
-
+            Ec = ec;          
         }
 
         /// <summary>
@@ -233,9 +221,36 @@ namespace AirAmbe
         /// Une méthode pour gérer l'aiguillage des avions
         /// </summary>
         /// <param name="Avion"></param>
-        public void GererAiguillageAvion(Rectangle Avion)
+        public Rectangle GererAiguillageAvion(Rectangle Avion)
         {
-            //TODO
+            //Déclaration des variables
+            int degre =180;
+
+            Rectangle rectRotation = new Rectangle();
+
+
+
+            RotateTransform aiguillageDroit;
+
+
+
+            RotateTransform aiguillageGauche = new RotateTransform(270, 14, 14);
+
+            RotateTransform aiguillageBas = new RotateTransform(180, 14, 14);
+
+            while(degre!=90)
+            {
+                degre -= 20;
+
+                aiguillageDroit = new RotateTransform(degre, 14, 14);
+                Avion.RenderTransform = aiguillageDroit;
+
+            }
+
+           
+
+            return rectRotation;
+
         }
 
 
@@ -377,7 +392,7 @@ namespace AirAmbe
             {              
                 GereBas.Start(); 
                 GereBas.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
-                GereBas.Interval = TimeSpan.FromMilliseconds(50);
+                GereBas.Interval = TimeSpan.FromMilliseconds(35);
             }
             else if (piste == 2 || piste == 4 || piste == 5)  //Si il s'agit de la piste 2, 4 ou 5
             {
@@ -404,25 +419,31 @@ namespace AirAmbe
             int longueurMaxVerticale = 500;
             int longueurMinHorizontale = 0;          
             int finPiste;
-        
-
+       
             //Si il s'agit de la piste 1 ou 3
             if (piste == 1 || piste == 3)
             {
                 if (CoordY <= longueurMaxVerticale)
                 {
-                    finPiste = 350;
+                    finPiste = 400;
+                    if(CoordY==100)
+                    {
+                        GereBas.Interval = TimeSpan.FromMilliseconds(50);
+                    }
 
-                    if(CoordY == finPiste)
+                    if(CoordY >= finPiste)
                     {
                         //On arrete le déplacement en cours
                         GereBas.Stop();
 
+                        //On aiguille l'avion dans la bonne direction
+                        //GererAiguillageAvion(avionAtterrissage);
+                        
                         //On commence le nouveau déplacement
                         GereDroit = new DispatcherTimer();
 
                         GereDroit.Start();
-                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageVoieService(sender, e, avionAtterrissage, piste, coordX, coordY));
                         GereDroit.Interval = TimeSpan.FromMilliseconds(50);
                     }
                     else
@@ -469,11 +490,100 @@ namespace AirAmbe
             }                 
         }
 
+        /// <summary>
+        /// Une méthode pour les déplacements d'atterrissage sur la voie de service 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="avionAtterrissage"></param>
+        /// <param name="piste"></param>
+        /// <param name="coordX"></param>
+        /// <param name="coordY"></param>
+        public void DeplacementAtterrissageVoieService(object sender, EventArgs e, Rectangle avionAtterrissage, int piste, int coordX, int coordY)
+        {
+            //Déclaration des variables
+            int longueurMaxVerticale = 500;
+            int longueurMinHorizontale = 600;
+            int finVoieService;
+
+            //Si il s'agit de la piste 1 ou 3
+            if (piste == 1 || piste == 3)
+            {
+
+                if (CoordX <= longueurMinHorizontale)
+                {
+                    finVoieService = 200;
+                    //if (CoordX == 100)
+                    //{
+                    //    GereBas.Interval = TimeSpan.FromMilliseconds(50);
+                    //}
+
+                    if (CoordX >= finVoieService)
+                    {
+                        //On arrete le déplacement en cours
+                        GereDroit.Stop();
+
+                        //On aiguille l'avion dans la bonne direction
+                        //GererAiguillageAvion(avionAtterrissage);
+
+                        //On commence le nouveau déplacement
+                        //GereHaut = new DispatcherTimer();
+
+                        //GereHaut.Start();
+                        //GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageVoieService(sender, e, avionAtterrissage, piste, coordX, coordY));
+                        //GereHaut.Interval = TimeSpan.FromMilliseconds(50);
+                    }
+                    else
+                    {
+                        CoordX += VITESSE;
+                    }
+                }
+
+                //On génère le déplacement 
+                Canvas.SetLeft(avionAtterrissage, CoordX);
+            }
+            else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2, 4 ou 5
+            {
+                if (CoordX >= longueurMinHorizontale)
+                {
+                    //Pour tester la longueur de fin de piste en fonction de la piste         
+                    if (piste == 5)
+                    {
+                        finVoieService = 300;
+                    }
+                    else
+                    {
+                        finVoieService = 400;
+                    }
+
+                    if (CoordX == finVoieService)
+                    {
+                        //On arrete le déplacement en cours
+                        GereGauche.Stop();
+
+                        //On commence le nouveau déplacement
+
+
+                    }
+                    else
+                    {
+                        CoordX -= VITESSE;
+                    }
+                }
+
+                //On génère le déplacement 
+                Canvas.SetLeft(avionAtterrissage, CoordX);
+
+            }
+        }
+
+
+
+
 
         public void DeplacementAtterrissageHaut(object sender, EventArgs e, Rectangle avionAtterrissage, int piste, int coordX, int coordY)
         {
             //Déclaration des variables
-
 
             if (piste == 1 || piste == 3)
             {
@@ -488,15 +598,15 @@ namespace AirAmbe
                     {
                         GereBas.Stop();
 
-                        GereDroit = new DispatcherTimer();
+                        GereHaut = new DispatcherTimer();
 
-                        GereDroit.Start();
-                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
-                        GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+                        GereHaut.Start();
+                        GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+                        GereHaut.Interval = TimeSpan.FromMilliseconds(50);
                     }
                     else
                     {
-                        CoordY = CoordY + VITESSE;
+                        CoordX += VITESSE;
                     }
                 }
                 Canvas.SetTop(avionAtterrissage, CoordY);
@@ -590,43 +700,25 @@ namespace AirAmbe
         public void DemarreAtterrissage(int piste)
         {
             //Déclaration des variables
-            //string idVol = "0";//----------------->Variable temporaire en attente d'oli
+            Rectangle AvionA = new Rectangle();
+            Rectangle rectRotation = new Rectangle();
+            ImageBrush a = new ImageBrush();
+            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avion.png"));
+            AvionA.Fill = a;
+            AvionA.Width = 30;
+            AvionA.Height = 35;
+            AvionA.Name = "vol" + i.ToString();
             int coordY=0;
             int coordX=0;
+            //string idVol = "0";//----------------->Variable temporaire en attente d'oli
+            //i++;
 
-            //Image AvionA = new Image();
-            //BitmapImage b = new BitmapImage();
-            //b.BeginInit();
-            //b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/avion.png");
-            //b.EndInit();
-            //AvionA.Source = b;
-            //AvionA.Width = 35;
-            //AvionA.Name = "imgAvion" + idVol; //Le nom de l'image
-
-            ////On réinitialise les variables par défaut
-            //HorizontalA = 700;
 
             //foreach(Image img in TrouverEnfant<Image>(Ec.cnvCarte))
             //{
 
             //}
-           
-      
 
-
-            Rectangle AvionA = new Rectangle();
-            Rectangle rectRotation = new Rectangle();
-            ImageBrush a = new ImageBrush();
-            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avion.png"));           
-            AvionA.Fill = a;
-            AvionA.Width = 30;
-            AvionA.Height = 35;
-
-            
-            AvionA.Name = "vol" + i.ToString();
-            i++;
-           
-          
             RotateTransform aiguillageDroit = new RotateTransform(90, 14, 14);
             RotateTransform aiguillageGauche = new RotateTransform(270, 14, 14);
            
