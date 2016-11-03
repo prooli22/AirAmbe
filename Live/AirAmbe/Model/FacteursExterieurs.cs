@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace AirAmbe
 {
@@ -16,7 +17,7 @@ namespace AirAmbe
 
             int nombre = r.Next(1, 101);
         
-            /*if (nombre < 20)
+            if (nombre < 20)
             {
                 VolRetarde(ec);
             }
@@ -24,7 +25,7 @@ namespace AirAmbe
             {
                 PluieTorrentiel(ec);
             }
-            else if (nombre < 45)*/
+            else if (nombre < 45)
             {
                 PisteIndisponible(ec.LstPistes);
             }
@@ -52,43 +53,66 @@ namespace AirAmbe
                 lstPistes[pisteIndisponible].estDisponible = false;
 
                 StartTimerPiste(pisteIndisponible, lstPistes);
+                MessageBox.Show("La piste #" + (pisteIndisponible+1)+" est indisponible.");
             }
         }
 
         private static void StartTimerPiste(int numPiste, List<Piste> lstPistes)
         {
-            Timer tPiste = new Timer();
+            DispatcherTimer dtPiste = new DispatcherTimer();
+            dtPiste.Tick += new EventHandler((sender, e) => tPiste_Elapsed(sender, e, numPiste, lstPistes,dtPiste));
+            dtPiste.Interval = new TimeSpan(0, 0, 30);
+            dtPiste.Start();
+
+            /*Timer tPiste = new Timer();
             tPiste.AutoReset = false;
             tPiste.Elapsed += new ElapsedEventHandler((sender, e) => tPiste_Elapsed(sender, e, numPiste, lstPistes));
             tPiste.Interval = 30000;
-            tPiste.Start();
+            tPiste.Start();*/
         }
 
-        private static void tPiste_Elapsed(object sender, ElapsedEventArgs e, int numPiste, List<Piste> lstPistes)
+        private static void tPiste_Elapsed(object sender, EventArgs e, int numPiste, List<Piste> lstPistes, DispatcherTimer dtPiste)
         {
             lstPistes[numPiste].estDisponible = true;
+            MessageBox.Show("La piste #" + (numPiste + 1) + " est est disponible.");
+            dtPiste.Stop();
         }
 
         private static void PluieTorrentiel(EcranControleur ec)
         {
+            Random r = new Random();
+
             MessageBox.Show("Pluie!!!!");
-            //ec.StartPluie();
+
+            DispatcherTimer dtPluie = new DispatcherTimer();
+            dtPluie.Tick += new EventHandler((sender, e) => dtPluie_Elapsed(sender, e, dtPluie, ec));
+            dtPluie.Interval = new TimeSpan(0, 0, r.Next(30,301));
+            dtPluie.Start();
+        }
+
+        private static void dtPluie_Elapsed(object sender, EventArgs e, DispatcherTimer dtPluie, EcranControleur ec)
+        {
+            MessageBox.Show("Pluie stop");
+            dtPluie.Stop();
         }
 
         public static void StartTimer(EcranControleur ec)
         {
-            Timer tFacteur = new Timer();
+            DispatcherTimer dtFacteur = new DispatcherTimer();
+            dtFacteur.Tick += new EventHandler((sender, e) => tFacteur_Elapsed(sender, e, ec));
+            dtFacteur.Interval = new TimeSpan(0, 0, 10);
+            dtFacteur.Start();
+
+            /*Timer tFacteur = new Timer();
             tFacteur.AutoReset = false;
             tFacteur.Elapsed += new ElapsedEventHandler((sender, e) => tFacteur_Elapsed(sender, e, tFacteur, ec));
             tFacteur.Interval = 10000;
-            tFacteur.Start();
+            tFacteur.Start();*/
         }
 
-        private static void tFacteur_Elapsed(object sender, ElapsedEventArgs e, Timer tFacteur, EcranControleur ec)
+        private static void tFacteur_Elapsed(object sender, EventArgs e, EcranControleur ec)
         {
             FacteursExterieurs.FacteurAleatoire(ec);
-
-            tFacteur.Start();
         }
 
         private static void VolRetarde(EcranControleur ec)
@@ -131,6 +155,7 @@ namespace AirAmbe
                     ec.LstVols[volRetarde].DateVol = ec.LstVols[volRetarde].DateVol.AddMinutes(5);
                     //ec.TesterPiste(ec.LstVols[volRetarde]);
                 }
+                ec.ActualiserListesDesVols();
             }
 
         }
