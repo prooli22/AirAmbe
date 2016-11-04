@@ -33,7 +33,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid Name="grdPrincipale">
+    <Grid Name="grdPrincipale" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="500"></RowDefinition>
@@ -44,30 +44,37 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Label FontSize="25" Grid.Column="0" Grid.Row="0" Width="300" HorizontalAlignment="left">Centre de Contrôle</Label>
-
+        <Grid Grid.Row="0" Grid.Column="0" Background="White">
+            <Label FontSize="25" Width="300" HorizontalAlignment="left">Centre de Contrôle</Label>
+        </Grid>
+       
         <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,50,0" Grid.Column="1" Grid.Row="0" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/deconnexion.png" />
         </Button>
+        
         <Button Name="btnProfil" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,100,0" Grid.Column="1" Grid.Row="0" Click="btnProfil_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/parametre.png" />
         </Button>
-        
-        
-        <Border Name="brdCanvas" BorderBrush="Black" Margin="10, 10, 10, 10" Grid.Row="1" Grid.Column="0" BorderThickness="1">
-            <Canvas Name="cnvCarte" Background="LightGray" >
-                <Rectangle Name="Asphalthe1"></Rectangle>
-                <Rectangle Name="Asphalthe2"></Rectangle>
-                <Rectangle Name="AsphalthePrincipale"></Rectangle>
-                <Rectangle Name="Piste1"></Rectangle>
-                <Rectangle Name="Piste2"></Rectangle>
-                <Rectangle Name="Piste3"></Rectangle>
-                <Rectangle Name="Piste4"></Rectangle>
-                <Rectangle Name="Piste5"></Rectangle>
-                <Rectangle Name="hangar"></Rectangle>
-            </Canvas>
-        </Border>
- 
+
+        <Grid Grid.Row="1" Grid.Column="0" Background="Black" Margin="10">
+            <Border Name="brdCanvas" BorderBrush="Black" Grid.Column="0" BorderThickness="1">
+                <Canvas Name="cnvCarte" Background="LightGray" MouseWheel="cnvCarte_MouseWheel">
+                    <Canvas.RenderTransform>
+                        <ScaleTransform x:Name="zoom" CenterX="475" CenterY="250"></ScaleTransform>
+                    </Canvas.RenderTransform>
+                    <Rectangle Name="Asphalthe1"></Rectangle>
+                    <Rectangle Name="Asphalthe2"></Rectangle>
+                    <Rectangle Name="AsphalthePrincipale"></Rectangle>
+                    <Rectangle Name="Piste1"></Rectangle>
+                    <Rectangle Name="Piste2"></Rectangle>
+                    <Rectangle Name="Piste3"></Rectangle>
+                    <Rectangle Name="Piste4"></Rectangle>
+                    <Rectangle Name="Piste5"></Rectangle>
+                    <Rectangle Name="hangar"></Rectangle>
+                </Canvas>
+            </Border>
+        </Grid>
+
         <Grid Grid.Column="1" Grid.Row="1" Background="White">
             <Border Name="brdScrollViewer" BorderBrush="Black" Width="280" HorizontalAlignment="left" Margin="10" BorderThickness="1">
                 <Grid>
@@ -88,31 +95,33 @@
             </Border>
         </Grid>
 
-        <TabControl Name="tabVols" Grid.Row="2" Grid.Column="0" Margin="10">
-            <TabItem Header="Atterissages">
-                <DataGrid Name="dgAtterissages" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Provenance" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Heure d'arrivée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:H:mm:ss}'}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd}'}"></DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-            <TabItem Header="Décollages">
-                <DataGrid Name="dgDecollages" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Destination" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Heure de départ" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:H:mm:ss}'}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd}'}"></DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-        </TabControl>
-
+        <Grid Grid.Column="0" Grid.Row="2" Background="White">
+            <TabControl Name="tabVols" Grid.Row="2" Grid.Column="0" Margin="10">
+                <TabItem Header="Atterissages">
+                    <DataGrid Name="dgAtterissages" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Provenance" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Heure d'arrivée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:H:mm:ss}'}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd}'}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Décollages">
+                    <DataGrid Name="dgDecollages" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Destination" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Heure de départ" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:H:mm:ss}'}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd}'}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+        
         <TabControl Name="tabInfo" Grid.Row="2" Grid.Column="1" Margin="10">
             <TabItem Header="Pistes">
                 
