@@ -97,25 +97,29 @@ namespace AirAmbe
             Ec.Piste1.Width = 350;
             Ec.Piste1.Height = 40;
             Canvas.SetLeft(Ec.Piste1, 45);
-            Canvas.SetTop(Ec.Piste1, 30);
+            Canvas.SetTop(Ec.Piste1,65);
             
         }
 
         /// <summary>
-        /// Une méthode pour dessiner la piste 2 (verticale)
+        /// Une méthode pour dessiner la piste 4 (verticale)
         /// </summary>
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste2(ImageBrush ib)
-        {           
-            Ec.Piste2.Stroke = new SolidColorBrush(Colors.Black);
-            Ec.Piste2.StrokeThickness = 2;
-            Ec.Piste2.Fill = ib;
-            Ec.Piste2.Width = 450;
-            Ec.Piste2.Height = 40;
-            Canvas.SetLeft(Ec.Piste2, 437);
-            Canvas.SetTop(Ec.Piste2, 410);
-        }
+        {
+            Rectangle rectRotation = new Rectangle();
 
+            RotateTransform rotation = new RotateTransform(90, 14, 14);
+
+            Ec.Piste4.Stroke = new SolidColorBrush(Colors.Black);
+            Ec.Piste4.StrokeThickness = 2;
+            Ec.Piste4.Fill = ib;
+            Ec.Piste4.Width = 450;
+            Ec.Piste4.Height = 40;
+            Canvas.SetLeft(Ec.Piste4, 400);
+            Canvas.SetTop(Ec.Piste4, 345);
+        }
+        
         /// <summary>
         /// Une méthode pour dessiner la piste 3 (Horizontale)
         /// </summary>
@@ -132,27 +136,23 @@ namespace AirAmbe
             Ec.Piste3.Fill = ib;
             Ec.Piste3.Width = 350;
             Ec.Piste3.Height = 40;
-            Canvas.SetLeft(Ec.Piste3, 137);
-            Canvas.SetTop(Ec.Piste3, 30);
+            Canvas.SetLeft(Ec.Piste3, 120);
+            Canvas.SetTop(Ec.Piste3, 65);
         }
 
         /// <summary>
-        /// Une méthode pour dessiner la piste 4 (verticale)
+        /// Une méthode pour dessiner la piste 2 (verticale)
         /// </summary>
         /// <param name="ib">L'image d'une piste</param>
         public void DessinerPiste4(ImageBrush ib)
         {
-            Rectangle rectRotation = new Rectangle();
-
-            RotateTransform rotation = new RotateTransform(90, 14, 14);
-
-            Ec.Piste4.Stroke = new SolidColorBrush(Colors.Black);
-            Ec.Piste4.StrokeThickness = 2;
-            Ec.Piste4.Fill = ib;
-            Ec.Piste4.Width = 450;
-            Ec.Piste4.Height = 40;
-            Canvas.SetLeft(Ec.Piste4, 437);
-            Canvas.SetTop(Ec.Piste4, 330);
+            Ec.Piste2.Stroke = new SolidColorBrush(Colors.Black);
+            Ec.Piste2.StrokeThickness = 2;
+            Ec.Piste2.Fill = ib;
+            Ec.Piste2.Width = 450;
+            Ec.Piste2.Height = 40;
+            Canvas.SetLeft(Ec.Piste2, 400);
+            Canvas.SetTop(Ec.Piste2, 410);
         }
 
         /// <summary>
@@ -425,7 +425,7 @@ namespace AirAmbe
             {
                 if (CoordY <= longueurMaxVerticale)
                 {
-                    finPiste = 400;
+                    finPiste = 450;
                     if(CoordY==100)
                     {
                         GereBas.Interval = TimeSpan.FromMilliseconds(50);
@@ -728,7 +728,7 @@ namespace AirAmbe
             switch (piste)
             {
                 case 1:                   
-                    coordX = 36;
+                    coordX = 40;
                     coordY = 0;
 
                     AvionA.RenderTransform = aiguillageBas;
@@ -736,13 +736,13 @@ namespace AirAmbe
 
                 case 2:
                     coordX = 900;
-                    coordY = 335;
+                    coordY = 352;
 
                     AvionA.RenderTransform = aiguillageGauche;
                     break;
 
                 case 3:
-                    coordX = 128;
+                    coordX = 115;
                     coordY = 0;
 
                     AvionA.RenderTransform = aiguillageBas;
@@ -750,13 +750,13 @@ namespace AirAmbe
 
                 case 4:
                     coordX = 900;
-                    coordY = 413;
+                    coordY = 417;
                     AvionA.RenderTransform = aiguillageGauche;
                     break;
 
                 case 5:
                     coordX = 900;
-                    coordY = 34;
+                    coordY = 37;
 
                     AvionA.RenderTransform = aiguillageGauche;
                     break;
