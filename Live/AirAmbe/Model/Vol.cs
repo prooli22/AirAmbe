@@ -19,10 +19,11 @@ namespace AirAmbe
         public string NumeroVol { get; set; }
         public bool EstAtterrissage { get; set; }
         public DateTime DateVol { get; set; }
+        public DateTime DatePrevu { get; set; }
         public int Intervalle { get; set; }
         public int NumScenario { get; set; }
         public Etat EtatVol { get; set; }
-        public int Delais { get; set; }
+        public TimeSpan Delais { get; set; }
         public Piste PisteAssigne { get; set; }
 
         /// <summary>
@@ -48,14 +49,5 @@ namespace AirAmbe
             EtatVol = Etat.Attente;
         }
 
-
-        public void TrouverDelais()
-        {
-            if (DateVol.Minute < DateTime.Now.Minute)
-                Delais = (DateVol.Minute + 60) - DateTime.Now.Minute;
-
-            else
-                Delais = DateVol.Minute - DateTime.Now.Minute;
-        }
     }
 }

@@ -165,19 +165,20 @@ namespace AirAmbe
             {
                 // Met les secondes à 00
                 if (LstVols[i].DateVol.Second != 0)
-                    LstVols[i].DateVol = LstVols[i].DateVol.AddSeconds(-LstVols[i].DateVol.Second);
+                    //LstVols[i].DateVol = LstVols[i].DateVol.AddSeconds(-LstVols[i].DateVol.Second);
 
-                // Ajoute 5 minutes entre chaque scénario
+                // Ajoute 2 minutes entre chaque scénario
                 if (i > 0 && (LstVols[i].NumScenario != LstVols[i - 1].NumScenario))
                 {
-                    LstVols[i].DateVol = LstVols[i - 1].DateVol.AddMinutes(5);
+                    LstVols[i].DateVol = LstVols[i - 1].DateVol.AddMinutes(2);
                     nbVols = 1;
                 }
 
                 // Ajoute le temps de l'intervalle pour un scénario
-                LstVols[i].DateVol = LstVols[i].DateVol.AddMinutes(LstVols[i].Intervalle * nbVols);
+                LstVols[i].DateVol = LstVols[i].DateVol.AddSeconds(LstVols[i].Intervalle * nbVols);
                 nbVols++;
 
+                LstVols[i].DatePrevu = LstVols[i].DateVol;
                 LstVols[i].Delais = LstVols[i].DateVol - DateTime.Now;
             }
         }
@@ -326,5 +327,7 @@ namespace AirAmbe
 
             cnvCarte.LayoutTransform = new ScaleTransform(zoom.ScaleX, zoom.ScaleY);
         }
+
+
     }
 }

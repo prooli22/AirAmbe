@@ -271,7 +271,7 @@ namespace AirAmbe.View
                 {
                     TimeSpan t = EC.LstVols[i].DateVol - vol.DateVol;
 
-                    if (t.TotalSeconds <= 180 && t.TotalSeconds >= -180)
+                    if (t.TotalMilliseconds <= 60000 && t.TotalMilliseconds >= -60000)
                     {
                         ComboBoxItem cboI = cboPistes.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
 
@@ -330,24 +330,10 @@ namespace AirAmbe.View
 
         private void TesterEtat()
         {
-            //Grid grd = new Grid();
-
-            //foreach (Image img in TrouverEnfant<Image>(grdProchainsVols))
-            //{
-            //    if (img.Name.Contains(vol.IdVol.ToString()))
-            //    {
-            //        grd = img.Parent as Grid;
-
-                    // LE CODE ALLAIT ICI.
-
-            //        break;
-            //    }
-            //}
-
-            if (vol.Delais.TotalMinutes <= 5 && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
+            if (vol.Delais.TotalMilliseconds < 300000 && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
             {
                 vol.EtatVol = Etat.Critique;
-                GrdVol.Background = Brushes.Firebrick;
+                GrdVol.Background = Brushes.LightYellow;
             }
 
             else if (vol.EtatVol == Etat.Atterrissage || vol.EtatVol == Etat.Decollage)
@@ -357,6 +343,14 @@ namespace AirAmbe.View
             }
 
             imgEtat.Source = TrouverEtat(vol.EtatVol);
+        }
+
+
+        public void RetarderVol()
+        {
+            vol.EtatVol = Etat.Attente;
+            vol.PisteAssigne = null;
+            cboPistes.SelectedIndex = 0;
         }
 
 
@@ -376,21 +370,6 @@ namespace AirAmbe.View
         // À REVOIR.
         private void cboPistes_Selection(object sender, SelectionChangedEventArgs e)
         {
-            //ComboBox cbo = sender as ComboBox;
-            //ComboBoxItem cboi = cbo.Items[cbo.SelectedIndex] as ComboBoxItem;
-            //Grid grd = new Grid();
-            //Image imgVol = new Image();
-
-            //foreach (Image img in TrouverEnfant<Image>(grdProchainsVols))
-            //{
-            //    if (img.Name.Contains(vol.IdVol.ToString()))
-            //    {
-            //        imgVol = img;
-            //        grd = img.Parent as Grid;
-            //        break;
-            //    }
-            //}
-
             // Si la piste n'est pas disponible et qu'on veut la forcer.
             ComboBoxItem cboI = cboPistes.Items[cboPistes.SelectedIndex] as ComboBoxItem;
 
@@ -435,59 +414,73 @@ namespace AirAmbe.View
         {
             // On test le delais.
             vol.Delais = vol.DateVol - DateTime.Now;
-            //vol.Delais = TimeSpan.FromMilliseconds(vol.Delais.TotalMilliseconds - vol.Delais.Milliseconds);
 
             // Changer quand le vol est terminée.
             if (vol.Delais.TotalMilliseconds < 1000)
             {
                 GrdVol.Children.Remove(btnDetailsVols);
 
-                if (vol.EtatVol == Etat.Critique)
+                lblDelais.FontSize = 12;
+                lblDelais.FontWeight = FontWeights.Normal;
+
+                lock(this)
                 {
-                    lblDelais.Content = "Le vol a échoué!";
-                    vol.EtatVol = Etat.Echoue;
+                    if (vol.EtatVol == Etat.Critique)
+                    {
+                        lblDelais.Content = "Le vol a échoué!";
+                        vol.EtatVol = Etat.Echoue;
+                    }
+
+                    else if (vol.EstAtterrissage)
+                    {
+                        EC.Anim = new Animation(EC);
+                        EC.Anim.DemarreAtterrissage(vol.PisteAssigne.NumPiste);
+
+                        lblDelais.Content = "Attérit sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                        lblDelais.Width = 170;
+                        lblDelais.Margin = new Thickness(58, 0, 0, 0);
+
+                        vol.EtatVol = Etat.Atterrissage;
+                    }
+
+                    else
+                    {
+                        EC.Anim = new Animation(EC);
+                        EC.Anim.DemarreDecollage(vol.PisteAssigne.NumPiste);
+
+                        lblDelais.Content = "Décolle sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                        lblDelais.Width = 170;
+                        lblDelais.Margin = new Thickness(58, 0, 0, 0);
+
+                        vol.EtatVol = Etat.Decollage;
+                    }
+
+                    GrdVol.Height = 60;
+                    GrdVol.Background = Brushes.LightGray;
+                    TesterEtat();
+                    //TesterPiste();
+                    vol.PisteAssigne = null;
+
+                    dt.Stop();
                 }
-
-                else if (vol.EstAtterrissage)
-                {
-                    EC.Anim = new Animation(EC);
-                    EC.Anim.DemarreAtterrissage(vol.PisteAssigne.NumPiste);
-
-                    lblDelais.Content = "Attérit sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-                    lblDelais.Width = 170;
-                    lblDelais.Margin = new Thickness(58, 0, 0, 0);
-
-
-                    vol.EtatVol = Etat.Atterrissage;
-                }
-
-                else
-                {
-                    EC.Anim = new Animation(EC);
-                    EC.Anim.DemarreDecollage(vol.PisteAssigne.NumPiste);
-
-                    lblDelais.Content = "Décolle sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-                    lblDelais.Width = 170;
-                    lblDelais.Margin = new Thickness(58, 0, 0, 0);
-
-                    vol.EtatVol = Etat.Decollage;
-                }
-
-                GrdVol.Height = 60;
-                GrdVol.Background = Brushes.LightGray;
-                TesterEtat();
-                //TesterPiste();
-                vol.PisteAssigne = null;
-
-                dt.Stop();
             }
 
             // Changer les secondes.
-            else if (vol.Delais.TotalMilliseconds < 60500)
+            else if (vol.Delais.TotalMilliseconds < 331000)
             {
-                lblDelais.Content = "Dans " + vol.Delais.Seconds.ToString() + " secondes";
+                string separateur;
 
-                dt.Interval = TimeSpan.FromMilliseconds(1000);
+                if (vol.Delais.Seconds < 10)
+                    separateur = " : 0";
+
+                else
+                    separateur = " : ";
+
+                lblDelais.Content = "Dans 0" + vol.Delais.Minutes.ToString() + separateur + vol.Delais.Seconds.ToString();
+                lblDelais.FontSize = 14;
+                lblDelais.FontWeight = FontWeights.Bold;
+
+                dt.Interval = TimeSpan.FromMilliseconds(100);
             }
 
             // Changer les minutes.
@@ -495,7 +488,7 @@ namespace AirAmbe.View
             {
                 lblDelais.Content = "Dans " + (vol.Delais.Minutes + 1).ToString() + " minutes";
 
-                dt.Interval = TimeSpan.FromMilliseconds((60 - DateTime.Now.Second) * 1000);
+                dt.Interval = TimeSpan.FromMilliseconds(1000);
             }
 
             TesterEtat();

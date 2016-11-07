@@ -103,8 +103,8 @@
                             <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Provenance" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Heure d'arrivée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:H:mm:ss}'}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd}'}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Prévu le" IsReadOnly="True" Binding="{Binding DatePrevu, StringFormat='{}{0:yyyy-MM-dd à H:mm}'}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Heure estimée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd H:mm:ss}'}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
@@ -114,8 +114,8 @@
                             <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Destination" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Heure de départ" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:H:mm:ss}'}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd}'}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Prévu le" IsReadOnly="True" Binding="{Binding DatePrevu, StringFormat='{}{0:yyyy-MM-dd à H:mm}'}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Heure estimée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd H:mm:ss}'}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
