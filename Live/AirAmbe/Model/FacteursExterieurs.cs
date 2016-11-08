@@ -23,7 +23,7 @@ namespace AirAmbe
         
             //if (nombre < 20)
             {
-                VolRetarde(ec);
+                //VolRetarde(ec.LstVols);
             }
             /*else if (nombre < 35)
             {
@@ -127,52 +127,55 @@ namespace AirAmbe
             FacteursExterieurs.FacteurAleatoire(ec);
         }
 
-        private static void VolRetarde(EcranControleur ec)
-        {        
-            bool retarde = false;
-            for (int i = 0; i < ec.LstVols.Count; i++)
+        public static void VolRetarde(Vol v, int secondes)
+        {
+            /*bool retarde = false;
+            for (int i = 0; i < LstVols.Count; i++)
             {
-                if (!(ec.LstVols[i].EtatVol == Etat.Atterrissage || ec.LstVols[i].EtatVol == Etat.Decollage || ec.LstVols[i].EtatVol == Etat.Echoue))
+                if (!(LstVols[i].EtatVol == Etat.Atterrissage || LstVols[i].EtatVol == Etat.Decollage || LstVols[i].EtatVol == Etat.Echoue))
                 {
                     retarde = true;
                     break;
                 }
-            }
+            }*/
 
-            if (retarde)
+            MessageBox.Show("Vol#" + v.NumeroVol + " retardé de " + secondes + " secondes.");
+            v.DateVol = v.DateVol.AddSeconds(secondes);
+
+            /*if (retarde)
             {
-                int volRetarde = new Random().Next(0, ec.LstVols.Count);
-                while (ec.LstVols[volRetarde].EtatVol == Etat.Atterrissage || ec.LstVols[volRetarde].EtatVol == Etat.Decollage || ec.LstVols[volRetarde].EtatVol == Etat.Echoue || ec.LstVols[volRetarde].Delais.TotalMilliseconds <= 120000)
+                int volRetarde = new Random().Next(0, LstVols.Count);
+                while (LstVols[volRetarde].EtatVol == Etat.Atterrissage || LstVols[volRetarde].EtatVol == Etat.Decollage || LstVols[volRetarde].EtatVol == Etat.Echoue || LstVols[volRetarde].Delais.TotalMilliseconds <= 120000)
                 {
-                    volRetarde = new Random().Next(0, ec.LstVols.Count);
+                    volRetarde = new Random().Next(0, LstVols.Count);
                 }
 
                 int volMagnitude = new Random().Next(0, 101);
 
                 if (volMagnitude > 75)
                 {
-                    MessageBox.Show("Vol#" + ec.LstVols[volRetarde].NumeroVol + " retardé de 1 heure.");
-                    ec.LstVols[volRetarde].DateVol = ec.LstVols[volRetarde].DateVol.AddHours(1);
+                    MessageBox.Show("Vol#" + LstVols[volRetarde].NumeroVol + " retardé de 1 heure.");
+                    LstVols[volRetarde].DateVol = LstVols[volRetarde].DateVol.AddHours(1);
                     //ec.TesterPiste(ec.LstVols[volRetarde]);                    
                 }
                 else if (volMagnitude > 50)
                 {
-                    MessageBox.Show("Vol#" + ec.LstVols[volRetarde].NumeroVol + " retardé de 30 minutes.");
-                    ec.LstVols[volRetarde].DateVol = ec.LstVols[volRetarde].DateVol.AddMinutes(30);
+                    MessageBox.Show("Vol#" + LstVols[volRetarde].NumeroVol + " retardé de 30 minutes.");
+                    LstVols[volRetarde].DateVol = LstVols[volRetarde].DateVol.AddMinutes(30);
                     //ec.TesterPiste(ec.LstVols[volRetarde]);
                 }
                 else
                 {
-                    MessageBox.Show("Vol#" + ec.LstVols[volRetarde].NumeroVol + " retardé de 5 minutes.");
-                    ec.LstVols[volRetarde].DateVol = ec.LstVols[volRetarde].DateVol.AddMinutes(5);
+                    MessageBox.Show("Vol#" + LstVols[volRetarde].NumeroVol + " retardé de 5 minutes.");
+                    LstVols[volRetarde].DateVol = LstVols[volRetarde].DateVol.AddMinutes(5);
                     //ec.TesterPiste(ec.LstVols[volRetarde]);
-                }
-                /*
-                ec.LstVols[volRetarde].EtatVol = Etat.Attente;
-                ec.LstVols[volRetarde].PisteAssigne = null;*/
+                }*/
+            /*
+            ec.LstVols[volRetarde].EtatVol = Etat.Attente;
+            ec.LstVols[volRetarde].PisteAssigne = null;*/
 
-                ec.RafraichirVols();
-            }
+            //ec.RafraichirVols();
+        //}
 
         }
     }
