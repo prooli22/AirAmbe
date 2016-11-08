@@ -19,7 +19,7 @@ namespace AirAmbe
     public class Animation
     {
         //Déclaration des constantes de la classe Animation
-        public const int VITESSE = 2;
+        public const int VITESSE = 15;
 
         //Déclaration des attributs de la classe Animation
         public DispatcherTimer GereDroit;
@@ -28,16 +28,30 @@ namespace AirAmbe
 
         public DispatcherTimer GereHaut;
 
-        //public DispatcherTimer GereHautD;
-
         public DispatcherTimer GereBas;
+
         public EcranControleur Ec { get; set; }
+
         public int CoordY { get; set; }
 
         public int CoordX { get; set; }
 
+        public int FinPiste { get; set; }
+
+        public int FinVoieService { get; set; }
+
+        public int LongueurVerticale {get; set;}
+
+        public int LongueurHorizontale { get; set; }
+
+        public int LongueurVerticaleVs { get; set; }
+
+        public int LongueurHorizontaleVs { get; set; }
+
         public int i=0;
       
+        public Direction DirectionVent { get; set; }
+
         /// <summary>
         /// Constructeur de la classe Animation
         /// </summary>
@@ -94,10 +108,10 @@ namespace AirAmbe
             Ec.Piste1.Stroke = new SolidColorBrush(Colors.Black);
             Ec.Piste1.StrokeThickness = 2;
             Ec.Piste1.Fill = ib;
-            Ec.Piste1.Width = 350;
+            Ec.Piste1.Width = 330;
             Ec.Piste1.Height = 40;
             Canvas.SetLeft(Ec.Piste1, 45);
-            Canvas.SetTop(Ec.Piste1,65);
+            Canvas.SetTop(Ec.Piste1,75);
             
         }
 
@@ -134,10 +148,10 @@ namespace AirAmbe
             Ec.Piste3.Stroke = new SolidColorBrush(Colors.Black);
             Ec.Piste3.StrokeThickness = 2;
             Ec.Piste3.Fill = ib;
-            Ec.Piste3.Width = 350;
+            Ec.Piste3.Width = 330;
             Ec.Piste3.Height = 40;
             Canvas.SetLeft(Ec.Piste3, 120);
-            Canvas.SetTop(Ec.Piste3, 65);
+            Canvas.SetTop(Ec.Piste3, 75);
         }
 
         /// <summary>
@@ -262,10 +276,10 @@ namespace AirAmbe
             Ec.hangar.Stroke = new SolidColorBrush(Colors.Black);
             Ec.hangar.StrokeThickness = 2;
             Ec.hangar.Width = 500;
-            Ec.hangar.Height = 150;
+            Ec.hangar.Height = 230;
 
-            Canvas.SetLeft(Ec.hangar, 400);
-            Canvas.SetTop(Ec.hangar, 129);
+            Canvas.SetLeft(Ec.hangar, 370);
+            Canvas.SetTop(Ec.hangar, 95);
             Canvas.SetZIndex(Ec.hangar, 100);
         }
 
@@ -378,20 +392,18 @@ namespace AirAmbe
         /// <summary>
         /// Une méthode pour gérer les attérissages uniquement 
         /// </summary>
-        public void GererAtterrissage(Rectangle avionAtterrissage, int piste, int coordX,int coordY)
+        public void GererAtterrissage(Rectangle avionAtterrissage, int piste)
         {
             //Déclaration des variables
             GereBas = new DispatcherTimer();
-            CoordY = coordY;
-            CoordX = coordX;
-
+           
             //MessageBox.Show(avionAtterrissage.Name.ToString());
 
             //Si il s'agit de la piste 1 ou 3
             if (piste == 1 || piste == 3)
             {              
                 GereBas.Start(); 
-                GereBas.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+                GereBas.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste));
                 GereBas.Interval = TimeSpan.FromMilliseconds(35);
             }
             else if (piste == 2 || piste == 4 || piste == 5)  //Si il s'agit de la piste 2, 4 ou 5
@@ -399,7 +411,7 @@ namespace AirAmbe
                 GereGauche = new DispatcherTimer();
 
                 GereGauche.Start();
-                GereGauche.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX,coordY));
+                GereGauche.Tick += new EventHandler((sender, e) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste));
                 GereGauche.Interval = TimeSpan.FromMilliseconds(50);
             }
         }
@@ -413,70 +425,68 @@ namespace AirAmbe
         /// <param name="piste"></param>
         /// <param name="coordX"></param>
         /// <param name="coordY"></param>
-        public void DeplacementAtterrissage(object sender, EventArgs e, Rectangle avionAtterrissage, int piste, int coordX, int coordY)
+        public void DeplacementAtterrissage(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
-            //Déclaration des variables
-            int longueurMaxVerticale = 500;
-            int longueurMinHorizontale = 0;          
-            int finPiste;
-       
             //Si il s'agit de la piste 1 ou 3
+          
             if (piste == 1 || piste == 3)
             {
-                if (CoordY <= longueurMaxVerticale)
+                if (CoordY <= LongueurVerticale)
                 {
-                    finPiste = 450;
-                    if(CoordY==100)
-                    {
-                        GereBas.Interval = TimeSpan.FromMilliseconds(50);
-                    }
-
-                    if(CoordY >= finPiste)
-                    {
-                        //On arrete le déplacement en cours
-                        GereBas.Stop();
+                    //if(CoordY==100)
+                    //{
+                    //    GereBas.Interval = TimeSpan.FromMilliseconds(50);
+                    //}                  
+                        if ((CoordY >= FinPiste && DirectionVent==Direction.Nord) || (CoordY<= FinPiste && DirectionVent==Direction.Sud))
+                        {
+                            //On arrete le déplacement en cours
+                            GereBas.Stop();
 
                         //On aiguille l'avion dans la bonne direction
                         //GererAiguillageAvion(avionAtterrissage);
-                        
-                        //On commence le nouveau déplacement
+
+                        ////On commence le nouveau déplacement
                         GereDroit = new DispatcherTimer();
 
                         GereDroit.Start();
-                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageVoieService(sender, e, avionAtterrissage, piste, coordX, coordY));
+                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageDroit(sender, e, avionAtterrissage, piste));
                         GereDroit.Interval = TimeSpan.FromMilliseconds(50);
-                    }
-                    else
-                    {                      
-                        CoordY += VITESSE;                  
-                    }          
-               }
+                        }
+                        else
+                        {
 
+                        //CoordY += VITESSE;
+                        if (DirectionVent == Direction.Nord)
+                        {
+                            CoordY += VITESSE;
+                        }
+                        else if (DirectionVent == Direction.Sud)
+                        {
+                            CoordY -= VITESSE;
+                        }
+
+                    }                     
+                    }                        
+               
+            
                 //On génère le déplacement 
                 Canvas.SetTop(avionAtterrissage, CoordY);
             }
             else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2, 4 ou 5
             {               
-                if(CoordX >= longueurMinHorizontale)
-                {          
-                    //Pour tester la longueur de fin de piste en fonction de la piste         
-                    if(piste==5)
-                    {
-                        finPiste = 300;
-                    }
-                    else
-                    {
-                        finPiste = 400;
-                    }
-
-                    if(CoordX == finPiste)
+                if(CoordX >= LongueurHorizontale)
+                {                             
+                    if(CoordX <= FinPiste)
                     {
                         //On arrete le déplacement en cours
                         GereGauche.Stop();
-                        
+
                         //On commence le nouveau déplacement
+                        GereHaut = new DispatcherTimer();
 
-
+                        GereHaut.Start();
+                        GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementHautAtterrissage(sender, e, avionAtterrissage, piste));
+                        GereHaut.Interval = TimeSpan.FromMilliseconds(50);
                     }
                     else
                     {
@@ -499,26 +509,20 @@ namespace AirAmbe
         /// <param name="piste"></param>
         /// <param name="coordX"></param>
         /// <param name="coordY"></param>
-        public void DeplacementAtterrissageVoieService(object sender, EventArgs e, Rectangle avionAtterrissage, int piste, int coordX, int coordY)
-        {
-            //Déclaration des variables
-            int longueurMaxVerticale = 500;
-            int longueurMinHorizontale = 600;
-            int finVoieService;
-
+        public void DeplacementAtterrissageDroit(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
+        {                           
             //Si il s'agit de la piste 1 ou 3
-            if (piste == 1 || piste == 3)
-            {
-
-                if (CoordX <= longueurMinHorizontale)
+            //if (piste == 1 || piste == 3)
+            //{
+                if (CoordX <= LongueurHorizontale)
                 {
-                    finVoieService = 200;
+                    
                     //if (CoordX == 100)
                     //{
                     //    GereBas.Interval = TimeSpan.FromMilliseconds(50);
                     //}
 
-                    if (CoordX >= finVoieService)
+                    if (CoordX >= FinVoieService)
                     {
                         //On arrete le déplacement en cours
                         GereDroit.Stop();
@@ -527,81 +531,10 @@ namespace AirAmbe
                         //GererAiguillageAvion(avionAtterrissage);
 
                         //On commence le nouveau déplacement
-                        //GereHaut = new DispatcherTimer();
-
-                        //GereHaut.Start();
-                        //GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageVoieService(sender, e, avionAtterrissage, piste, coordX, coordY));
-                        //GereHaut.Interval = TimeSpan.FromMilliseconds(50);
-                    }
-                    else
-                    {
-                        CoordX += VITESSE;
-                    }
-                }
-
-                //On génère le déplacement 
-                Canvas.SetLeft(avionAtterrissage, CoordX);
-            }
-            else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2, 4 ou 5
-            {
-                if (CoordX >= longueurMinHorizontale)
-                {
-                    //Pour tester la longueur de fin de piste en fonction de la piste         
-                    if (piste == 5)
-                    {
-                        finVoieService = 300;
-                    }
-                    else
-                    {
-                        finVoieService = 400;
-                    }
-
-                    if (CoordX == finVoieService)
-                    {
-                        //On arrete le déplacement en cours
-                        GereGauche.Stop();
-
-                        //On commence le nouveau déplacement
-
-
-                    }
-                    else
-                    {
-                        CoordX -= VITESSE;
-                    }
-                }
-
-                //On génère le déplacement 
-                Canvas.SetLeft(avionAtterrissage, CoordX);
-
-            }
-        }
-
-
-
-
-
-        public void DeplacementAtterrissageHaut(object sender, EventArgs e, Rectangle avionAtterrissage, int piste, int coordX, int coordY)
-        {
-            //Déclaration des variables
-
-            if (piste == 1 || piste == 3)
-            {
-                if (CoordY <= 500)
-                {
-                    //GereDroit = new DispatcherTimer();
-
-                    //GereBas.Stop();
-                    // GereDroit.Start();
-
-                    if (CoordY == 350)
-                    {
-                        GereBas.Stop();
-
                         GereHaut = new DispatcherTimer();
-
+              
                         GereHaut.Start();
-                        GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissage(sender, e, avionAtterrissage, piste, coordX, coordY));
+                        GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementHautAtterrissage(sender, e, avionAtterrissage, piste));
                         GereHaut.Interval = TimeSpan.FromMilliseconds(50);
                     }
                     else
@@ -609,32 +542,92 @@ namespace AirAmbe
                         CoordX += VITESSE;
                     }
                 }
+
+                //On génère le déplacement 
+                Canvas.SetLeft(avionAtterrissage, CoordX);
+            //}
+            //else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2, 4 ou 5
+            //{
+            //    if (CoordX >= LongueurHorizontale)
+            //    {
+            //        if (CoordX <= FinPiste)
+            //        {
+            //            //On arrete le déplacement en cours
+            //            GereDroit.Stop();
+
+            //            //On commence le nouveau déplacement
+            //            //GereHaut = new DispatcherTimer();
+
+            //            //GereHaut.Start();
+            //            //GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementHautAtterrissage(sender, e, avionAtterrissage, piste));
+            //            //GereHaut.Interval = TimeSpan.FromMilliseconds(50);
+            //        }
+            //        else
+            //        {
+            //            CoordX -= VITESSE;
+            //        }
+            //    }
+
+            //    //On génère le déplacement 
+            //    Canvas.SetLeft(avionAtterrissage, CoordX);
+
+            //}
+        }
+
+
+        public void DeplacementHautAtterrissage(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
+        {
+            //Déclaration des variables
+            int longueurVerticaleMax=0;
+            FinVoieService = 600;
+            LongueurHorizontale = 600;
+
+
+
+            if (piste == 1 || piste == 2 || piste == 3 || piste == 4)
+            {
+                if (CoordY >= longueurVerticaleMax)
+                {
+                    if (CoordY <= LongueurVerticaleVs)
+                    {
+                        GereHaut.Stop();
+                      
+                        GereDroit = new DispatcherTimer();
+
+                        GereDroit.Start();
+                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageDroit(sender, e, avionAtterrissage, piste));
+                        GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+                    }
+                    else
+                    {
+                        CoordY -= VITESSE;
+                    }
+                }
                 Canvas.SetTop(avionAtterrissage, CoordY);
             }
-            else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2, 4 ou 5
+            else if (piste == 5)    
             {
+                longueurVerticaleMax = 500;
 
-            }
+                if (CoordY <= longueurVerticaleMax)
+                {
+                    if (CoordY >= LongueurVerticaleVs)
+                    {
+                        GereHaut.Stop();
 
+                        GereDroit = new DispatcherTimer();
 
-            //if (HorizontalA >= 0)
-            //{
-
-            //    //Pour tester la longueur de la distance horizontale à parcourir
-            //    if (HorizontalA == 100)
-            //    {
-            //        GereHautA = new DispatcherTimer();
-
-            //        GereGauche.Stop();
-            //        GereHautA.Start();
-            //        GereHautA.Tick += new EventHandler((senderHaut, eHaut) => DeplacementHautVoieServiceA(sender, e, avionAtterrissage, piste));
-            //        GereHautA.Interval = TimeSpan.FromMilliseconds(50);
-            //    }
-            //    else
-            //    {
-            //        HorizontalA -= 1;
-            //    }
-            //}
+                        GereDroit.Start();
+                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageDroit(sender, e, avionAtterrissage, piste));
+                        GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+                    }
+                    else
+                    {
+                        CoordY += VITESSE;
+                    }
+                }
+                Canvas.SetTop(avionAtterrissage, CoordY);
+            }           
         }
 
 
@@ -708,8 +701,14 @@ namespace AirAmbe
             AvionA.Width = 30;
             AvionA.Height = 35;
             AvionA.Name = "vol" + i.ToString();
+
+            Direction directionVent = Direction.Sud;
+
             int coordY=0;
             int coordX=0;
+            int finPiste=0;
+            int finVoieService = 0;
+
             //string idVol = "0";//----------------->Variable temporaire en attente d'oli
             //i++;
 
@@ -720,23 +719,42 @@ namespace AirAmbe
             //}
 
             RotateTransform aiguillageDroit = new RotateTransform(90, 14, 14);
-            RotateTransform aiguillageGauche = new RotateTransform(270, 14, 14);
-           
+            RotateTransform aiguillageGauche = new RotateTransform(270, 14, 14);         
             RotateTransform aiguillageBas = new RotateTransform(180, 14, 14);
+            RotateTransform aiguillageHaut = new RotateTransform(360, 14, 14);
 
             //Selon le numéro de la piste on initialise les coordonnées de départ ainsi que l'orientation de l'avion
             switch (piste)
             {
-                case 1:                   
-                    coordX = 40;
-                    coordY = 0;
-
-                    AvionA.RenderTransform = aiguillageBas;
+                case 1:  
+                    if(directionVent==Direction.Nord)
+                    {
+                        coordX = 40;
+                        coordY = 0;
+                        finPiste = 450;
+                        finVoieService = 200;
+                        LongueurVerticaleVs = 230;
+                        AvionA.RenderTransform = aiguillageBas;
+                    }
+                    else
+                    {     
+                        coordX = 40;
+                        coordY = 400;
+                        finPiste = 50;
+                        //finVoieService = 200;
+                        //LongueurVerticaleVs = 200;
+                        AvionA.RenderTransform = aiguillageHaut;
+                    }     
+                 
                     break;
 
                 case 2:
                     coordX = 900;
                     coordY = 352;
+                    finPiste = 330;
+                    LongueurVerticaleVs =310;
+
+                    //finVoieService;
 
                     AvionA.RenderTransform = aiguillageGauche;
                     break;
@@ -744,6 +762,9 @@ namespace AirAmbe
                 case 3:
                     coordX = 115;
                     coordY = 0;
+                    finPiste = 405;
+                    finVoieService=160;
+                    LongueurVerticaleVs = 180;
 
                     AvionA.RenderTransform = aiguillageBas;
                     break;
@@ -751,12 +772,18 @@ namespace AirAmbe
                 case 4:
                     coordX = 900;
                     coordY = 417;
+                    finPiste = 280;
+                    LongueurVerticaleVs = 275;
+
                     AvionA.RenderTransform = aiguillageGauche;
                     break;
 
                 case 5:
                     coordX = 900;
                     coordY = 37;
+                    finPiste = 325;
+                    LongueurVerticaleVs = 70;
+                    //finVoieService;
 
                     AvionA.RenderTransform = aiguillageGauche;
                     break;
@@ -769,9 +796,34 @@ namespace AirAmbe
             //On ajoute l'avion au canvas
             Ec.cnvCarte.Children.Add(AvionA);
 
+            //On initialise les attributs de la classe
+            CoordY = coordY;
+            CoordX = coordX;
+            FinPiste = finPiste;
+            FinVoieService = finVoieService;
+            DirectionVent = directionVent;
+
+
+            if(piste==1 || piste==3)
+            {
+                LongueurHorizontale = 500;
+                LongueurVerticale = 500;
+            }
+            else
+            {
+                LongueurHorizontale = 0;
+                LongueurVerticale = 500;
+            }
+
+
             //On appelle la fonction d'atterrissage en fonction de sa piste ainsi que de ses coordonnées
-            GererAtterrissage(AvionA, piste, coordX, coordY);
+            GererAtterrissage(AvionA, piste);
         }
+
+
+     
+
+
 
         /// <summary>
         /// Une méthode qui permet de démarrer un décollage 
