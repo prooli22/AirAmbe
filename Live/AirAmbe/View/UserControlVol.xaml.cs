@@ -323,8 +323,8 @@ namespace AirAmbe.View
                     b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/decollage.png");
                     break;
 
-                case Etat.Echoue:
-                    b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/interrogation.png");
+                case Etat.Retarde:
+                    b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/exclamation.png");
                     break;
 
                 default:
@@ -339,10 +339,10 @@ namespace AirAmbe.View
 
         private void TesterEtat()
         {
-            if (vol.Delais.TotalMilliseconds < 300000 && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
+            if (vol.Delais.TotalMilliseconds < vol.TEMPSRETARD + vol.TEMPSFINAL && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
             {
                 vol.EtatVol = Etat.Critique;
-                GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 238, 94));
+                GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 144, 94));
             }
 
             else if (vol.EtatVol == Etat.Atterrissage || vol.EtatVol == Etat.Decollage)
@@ -360,6 +360,16 @@ namespace AirAmbe.View
             vol.EtatVol = Etat.Attente;
             vol.PisteAssigne = null;
             cboPistes.SelectedIndex = 0;
+
+            if (vol.Delais.TotalMilliseconds < vol.TEMPSRETARD && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
+            {
+                vol.EtatVol = Etat.Retarde;
+                GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66));
+            }
+
+            vol.DateVol = vol.DateVol.AddMilliseconds(vol.TEMPSRETARD);
+
+            TesterEtat();
         }
 
 
@@ -434,13 +444,10 @@ namespace AirAmbe.View
                     lblDelais.FontSize = 12;
                     lblDelais.FontWeight = FontWeights.Normal;
 
-                    if (vol.EtatVol == Etat.Echoue || vol.EtatVol == Etat.Critique)
-                    {
-                        lblDelais.Content = "Le vol a échoué!";
-                        vol.EtatVol = Etat.Echoue;
-                    }
+                    
+                    
 
-                    else if (vol.EstAtterrissage)
+                    if (vol.EstAtterrissage)
                     {
                         EC.Anim = new Animation(EC);
                         EC.Anim.DemarreAtterrissage(vol.PisteAssigne.NumPiste);
@@ -475,8 +482,17 @@ namespace AirAmbe.View
                 }
             }
 
+            else if (vol.Delais.TotalMilliseconds < vol.TEMPSFINAL + 1000 && (vol.EtatVol == Etat.Retarde || vol.EtatVol == Etat.Critique))
+            {
+                RetarderVol();
+
+                dt.Interval = TimeSpan.FromMilliseconds(500);
+
+                TesterEtat();
+            }
+
             // Changer les secondes.
-            else if (vol.Delais.TotalMilliseconds < 331000)
+            else if (vol.Delais.TotalMilliseconds < vol.TEMPSRETARD + vol.TEMPSFINAL + 1000)
             {
                 string separateur;
 
@@ -498,7 +514,7 @@ namespace AirAmbe.View
             // Changer les minutes.
             else
             {
-                lblDelais.Content = "Dans " + (vol.Delais.Minutes + 1).ToString() + " minutes";
+                lblDelais.Content = "Dans " + (vol.Delais.Minutes + (vol.Delais.Hours * 60) + 1).ToString() + " minutes";
 
                 dt.Interval = TimeSpan.FromMilliseconds(1000);
 

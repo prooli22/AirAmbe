@@ -128,7 +128,6 @@
             </TabItem>
 
             <TabItem Header="Légende">
-
                 <Grid Name="grdLegende" >
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -153,7 +152,6 @@
                         <Label FontSize="14" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center">Terminée</Label>
                     </Grid>
                 </Grid>
-            
             </TabItem>
         </TabControl>
 

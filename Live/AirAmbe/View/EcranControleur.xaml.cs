@@ -161,8 +161,11 @@ namespace AirAmbe
         {
             int nbVols = 1;
 
+
             for (int i = 0; i < LstVols.Count; i++)
             {
+                LstVols[i].DateVol = LstVols[i].DateVol.AddMilliseconds(LstVols[i].TEMPSFINAL + (LstVols[i].Intervalle * 1000));
+
                 // Met les secondes à 00
                 if (LstVols[i].DateVol.Second != 0)
                     //LstVols[i].DateVol = LstVols[i].DateVol.AddSeconds(-LstVols[i].DateVol.Second);
@@ -246,7 +249,7 @@ namespace AirAmbe
                 else
                     LstDecollagesNew.Add(LstVols[i]);
 
-                if (LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage && LstVols[i].EtatVol != Etat.Echoue)
+                if (LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage && LstVols[i].EtatVol != Etat.Retarde)
                 {
                     LstUserControlVols.Add(new View.UserControlVol(this, LstVols[i], j));
 
