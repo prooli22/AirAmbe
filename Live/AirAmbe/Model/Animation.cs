@@ -130,7 +130,7 @@ namespace AirAmbe
             Ec.Piste4.Fill = ib;
             Ec.Piste4.Width = 450;
             Ec.Piste4.Height = 40;
-            Canvas.SetLeft(Ec.Piste4, 400);
+            Canvas.SetLeft(Ec.Piste4, 370);
             Canvas.SetTop(Ec.Piste4, 345);
         }
         
@@ -165,7 +165,7 @@ namespace AirAmbe
             Ec.Piste2.Fill = ib;
             Ec.Piste2.Width = 450;
             Ec.Piste2.Height = 40;
-            Canvas.SetLeft(Ec.Piste2, 400);
+            Canvas.SetLeft(Ec.Piste2, 370);
             Canvas.SetTop(Ec.Piste2, 410);
         }
 
@@ -275,10 +275,10 @@ namespace AirAmbe
         {        
             Ec.hangar.Stroke = new SolidColorBrush(Colors.Black);
             Ec.hangar.StrokeThickness = 2;
-            Ec.hangar.Width = 500;
+            Ec.hangar.Width = 750;
             Ec.hangar.Height = 230;
 
-            Canvas.SetLeft(Ec.hangar, 370);
+            Canvas.SetLeft(Ec.hangar, 160);
             Canvas.SetTop(Ec.hangar, 95);
             Canvas.SetZIndex(Ec.hangar, 100);
         }
@@ -427,8 +427,7 @@ namespace AirAmbe
         /// <param name="coordY"></param>
         public void DeplacementAtterrissage(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
-            //Si il s'agit de la piste 1 ou 3
-          
+            //Si il s'agit de la piste 1 ou 3         
             if (piste == 1 || piste == 3)
             {
                 if (CoordY <= LongueurVerticale)
@@ -437,30 +436,31 @@ namespace AirAmbe
                     //{
                     //    GereBas.Interval = TimeSpan.FromMilliseconds(50);
                     //}                  
-                        if ((CoordY >= FinPiste && DirectionVent==Direction.Nord) || (CoordY<= FinPiste && DirectionVent==Direction.Sud))
+                        if ((CoordY >= FinPiste && (DirectionVent==Direction.Nord || DirectionVent==Direction.Est)) || (CoordY <= FinPiste && (DirectionVent==Direction.Sud || DirectionVent==Direction.Ouest)))
                         {
+                    
                             //On arrete le déplacement en cours
                             GereBas.Stop();
 
-                        //On aiguille l'avion dans la bonne direction
-                        //GererAiguillageAvion(avionAtterrissage);
+                            //On aiguille l'avion dans la bonne direction
+                            //GererAiguillageAvion(avionAtterrissage);
 
-                        ////On commence le nouveau déplacement
-                        GereDroit = new DispatcherTimer();
+                            ////On commence le nouveau déplacement
+                            GereDroit = new DispatcherTimer();
 
-                        GereDroit.Start();
-                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageDroit(sender, e, avionAtterrissage, piste));
-                        GereDroit.Interval = TimeSpan.FromMilliseconds(50);
-                        }
+                            GereDroit.Start();
+                            GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageDroit(sender, e, avionAtterrissage, piste));
+                            GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+                    }
                         else
                         {
 
                         //CoordY += VITESSE;
-                        if (DirectionVent == Direction.Nord)
+                        if (DirectionVent == Direction.Nord || DirectionVent==Direction.Est)
                         {
                             CoordY += VITESSE;
                         }
-                        else if (DirectionVent == Direction.Sud)
+                        else if (DirectionVent == Direction.Sud || DirectionVent==Direction.Ouest)
                         {
                             CoordY -= VITESSE;
                         }
@@ -475,8 +475,8 @@ namespace AirAmbe
             else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2, 4 ou 5
             {               
                 if(CoordX >= LongueurHorizontale)
-                {                             
-                    if(CoordX <= FinPiste)
+                {
+                    if ((CoordX <= FinPiste && (DirectionVent==Direction.Est || DirectionVent==Direction.Nord)) || (CoordX >= FinPiste && (DirectionVent == Direction.Ouest || DirectionVent == Direction.Sud)))
                     {
                         //On arrete le déplacement en cours
                         GereGauche.Stop();
@@ -485,7 +485,7 @@ namespace AirAmbe
                         GereHaut = new DispatcherTimer();
 
                         GereHaut.Start();
-                        GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementHautAtterrissage(sender, e, avionAtterrissage, piste));
+                        GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementHautBasAtterrissageVs(sender, e, avionAtterrissage, piste));
                         GereHaut.Interval = TimeSpan.FromMilliseconds(50);
                     }
                     else
@@ -515,26 +515,19 @@ namespace AirAmbe
             //if (piste == 1 || piste == 3)
             //{
                 if (CoordX <= LongueurHorizontale)
-                {
+                {          
                     
-                    //if (CoordX == 100)
-                    //{
-                    //    GereBas.Interval = TimeSpan.FromMilliseconds(50);
-                    //}
-
+                        
                     if (CoordX >= FinVoieService)
                     {
                         //On arrete le déplacement en cours
                         GereDroit.Stop();
-
-                        //On aiguille l'avion dans la bonne direction
-                        //GererAiguillageAvion(avionAtterrissage);
-
+               
                         //On commence le nouveau déplacement
                         GereHaut = new DispatcherTimer();
-              
+
                         GereHaut.Start();
-                        GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementHautAtterrissage(sender, e, avionAtterrissage, piste));
+                        GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementHautBasAtterrissageVs(sender, e, avionAtterrissage, piste));
                         GereHaut.Interval = TimeSpan.FromMilliseconds(50);
                     }
                     else
@@ -545,62 +538,40 @@ namespace AirAmbe
 
                 //On génère le déplacement 
                 Canvas.SetLeft(avionAtterrissage, CoordX);
-            //}
-            //else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2, 4 ou 5
-            //{
-            //    if (CoordX >= LongueurHorizontale)
-            //    {
-            //        if (CoordX <= FinPiste)
-            //        {
-            //            //On arrete le déplacement en cours
-            //            GereDroit.Stop();
-
-            //            //On commence le nouveau déplacement
-            //            //GereHaut = new DispatcherTimer();
-
-            //            //GereHaut.Start();
-            //            //GereHaut.Tick += new EventHandler((senderA, eA) => DeplacementHautAtterrissage(sender, e, avionAtterrissage, piste));
-            //            //GereHaut.Interval = TimeSpan.FromMilliseconds(50);
-            //        }
-            //        else
-            //        {
-            //            CoordX -= VITESSE;
-            //        }
-            //    }
-
-            //    //On génère le déplacement 
-            //    Canvas.SetLeft(avionAtterrissage, CoordX);
-
-            //}
         }
 
-
-        public void DeplacementHautAtterrissage(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
+        public void DeplacementHautBasAtterrissageVs(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
             //Déclaration des variables
             int longueurVerticaleMax=0;
             FinVoieService = 600;
             LongueurHorizontale = 600;
 
-
-
             if (piste == 1 || piste == 2 || piste == 3 || piste == 4)
             {
                 if (CoordY >= longueurVerticaleMax)
                 {
-                    if (CoordY <= LongueurVerticaleVs)
+               
+                    if ((CoordY <= LongueurVerticaleVs &&(DirectionVent==Direction.Nord || DirectionVent==Direction.Est)) || (CoordY>= LongueurVerticaleVs && (DirectionVent==Direction.Sud|| DirectionVent==Direction.Ouest)))
                     {
                         GereHaut.Stop();
-                      
-                        GereDroit = new DispatcherTimer();
+                        
+                        if(piste==1 || piste==3)
+                        {
+                            GereDroit = new DispatcherTimer();
 
-                        GereDroit.Start();
-                        GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageDroit(sender, e, avionAtterrissage, piste));
-                        GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+                            GereDroit.Start();
+                            GereDroit.Tick += new EventHandler((senderA, eA) => DeplacementAtterrissageDroit(sender, e, avionAtterrissage, piste));
+                            GereDroit.Interval = TimeSpan.FromMilliseconds(50);
+                        }                      
                     }
-                    else
+                    if (DirectionVent == Direction.Nord || DirectionVent==Direction.Est)
                     {
                         CoordY -= VITESSE;
+                    }
+                    else if (DirectionVent == Direction.Sud || DirectionVent==Direction.Ouest)
+                    {
+                        CoordY += VITESSE;
                     }
                 }
                 Canvas.SetTop(avionAtterrissage, CoordY);
@@ -702,7 +673,7 @@ namespace AirAmbe
             AvionA.Height = 35;
             AvionA.Name = "vol" + i.ToString();
 
-            Direction directionVent = Direction.Sud;
+            Direction directionVent = Direction.Est;
 
             int coordY=0;
             int coordX=0;
@@ -727,7 +698,7 @@ namespace AirAmbe
             switch (piste)
             {
                 case 1:  
-                    if(directionVent==Direction.Nord)
+                    if(directionVent==Direction.Nord || directionVent==Direction.Ouest || directionVent==Direction.Est)
                     {
                         coordX = 40;
                         coordY = 0;
@@ -740,33 +711,48 @@ namespace AirAmbe
                     {     
                         coordX = 40;
                         coordY = 400;
-                        finPiste = 50;
-                        //finVoieService = 200;
-                        //LongueurVerticaleVs = 200;
+                        finPiste = 10;
+                        finVoieService = 200;
+                        LongueurVerticaleVs = 100;
                         AvionA.RenderTransform = aiguillageHaut;
-                    }     
-                 
+                    }                                          
                     break;
 
                 case 2:
-                    coordX = 900;
-                    coordY = 352;
-                    finPiste = 330;
-                    LongueurVerticaleVs =310;
 
-                    //finVoieService;
+                    if(directionVent==Direction.Est || directionVent==Direction.Nord || directionVent==Direction.Sud)
+                    {
+                        coordX = 900;
+                        coordY = 352;
+                        finPiste = 330;
+                        LongueurVerticaleVs = 310;
+                        AvionA.RenderTransform = aiguillageGauche;
+                    }
+                    else
+                    {
 
-                    AvionA.RenderTransform = aiguillageGauche;
+                    }  
                     break;
 
                 case 3:
-                    coordX = 115;
-                    coordY = 0;
-                    finPiste = 405;
-                    finVoieService=160;
-                    LongueurVerticaleVs = 180;
-
-                    AvionA.RenderTransform = aiguillageBas;
+                    if(directionVent == Direction.Nord || directionVent == Direction.Ouest || directionVent == Direction.Est)
+                    {
+                        coordX = 115;
+                        coordY = 0;
+                        finPiste = 405;
+                        finVoieService = 160;
+                        LongueurVerticaleVs = 180;
+                        AvionA.RenderTransform = aiguillageBas;
+                    }
+                    else 
+                    {
+                        coordX = 114;
+                        coordY = 400;
+                        finPiste = 25;
+                        finVoieService = 160;
+                        LongueurVerticaleVs = 180;
+                        AvionA.RenderTransform = aiguillageHaut;
+                    }
                     break;
 
                 case 4:
