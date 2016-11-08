@@ -37,7 +37,7 @@ namespace AirAmbe
 
         public List<Piste> LstPistes { get; set; }
 
-        public List<UserControl> LstUserControlVols { get; set; }
+        public List<UserControlVol> LstUserControlVols { get; set; }
 
         public Animation Anim { get; set; }
 
@@ -51,7 +51,7 @@ namespace AirAmbe
         {
             InitializeComponent();
             Controleur = U;
-            LstUserControlVols = new List<UserControl>();
+            LstUserControlVols = new List<UserControlVol>();
             
             
 
@@ -218,7 +218,7 @@ namespace AirAmbe
                     gridRow.Height = GridLength.Auto;
                     grdProchainsVols.RowDefinitions.Add(gridRow);
 
-                    LstUserControlVols.Add(new View.UserControlVol(this, LstVols[i], i));
+                    LstUserControlVols.Add(new UserControlVol(this, LstVols[i], i));
                 } 
             }
         }
@@ -249,9 +249,9 @@ namespace AirAmbe
                 else
                     LstDecollagesNew.Add(LstVols[i]);
 
-                if (LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage && LstVols[i].EtatVol != Etat.Retarde)
+                if (LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage)
                 {
-                    LstUserControlVols.Add(new View.UserControlVol(this, LstVols[i], j));
+                    LstUserControlVols.Add(new UserControlVol(this, LstVols[i], j));
 
                     j++;
                 }
@@ -262,6 +262,18 @@ namespace AirAmbe
 
             LstDecollages = LstDecollagesNew;
             LstAtterrissages = LstAtterrissagesNew;
+        }
+
+
+        public void RetarderVol(Vol vol)
+        {
+            for (int i = 0; i < LstUserControlVols.Count; i++)
+            {
+                if(LstUserControlVols[i].vol == vol)
+                {
+                    LstUserControlVols[i].RetarderVol();
+                }
+            }
         }
 
 

@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace AirAmbe.View
+namespace AirAmbe
 {
     /// <summary>
     /// Logique d'interaction pour UserControlVol.xaml
@@ -24,7 +24,7 @@ namespace AirAmbe.View
     {
         private EcranControleur EC { get; set; }
 
-        private Vol vol { get; set; }
+        public Vol vol { get; set; }
 
         private Grid GrdVol { get; set; }
 
@@ -345,6 +345,9 @@ namespace AirAmbe.View
                 GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 144, 94));
             }
 
+            else if (vol.EtatVol == Etat.Retarde)
+                GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66));
+
             else if (vol.EtatVol == Etat.Atterrissage || vol.EtatVol == Etat.Decollage)
             {
                 imgEtat.Height = 37;
@@ -353,23 +356,39 @@ namespace AirAmbe.View
 
             imgEtat.Source = TrouverEtat(vol.EtatVol);
         }
-
+         
 
         public void RetarderVol()
         {
-            vol.EtatVol = Etat.Attente;
             vol.PisteAssigne = null;
             cboPistes.SelectedIndex = 0;
+            vol.EtatVol = Etat.Retarde;
 
-            if (vol.Delais.TotalMilliseconds < vol.TEMPSRETARD && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
-            {
-                vol.EtatVol = Etat.Retarde;
+            if (vol.EtatVol == Etat.Critique || vol.EtatVol == Etat.Attente)
                 GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66));
-            }
+
+            else
+                GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 238, 94));
+                
 
             vol.DateVol = vol.DateVol.AddMilliseconds(vol.TEMPSRETARD);
 
-            TesterEtat();
+            EC.RafraichirVols();
+        }
+
+        private void ChangerLabelDelais()
+        {
+            string separateur;
+
+            if (vol.Delais.Seconds < 10)
+                separateur = " : 0";
+
+            else
+                separateur = " : ";
+
+            lblDelais.Content = "Dans 0" + vol.Delais.Minutes.ToString() + separateur + vol.Delais.Seconds.ToString();
+            lblDelais.FontSize = 14;
+            lblDelais.FontWeight = FontWeights.Bold;
         }
 
 
@@ -444,8 +463,6 @@ namespace AirAmbe.View
                     lblDelais.FontSize = 12;
                     lblDelais.FontWeight = FontWeights.Normal;
 
-                    
-                    
 
                     if (vol.EstAtterrissage)
                     {
@@ -482,11 +499,17 @@ namespace AirAmbe.View
                 }
             }
 
-            else if (vol.Delais.TotalMilliseconds < vol.TEMPSFINAL + 1000 && (vol.EtatVol == Etat.Retarde || vol.EtatVol == Etat.Critique))
+            else if (vol.Delais.TotalMilliseconds < vol.TEMPSFINAL + 500)
             {
-                RetarderVol();
+                if (vol.EtatVol == Etat.Retarde || vol.EtatVol == Etat.Critique)
+                    RetarderVol();
 
-                dt.Interval = TimeSpan.FromMilliseconds(500);
+                else
+                {
+                    ChangerLabelDelais();
+
+                    cboPistes.IsEnabled = false;
+                }
 
                 TesterEtat();
             }
@@ -494,17 +517,7 @@ namespace AirAmbe.View
             // Changer les secondes.
             else if (vol.Delais.TotalMilliseconds < vol.TEMPSRETARD + vol.TEMPSFINAL + 1000)
             {
-                string separateur;
-
-                if (vol.Delais.Seconds < 10)
-                    separateur = " : 0";
-
-                else
-                    separateur = " : ";
-
-                lblDelais.Content = "Dans 0" + vol.Delais.Minutes.ToString() + separateur + vol.Delais.Seconds.ToString();
-                lblDelais.FontSize = 14;
-                lblDelais.FontWeight = FontWeights.Bold;
+                ChangerLabelDelais();
 
                 dt.Interval = TimeSpan.FromMilliseconds(500);
 
