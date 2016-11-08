@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AirAmbe.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,24 +12,32 @@ namespace AirAmbe
 {
     public static class FacteursExterieurs
     {
+        private static bool pluie = false;
+        public static Vent vent { get; set; }
+
         private static void FacteurAleatoire(EcranControleur ec)
         {
             Random r = new Random();
 
             int nombre = r.Next(1, 101);
         
-            if (nombre < 20)
+            //if (nombre < 20)
             {
                 VolRetarde(ec);
             }
-            else if (nombre < 35)
+            /*else if (nombre < 35)
             {
                 PluieTorrentiel(ec);
             }
             else if (nombre < 45)
             {
                 PisteIndisponible(ec.LstPistes);
-            }
+            }*/
+        }
+
+        private static void ChangerDirectionVent()
+        {
+
         }
 
         private static void PisteIndisponible(List<Piste> lstPistes)
@@ -60,7 +69,7 @@ namespace AirAmbe
         private static void StartTimerPiste(int numPiste, List<Piste> lstPistes)
         {
             DispatcherTimer dtPiste = new DispatcherTimer();
-            dtPiste.Tick += new EventHandler((sender, e) => tPiste_Elapsed(sender, e, numPiste, lstPistes,dtPiste));
+            dtPiste.Tick += new EventHandler((sender, e) => tPiste_tick(sender, e, numPiste, lstPistes,dtPiste));
             dtPiste.Interval = new TimeSpan(0, 0, 30);
             dtPiste.Start();
 
@@ -71,7 +80,7 @@ namespace AirAmbe
             tPiste.Start();*/
         }
 
-        private static void tPiste_Elapsed(object sender, EventArgs e, int numPiste, List<Piste> lstPistes, DispatcherTimer dtPiste)
+        private static void tPiste_tick(object sender, EventArgs e, int numPiste, List<Piste> lstPistes, DispatcherTimer dtPiste)
         {
             lstPistes[numPiste].estDisponible = true;
             MessageBox.Show("La piste #" + (numPiste + 1) + " est est disponible.");
@@ -80,17 +89,20 @@ namespace AirAmbe
 
         private static void PluieTorrentiel(EcranControleur ec)
         {
-            Random r = new Random();
+            if (!pluie)
+            {
+                Random r = new Random();
 
-            MessageBox.Show("Pluie!!!!");
+                MessageBox.Show("Pluie!!!!");
 
-            DispatcherTimer dtPluie = new DispatcherTimer();
-            dtPluie.Tick += new EventHandler((sender, e) => dtPluie_Elapsed(sender, e, dtPluie, ec));
-            dtPluie.Interval = new TimeSpan(0, 0, r.Next(30,301));
-            dtPluie.Start();
+                DispatcherTimer dtPluie = new DispatcherTimer();
+                dtPluie.Tick += new EventHandler((sender, e) => dtPluie_tick(sender, e, dtPluie, ec));
+                dtPluie.Interval = new TimeSpan(0, 0, r.Next(30,301));
+                dtPluie.Start();
+            }
         }
 
-        private static void dtPluie_Elapsed(object sender, EventArgs e, DispatcherTimer dtPluie, EcranControleur ec)
+        private static void dtPluie_tick(object sender, EventArgs e, DispatcherTimer dtPluie, EcranControleur ec)
         {
             MessageBox.Show("Pluie stop");
             dtPluie.Stop();
@@ -99,7 +111,7 @@ namespace AirAmbe
         public static void StartTimer(EcranControleur ec)
         {
             DispatcherTimer dtFacteur = new DispatcherTimer();
-            dtFacteur.Tick += new EventHandler((sender, e) => tFacteur_Elapsed(sender, e, ec));
+            dtFacteur.Tick += new EventHandler((sender, e) => tFacteur_tick(sender, e, ec));
             dtFacteur.Interval = new TimeSpan(0, 0, 10);
             dtFacteur.Start();
 
@@ -110,7 +122,7 @@ namespace AirAmbe
             tFacteur.Start();*/
         }
 
-        private static void tFacteur_Elapsed(object sender, EventArgs e, EcranControleur ec)
+        private static void tFacteur_tick(object sender, EventArgs e, EcranControleur ec)
         {
             FacteursExterieurs.FacteurAleatoire(ec);
         }
@@ -130,7 +142,7 @@ namespace AirAmbe
             if (retarde)
             {
                 int volRetarde = new Random().Next(0, ec.LstVols.Count);
-                while (ec.LstVols[volRetarde].EtatVol == Etat.Atterrissage || ec.LstVols[volRetarde].EtatVol == Etat.Decollage || ec.LstVols[volRetarde].EtatVol == Etat.Echoue || ec.LstVols[volRetarde].Delais <= 2)
+                while (ec.LstVols[volRetarde].EtatVol == Etat.Atterrissage || ec.LstVols[volRetarde].EtatVol == Etat.Decollage || ec.LstVols[volRetarde].EtatVol == Etat.Echoue || ec.LstVols[volRetarde].Delais.TotalMilliseconds <= 120000)
                 {
                     volRetarde = new Random().Next(0, ec.LstVols.Count);
                 }
@@ -155,7 +167,11 @@ namespace AirAmbe
                     ec.LstVols[volRetarde].DateVol = ec.LstVols[volRetarde].DateVol.AddMinutes(5);
                     //ec.TesterPiste(ec.LstVols[volRetarde]);
                 }
-                ec.ActualiserListesDesVols();
+                /*
+                ec.LstVols[volRetarde].EtatVol = Etat.Attente;
+                ec.LstVols[volRetarde].PisteAssigne = null;*/
+
+                ec.RafraichirVols();
             }
 
         }
