@@ -42,7 +42,7 @@ namespace AirAmbe.View
 
         private ComboBox cboPistes = new ComboBox();
 
-        private Label lblETA = new Label();
+        private Label lblEstime = new Label();
 
 
         /// <summary>
@@ -66,8 +66,17 @@ namespace AirAmbe.View
 
             dt = new DispatcherTimer();
             dt.Tick += dt_Tick;
-            dt.Interval = TimeSpan.FromMilliseconds(10);
+            dt.Interval = TimeSpan.FromMilliseconds(1);
             dt.Start();
+        }
+
+        ~UserControlVol()
+        {
+            //if(dt.IsEnabled)
+            //{
+            //    dt.Stop();
+            //    dt = null;
+            //}
         }
 
 
@@ -182,8 +191,8 @@ namespace AirAmbe.View
 
         private void AfficherDetailsVolsB()
         {
-            string atterrissage = "";
-            string estime = "";
+            string atterrissage;
+            string estime;
 
 
             if (vol.EstAtterrissage)
@@ -247,18 +256,18 @@ namespace AirAmbe.View
             Grid.SetRow(cboPistes, 1);
 
 
-            lblETA.Content = estime + vol.DateVol.ToString("HH:mm:ss");
-            lblETA.Height = 30;
-            lblETA.VerticalAlignment = VerticalAlignment.Top;
-            lblETA.HorizontalAlignment = HorizontalAlignment.Left;
-            lblETA.Margin = new Thickness(10, 60, 0, 0);
-            Grid.SetRow(lblETA, 1);
+            lblEstime.Content = estime + vol.DateVol.ToString("HH:mm:ss");
+            lblEstime.Height = 30;
+            lblEstime.VerticalAlignment = VerticalAlignment.Top;
+            lblEstime.HorizontalAlignment = HorizontalAlignment.Left;
+            lblEstime.Margin = new Thickness(10, 60, 0, 0);
+            Grid.SetRow(lblEstime, 1);
 
 
             GrdVol.Children.Add(R);
             GrdVol.Children.Add(lblAtterrissage);
             GrdVol.Children.Add(cboPistes);
-            GrdVol.Children.Add(lblETA);
+            GrdVol.Children.Add(lblEstime);
         }
 
 
@@ -333,7 +342,7 @@ namespace AirAmbe.View
             if (vol.Delais.TotalMilliseconds < 300000 && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
             {
                 vol.EtatVol = Etat.Critique;
-                GrdVol.Background = Brushes.LightYellow;
+                GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 238, 94));
             }
 
             else if (vol.EtatVol == Etat.Atterrissage || vol.EtatVol == Etat.Decollage)
@@ -416,16 +425,16 @@ namespace AirAmbe.View
             vol.Delais = vol.DateVol - DateTime.Now;
 
             // Changer quand le vol est terminée.
-            if (vol.Delais.TotalMilliseconds < 1000)
+            if (vol.Delais.TotalMilliseconds < 1000 && vol.Delais.TotalMilliseconds >= 0)
             {
-                GrdVol.Children.Remove(btnDetailsVols);
-
-                lblDelais.FontSize = 12;
-                lblDelais.FontWeight = FontWeights.Normal;
-
-                lock(this)
+                lock (this)
                 {
-                    if (vol.EtatVol == Etat.Critique)
+                    GrdVol.Children.Remove(btnDetailsVols);
+
+                    lblDelais.FontSize = 12;
+                    lblDelais.FontWeight = FontWeights.Normal;
+
+                    if (vol.EtatVol == Etat.Echoue || vol.EtatVol == Etat.Critique)
                     {
                         lblDelais.Content = "Le vol a échoué!";
                         vol.EtatVol = Etat.Echoue;
@@ -462,6 +471,7 @@ namespace AirAmbe.View
                     vol.PisteAssigne = null;
 
                     dt.Stop();
+                    dt = null;
                 }
             }
 
@@ -480,7 +490,9 @@ namespace AirAmbe.View
                 lblDelais.FontSize = 14;
                 lblDelais.FontWeight = FontWeights.Bold;
 
-                dt.Interval = TimeSpan.FromMilliseconds(100);
+                dt.Interval = TimeSpan.FromMilliseconds(500);
+
+                TesterEtat();
             }
 
             // Changer les minutes.
@@ -489,9 +501,9 @@ namespace AirAmbe.View
                 lblDelais.Content = "Dans " + (vol.Delais.Minutes + 1).ToString() + " minutes";
 
                 dt.Interval = TimeSpan.FromMilliseconds(1000);
-            }
 
-            TesterEtat();
+                TesterEtat();
+            }
         }
 
 
