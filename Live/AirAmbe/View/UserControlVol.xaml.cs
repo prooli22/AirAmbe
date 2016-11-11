@@ -20,7 +20,7 @@ namespace AirAmbe
     /// <summary>
     /// Logique d'interaction pour UserControlVol.xaml
     /// </summary>
-    public partial class UserControlVol : UserControl
+    public partial class UserControlVol : UserControl, IDisposable
     {
         private EcranControleur EC { get; set; }
 
@@ -30,7 +30,11 @@ namespace AirAmbe
 
         private int compteurVol;
 
-        private DispatcherTimer dt;
+        private DispatcherTimer dtStart;
+
+        private DispatcherTimer dt500;
+
+        private DispatcherTimer dt1000;
 
         private Image imgEtat = new Image();
 
@@ -64,10 +68,18 @@ namespace AirAmbe
             TesterEtat();
             //TesterPiste();
 
-            dt = new DispatcherTimer();
-            dt.Tick += dt_Tick;
-            dt.Interval = TimeSpan.FromMilliseconds(1);
-            dt.Start();
+            dtStart = new DispatcherTimer();
+            dtStart.Tick += dt_Tick;
+            dtStart.Interval = TimeSpan.FromMilliseconds(1);
+            dtStart.Start();
+
+            dt500 = new DispatcherTimer();
+            dt500.Tick += dt_Tick;
+            dt500.Interval = TimeSpan.FromMilliseconds(500);
+
+            dt1000 = new DispatcherTimer();
+            dt1000.Tick += dt_Tick;
+            dt1000.Interval = TimeSpan.FromMilliseconds(1000);
         }
 
         ~UserControlVol()
@@ -144,13 +156,6 @@ namespace AirAmbe
             lblNumVol.HorizontalAlignment = HorizontalAlignment.Center;
             lblNumVol.VerticalAlignment = VerticalAlignment.Top;
             Grid.SetRow(lblNumVol, 0);
-
-
-            if(vol.Delais.Minutes < 1)
-                lblDelais.Content = "Dans " + vol.Delais.Seconds.ToString() + " secondes";
-
-            else
-                lblDelais.Content = "Dans " + (vol.Delais.Minutes + 1).ToString() + " minutes";
 
             lblDelais.Name = "lblDelais" + vol.IdVol.ToString();
             lblDelais.Height = 30;
@@ -358,23 +363,22 @@ namespace AirAmbe
         }
          
 
-        public void RetarderVol()
+        public void RetarderVol(int millisecondes)
         {
+            // Piste null + combo box null + etat retarder
             vol.PisteAssigne = null;
             cboPistes.SelectedIndex = 0;
             vol.EtatVol = Etat.Retarde;
 
-            if (vol.EtatVol == Etat.Critique || vol.EtatVol == Etat.Attente)
-                GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66));
+            // Background rouge.
+            GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66));
 
-            else
-                GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 238, 94));
-                
-
-            vol.DateVol = vol.DateVol.AddMilliseconds(vol.TEMPSRETARD);
+            // On retarde le vol selon le nombre de millisecondes.
+            vol.DateVol = vol.DateVol.AddMilliseconds(millisecondes);
 
             EC.RafraichirVols();
         }
+
 
         private void ChangerLabelDelais()
         {
@@ -389,6 +393,99 @@ namespace AirAmbe
             lblDelais.Content = "Dans 0" + vol.Delais.Minutes.ToString() + separateur + vol.Delais.Seconds.ToString();
             lblDelais.FontSize = 14;
             lblDelais.FontWeight = FontWeights.Bold;
+        }
+
+
+        private void ChangerUserControl()
+        {
+            //if(vol.PisteAssigne != null)
+            //    System.Diagnostics.Trace.TraceInformation("Vol : " + vol.IdVol + "     Piste : " + vol.PisteAssigne.NumPiste.ToString());
+
+            //else
+            //    System.Diagnostics.Trace.TraceInformation("Vol : " + vol.IdVol + "     Piste : null");
+
+            
+
+            // On test le delais.
+            vol.Delais = vol.DateVol - DateTime.Now;
+
+            // Changer quand le vol est terminée.
+            if (vol.Delais.TotalMilliseconds < 1000 && vol.Delais.TotalMilliseconds >= 0)
+            {
+                GrdVol.Children.Remove(btnDetailsVols);
+
+                lblDelais.FontSize = 12;
+                lblDelais.FontWeight = FontWeights.Normal;
+
+
+                if (vol.EstAtterrissage)
+                {
+                    EC.Anim = new Animation(EC);
+                    EC.Anim.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
+
+                    lblDelais.Content = "Attérit sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                    lblDelais.Width = 170;
+                    lblDelais.Margin = new Thickness(58, 0, 0, 0);
+
+                    vol.EtatVol = Etat.Atterrissage;
+                }
+
+                else
+                {
+                    EC.Anim = new Animation(EC);
+                    EC.Anim.DemarreDecollage(vol.PisteHistorique.NumPiste);
+
+                    lblDelais.Content = "Décolle sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                    lblDelais.Width = 170;
+                    lblDelais.Margin = new Thickness(58, 0, 0, 0);
+
+                    vol.EtatVol = Etat.Decollage;
+                }
+
+                GrdVol.Height = 60;
+                GrdVol.Background = Brushes.LightGray;
+                TesterEtat();
+                //TesterPiste();
+                vol.PisteAssigne = null;
+
+                dt500.Stop();
+                dt1000.Stop();
+                dtStart.Stop();
+            }
+
+            else if (vol.Delais.TotalMilliseconds < vol.TEMPSFINAL + 500)
+            {
+                if (vol.EtatVol == Etat.Retarde || vol.EtatVol == Etat.Critique)
+                    RetarderVol(vol.TEMPSRETARD);
+
+                else
+                {
+                    ChangerLabelDelais();
+                    cboPistes.IsEnabled = false;
+
+                    // Set piste historique
+                    vol.PisteHistorique = vol.PisteAssigne;
+                }
+            }
+
+            // Changer les secondes.
+            else if (vol.Delais.TotalMilliseconds < vol.TEMPSRETARD + vol.TEMPSFINAL + 1000)
+            {
+                ChangerLabelDelais();
+                dt1000.Stop();
+                dtStart.Stop();
+
+                dt500.Start();
+            }
+
+            // Changer les minutes.
+            else
+            {
+                lblDelais.Content = "Dans " + (vol.Delais.Minutes + (vol.Delais.Hours * 60) + 1).ToString() + " minutes";
+                dtStart.Stop();
+
+                dt1000.Start();
+            }
         }
 
 
@@ -450,92 +547,31 @@ namespace AirAmbe
 
         private void dt_Tick(object sender, EventArgs e)
         {
-            // On test le delais.
-            vol.Delais = vol.DateVol - DateTime.Now;
+            //if (vol.Delais.TotalMilliseconds < 1000 && vol.Delais.TotalMilliseconds >= 0 && vol.PisteAssigne == null)
+            //{
+            //    dtStart.Stop();
+            //    dt1000.Stop();
+            //    dt500.Stop();
+            //}
 
-            // Changer quand le vol est terminée.
-            if (vol.Delais.TotalMilliseconds < 1000 && vol.Delais.TotalMilliseconds >= 0)
-            {
-                lock (this)
-                {
-                    GrdVol.Children.Remove(btnDetailsVols);
+            //else
+            //{
+            //    ChangerUserControl();
+            //    TesterEtat();
+            //}
 
-                    lblDelais.FontSize = 12;
-                    lblDelais.FontWeight = FontWeights.Normal;
-
-
-                    if (vol.EstAtterrissage)
-                    {
-                        EC.Anim = new Animation(EC);
-                        EC.Anim.DemarreAtterrissage(vol.PisteAssigne.NumPiste);
-
-                        lblDelais.Content = "Attérit sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-                        lblDelais.Width = 170;
-                        lblDelais.Margin = new Thickness(58, 0, 0, 0);
-
-                        vol.EtatVol = Etat.Atterrissage;
-                    }
-
-                    else
-                    {
-                        EC.Anim = new Animation(EC);
-                        EC.Anim.DemarreDecollage(vol.PisteAssigne.NumPiste);
-
-                        lblDelais.Content = "Décolle sur la piste " + vol.PisteAssigne.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-                        lblDelais.Width = 170;
-                        lblDelais.Margin = new Thickness(58, 0, 0, 0);
-
-                        vol.EtatVol = Etat.Decollage;
-                    }
-
-                    GrdVol.Height = 60;
-                    GrdVol.Background = Brushes.LightGray;
-                    TesterEtat();
-                    //TesterPiste();
-                    vol.PisteAssigne = null;
-
-                    dt.Stop();
-                    dt = null;
-                }
-            }
-
-            else if (vol.Delais.TotalMilliseconds < vol.TEMPSFINAL + 500)
-            {
-                if (vol.EtatVol == Etat.Retarde || vol.EtatVol == Etat.Critique)
-                    RetarderVol();
-
-                else
-                {
-                    ChangerLabelDelais();
-
-                    cboPistes.IsEnabled = false;
-                }
-
-                TesterEtat();
-            }
-
-            // Changer les secondes.
-            else if (vol.Delais.TotalMilliseconds < vol.TEMPSRETARD + vol.TEMPSFINAL + 1000)
-            {
-                ChangerLabelDelais();
-
-                dt.Interval = TimeSpan.FromMilliseconds(500);
-
-                TesterEtat();
-            }
-
-            // Changer les minutes.
-            else
-            {
-                lblDelais.Content = "Dans " + (vol.Delais.Minutes + (vol.Delais.Hours * 60) + 1).ToString() + " minutes";
-
-                dt.Interval = TimeSpan.FromMilliseconds(1000);
-
-                TesterEtat();
-            }
+            ChangerUserControl();
+            TesterEtat();
         }
 
 
+        public void Dispose()
+        {
+            //throw new NotImplementedException();
+            dtStart.Stop();
+            dt500.Stop();
+            dt1000.Stop();
 
+        }
     }
 }

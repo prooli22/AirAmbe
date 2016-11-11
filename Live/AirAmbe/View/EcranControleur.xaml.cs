@@ -226,54 +226,77 @@ namespace AirAmbe
 
         public void RafraichirVols()
         {
-            // Liste de vols temporaires.
-            List<Vol> LstDecollagesNew = new List<Vol>();
-            List<Vol> LstAtterrissagesNew = new List<Vol>();
-
-            // On vide la grille des prochains vols.
-            grdProchainsVols.Children.Clear();
-
-            // On vide la liste des UserControlVols.
-            LstUserControlVols.Clear();
+            ViderListes();
 
             // On tri la liste des vols.
             LstVols.Sort((a, b) => DateTime.Compare(a.DateVol, b.DateVol));
 
-            int j = 0;
+            // Clear les listes.
+            LstAtterrissages.Clear();
+            LstDecollages.Clear();
 
             for (int i = 0; i < LstVols.Count; i++)
             {
                 if (LstVols[i].EstAtterrissage)
-                    LstAtterrissagesNew.Add(LstVols[i]);
+                    LstAtterrissages.Add(LstVols[i]);
 
                 else
-                    LstDecollagesNew.Add(LstVols[i]);
+                    LstDecollages.Add(LstVols[i]);
 
-                if (LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage)
-                {
-                    LstUserControlVols.Add(new UserControlVol(this, LstVols[i], j));
-
-                    j++;
-                }
-
-                if (j == 10)
-                    break;
+                LstUserControlVols.Add(new UserControlVol(this, LstVols[i], i));
             }
 
-            LstDecollages = LstDecollagesNew;
-            LstAtterrissages = LstAtterrissagesNew;
+            dgAtterissages.Items.Refresh();
+            dgDecollages.Items.Refresh();
         }
 
 
-        public void RetarderVol(Vol vol)
+        private void FlushVols()
+        {
+            ViderListes();
+
+            int compteur = 0;
+
+            for (int i = 0; i < LstVols.Count; i++)
+            {
+                if(LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage)
+                {
+                    LstUserControlVols.Add(new UserControlVol(this, LstVols[i], compteur));
+
+                    compteur++;
+                }
+
+                if (compteur == 10)
+                    break;
+            }
+        }
+
+
+        private void ViderListes()
+        {
+            // On vide la grille des prochains vols.
+            grdProchainsVols.Children.Clear();
+
+            // Stop les timers.
+            for (int i = 0; i < LstUserControlVols.Count; i++)
+                LstUserControlVols[i].Dispose();
+
+            // On vide la liste des UserControlVols.
+            LstUserControlVols.Clear();
+        }
+
+
+        public void RetarderVol(int idVol, int millisecondes)
         {
             for (int i = 0; i < LstUserControlVols.Count; i++)
             {
-                if(LstUserControlVols[i].vol == vol)
+                if(LstUserControlVols[i].vol.IdVol == idVol)
                 {
-                    LstUserControlVols[i].RetarderVol();
+                    LstUserControlVols[i].RetarderVol(millisecondes);
                 }
             }
+
+            RafraichirVols();
         }
 
 
@@ -291,6 +314,7 @@ namespace AirAmbe
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             RafraichirVols();
+            FlushVols();
         }
 
 
@@ -320,7 +344,7 @@ namespace AirAmbe
 
         private void cnvCarte_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            const double GROSSISSEMENTEXTERIEUR = 1.8;
+            const double GROSSISSEMENTEXTERIEUR = 4.1;
             const double GROSSISSEMENTINTERIEUR = 1;
 
             zoom.ScaleX = 1;
@@ -338,9 +362,12 @@ namespace AirAmbe
 
                 zoom.ScaleX /= GROSSISSEMENTEXTERIEUR;
                 zoom.ScaleY /= GROSSISSEMENTEXTERIEUR;
+                cnvCarte.Height = 477;
+                cnvCarte.Width = 927;
             }
 
             cnvCarte.LayoutTransform = new ScaleTransform(zoom.ScaleX, zoom.ScaleY);
+
         }
 
 

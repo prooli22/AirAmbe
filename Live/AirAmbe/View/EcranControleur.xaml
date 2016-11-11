@@ -56,11 +56,11 @@
             <Image Source="pack://application:,,,/AirAmbe;component/Images/parametre.png" />
         </Button>
 
-        <Grid Grid.Row="1" Grid.Column="0" Background="Black" Margin="10">
-            <Border Name="brdCanvas" BorderBrush="Black" Grid.Column="0" BorderThickness="1">
+        <Canvas Name="cnvEspaceAerien" Grid.Row="1" Grid.Column="0" Background="DimGray" Margin="10">
+            <Border Name="brdCanvas" BorderBrush="Black" Grid.Column="0" Grid.Row="1" BorderThickness="1">
                 <Canvas Name="cnvCarte" Background="LightGray" MouseWheel="cnvCarte_MouseWheel">
                     <Canvas.RenderTransform>
-                        <ScaleTransform x:Name="zoom" CenterX="475" CenterY="250"></ScaleTransform>
+                        <ScaleTransform x:Name="zoom" CenterX="125" CenterY="74"></ScaleTransform>
                     </Canvas.RenderTransform>
                     <Rectangle Name="Asphalthe1"></Rectangle>
                     <Rectangle Name="Asphalthe2"></Rectangle>
@@ -73,7 +73,7 @@
                     <Rectangle Name="hangar"></Rectangle>
                 </Canvas>
             </Border>
-        </Grid>
+        </Canvas>
 
         <Grid Grid.Column="1" Grid.Row="1" Background="White">
             <Border Name="brdScrollViewer" BorderBrush="Black" Width="280" HorizontalAlignment="left" Margin="10" BorderThickness="1">
