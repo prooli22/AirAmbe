@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AirAmbe.Enum
 {
-    public enum Orientation
+    public enum Direction
     {
         Nord,
         Sud,
