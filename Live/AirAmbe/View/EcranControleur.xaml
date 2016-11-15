@@ -64,7 +64,7 @@
         </Button>
         
         <Button Name="btnProfil" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,100,0" Grid.Column="1" Grid.Row="0" Click="btnProfil_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
-            <Image Source="pack://application:,,,/AirAmbe;component/Images/parametre.png" />
+            <Image Source="pack://application:,,,/AirAmbe;component/Images/profile.png" />
         </Button>
 
         <Button Name="btnConfig" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,150,0" Grid.Column="1" Grid.Row="0" Click="btnConfig_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
@@ -141,7 +141,13 @@
             <TabItem Header="Pistes">
                 <DataGrid Name="dgPistes" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}"></DataGridTextColumn>
+                        <DataGridTextColumn FontSize="14" Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}">
+                            <DataGridTextColumn.CellStyle>
+                                <Style>
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center"></Setter>
+                                 </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
                         <DataGridTemplateColumn Header="Disponibilité" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

@@ -54,7 +54,10 @@ namespace AirAmbe
             
 
             if (Controleur == null)
+            {
+                btnConfig.Visibility = Visibility.Hidden;
                 btnProfil.Visibility = Visibility.Hidden;
+            }
 
 
             if (ChargerScenarios())
@@ -85,7 +88,7 @@ namespace AirAmbe
                 btnProfil.Visibility = Visibility.Hidden;
                 btnRefresh.Visibility = Visibility.Hidden;
             }
-            dgPistes.ItemsSource = LstPistes;
+            
         }
 
 
@@ -202,6 +205,9 @@ namespace AirAmbe
 
             dgAtterissages.ItemsSource = LstAtterrissages;
             dgDecollages.ItemsSource = LstDecollages;
+
+            // DataGrid des pistes.
+            dgPistes.ItemsSource = LstPistes;
         }
 
 
