@@ -85,6 +85,7 @@ namespace AirAmbe
                 btnProfil.Visibility = Visibility.Hidden;
                 btnRefresh.Visibility = Visibility.Hidden;
             }
+            dgPistes.ItemsSource = LstPistes;
         }
 
 
@@ -293,6 +294,7 @@ namespace AirAmbe
                 if(LstUserControlVols[i].vol.IdVol == idVol)
                 {
                     LstUserControlVols[i].RetarderVol(millisecondes);
+                    break;
                 }
             }
 

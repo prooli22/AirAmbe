@@ -31,6 +31,17 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style  x:Key="Ellipse" TargetType="{x:Type Ellipse}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding estDisponible}" Value="False">
+                    <Setter Property="Fill" Value="Red" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding estDisponible}" Value="True">
+                    <Setter Property="Fill" Value="Green" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Grid Name="grdPrincipale" Background="White">
@@ -128,7 +139,18 @@
         
         <TabControl Name="tabInfo" Grid.Row="2" Grid.Column="1" Margin="10">
             <TabItem Header="Pistes">
-                
+                <DataGrid Name="dgPistes" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Disponibilité" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Ellipse Style="{DynamicResource Ellipse}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
 
             <TabItem Header="Légende">
