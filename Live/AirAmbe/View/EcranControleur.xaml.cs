@@ -51,8 +51,6 @@ namespace AirAmbe
         {
             InitializeComponent();
             Controleur = U;
-            LstUserControlVols = new List<UserControlVol>();
-            
             
 
             if (Controleur == null)
@@ -110,7 +108,7 @@ namespace AirAmbe
                 return false;
 
             // On charge le nombre de pistes dans la liste.
-            for (int i = 0; i < Int32.Parse(scenarios[0]); i++)
+            for (int i = 0; i < 5; i++)
             {
                 LstPistes.Add(new Piste());
                 LstPistes[i].NumPiste = i + 1;
@@ -208,6 +206,8 @@ namespace AirAmbe
 
         private void ChargerProchainsVols()
         {
+            LstUserControlVols = new List<UserControlVol>();
+
             for (int i = 0; i < LstVols.Count; i++)
             {
                 LstVols[i].IdVol = i + 1;
@@ -323,6 +323,14 @@ namespace AirAmbe
             EcranConnexion eCon = new EcranConnexion();
             this.Close();
             eCon.Show();
+        }
+
+
+        private void btnConfig_Click(object sender, RoutedEventArgs e)
+        {
+            EcranConfiguration ec = new EcranConfiguration(this);
+
+            ec.Show();
         }
 
 

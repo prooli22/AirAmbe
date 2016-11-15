@@ -56,24 +56,28 @@
             <Image Source="pack://application:,,,/AirAmbe;component/Images/parametre.png" />
         </Button>
 
-        <Canvas Name="cnvEspaceAerien" Grid.Row="1" Grid.Column="0" Background="DimGray" Margin="10">
-            <Border Name="brdCanvas" BorderBrush="Black" Grid.Column="0" Grid.Row="1" BorderThickness="1">
-                <Canvas Name="cnvCarte" Background="LightGray" MouseWheel="cnvCarte_MouseWheel">
-                    <Canvas.RenderTransform>
-                        <ScaleTransform x:Name="zoom" CenterX="125" CenterY="74"></ScaleTransform>
-                    </Canvas.RenderTransform>
-                    <Rectangle Name="Asphalthe1"></Rectangle>
-                    <Rectangle Name="Asphalthe2"></Rectangle>
-                    <Rectangle Name="AsphalthePrincipale"></Rectangle>
-                    <Rectangle Name="Piste1"></Rectangle>
-                    <Rectangle Name="Piste2"></Rectangle>
-                    <Rectangle Name="Piste3"></Rectangle>
-                    <Rectangle Name="Piste4"></Rectangle>
-                    <Rectangle Name="Piste5"></Rectangle>
-                    <Rectangle Name="hangar"></Rectangle>
-                </Canvas>
-            </Border>
-        </Canvas>
+        <Button Name="btnConfig" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,150,0" Grid.Column="1" Grid.Row="0" Click="btnConfig_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/AirAmbe;component/Images/Config.png" />
+        </Button>
+
+        <Canvas Name="cnvEspaceAerien" Grid.Row="1" Grid.Column="0" Background="DimGray" Margin="10" />
+        
+        <Border Name="brdCanvas" BorderBrush="Black" Grid.Column="0" Grid.Row="1" BorderThickness="1">
+            <Canvas Name="cnvCarte" Background="LightGray" MouseWheel="cnvCarte_MouseWheel">
+                <Canvas.RenderTransform>
+                    <ScaleTransform x:Name="zoom" CenterX="125" CenterY="74"></ScaleTransform>
+                </Canvas.RenderTransform>
+                <Rectangle Name="Asphalthe1"></Rectangle>
+                <Rectangle Name="Asphalthe2"></Rectangle>
+                <Rectangle Name="AsphalthePrincipale"></Rectangle>
+                <Rectangle Name="Piste1"></Rectangle>
+                <Rectangle Name="Piste2"></Rectangle>
+                <Rectangle Name="Piste3"></Rectangle>
+                <Rectangle Name="Piste4"></Rectangle>
+                <Rectangle Name="Piste5"></Rectangle>
+                <Rectangle Name="hangar"></Rectangle>
+            </Canvas>
+        </Border>
 
         <Grid Grid.Column="1" Grid.Row="1" Background="White">
             <Border Name="brdScrollViewer" BorderBrush="Black" Width="280" HorizontalAlignment="left" Margin="10" BorderThickness="1">
