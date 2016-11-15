@@ -21,9 +21,7 @@ namespace AirAmbe
         {
             MessageBox.Show("Vol#" + v.NumeroVol + " retardé de " + secondes + " secondes.");
 
-            //ec.RetarderVol(v.IdVol, secondes * 1000);
-
-            v.DateVol = v.DateVol.AddSeconds(secondes);
+            ec.RetarderVol(v.IdVol, secondes * 1000);
         }
     }
 }

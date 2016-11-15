@@ -30,6 +30,17 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style  x:Key="Ellipse" TargetType="{x:Type Ellipse}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding estDisponible}" Value="False">
+                    <Setter Property="Fill" Value="Red" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding estDisponible}" Value="True">
+                    <Setter Property="Fill" Value="Green" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     
     <Grid>
@@ -49,11 +60,20 @@
                         <DataGridTextColumn Header="Provenance" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Prévu le" IsReadOnly="True" Binding="{Binding DatePrevu, StringFormat='{}{0:yyyy-MM-dd à H:mm}'}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Heure estimée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd H:mm:ss}'}"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Secondes">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Name="txtSecondes" MaxLength="4" LostFocus="txtSecondes_LostFocus">
+                                        30
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Retarder">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Name="btnRetarder" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnRetarder_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
-                                        <Image Source="pack://application:,,,/AirAmbe;component/Images/parametre.png" />
+                                        <Image Source="pack://application:,,,/AirAmbe;component/Images/retard.png" />
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -67,17 +87,13 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}"></DataGridTextColumn>
                         <!--À Rechercker Bravo oli-->
-                        <DataGridTextColumn Header="Disponibilité" IsReadOnly="True" Binding="{Binding estDisponible}">
-                            <DataGridTextColumn.CellStyle>
-                                <Style TargetType="{x:Type DataGridCell}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding estDisponible}" Value="False">
-                                            <Setter Property="Background" Value="Aqua" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGridTextColumn.CellStyle>
-                        </DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Disponibilité" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Ellipse Style="{DynamicResource Ellipse}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                             
                         <DataGridTemplateColumn Header="Changer état de la piste">
                             <DataGridTemplateColumn.CellTemplate>

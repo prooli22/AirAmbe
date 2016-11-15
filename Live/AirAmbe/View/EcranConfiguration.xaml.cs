@@ -20,6 +20,7 @@ namespace AirAmbe
     public partial class EcranConfiguration : Window
     {
         public EcranControleur EC { get; set; }
+        public int Secondes { get; set; } = 30;
         public EcranConfiguration(EcranControleur ec)
         {
             InitializeComponent();
@@ -32,10 +33,16 @@ namespace AirAmbe
 
         private void btnRetarder_Click(object sender, RoutedEventArgs e)
         {
-            FacteursExterieurs.VolRetarde((Vol)(dgVols.SelectedItem),30, EC);
+            /*DataGridRow row = dgVols.ItemContainerGenerator.ContainerFromIndex(dgVols.SelectedIndex) as DataGridRow;
+            var i = 5;
+            var ele = ((ContentPresenter)(dgVols.Columns[i].GetCellContent(row))).Content;
+            MessageBox.Show(ele.GetType().ToString());*/
 
+            FacteursExterieurs.VolRetarde((Vol)(dgVols.SelectedItem),Secondes, EC);
+
+            Secondes = 30;
+            
             dgVols.Items.Refresh();
-            EC.refreshDG();
         }
 
         private void btnChangerEtatPiste_Click(object sender, RoutedEventArgs e)
@@ -43,6 +50,7 @@ namespace AirAmbe
             FacteursExterieurs.ChangerEtatPiste((Piste)dgPistes.SelectedItem);
 
             dgPistes.Items.Refresh();
+            EC.dgPistes.Items.Refresh();
         }
 
         private void btn_MouseEnter(object sender, MouseEventArgs e)
@@ -57,6 +65,13 @@ namespace AirAmbe
             Button btn = sender as Button;
             btn.Height -= 2;
             btn.Width -= 2;
-        }        
+        }
+
+        private void txtSecondes_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox txtSecs = sender as TextBox;
+
+            Secondes = Int32.Parse(txtSecs.Text);
+        }
     }
 }
