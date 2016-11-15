@@ -60,12 +60,39 @@
                         <DataGridTextColumn Header="Provenance" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Prévu le" IsReadOnly="True" Binding="{Binding DatePrevu, StringFormat='{}{0:yyyy-MM-dd à H:mm}'}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Heure estimée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd H:mm:ss}'}"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Secondes">
+                        <!--<DataGridTemplateColumn Header="Secondes">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Name="txtSecondes" MaxLength="4" LostFocus="txtSecondes_LostFocus">
                                         30
                                     </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>-->
+                        <DataGridTemplateColumn Header="Temps">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Name="cboTemps">
+                                        <ComboBoxItem>1</ComboBoxItem>
+                                        <ComboBoxItem>2</ComboBoxItem>
+                                        <ComboBoxItem>3</ComboBoxItem>
+                                        <ComboBoxItem>4</ComboBoxItem>
+                                        <ComboBoxItem>5</ComboBoxItem>
+                                        <ComboBoxItem>10</ComboBoxItem>
+                                        <ComboBoxItem>15</ComboBoxItem>
+                                        <ComboBoxItem>30</ComboBoxItem>
+                                    </ComboBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Name="cboValeur">
+                                        <ComboBoxItem>Secondes</ComboBoxItem>
+                                        <ComboBoxItem>Minutes</ComboBoxItem>
+                                        <ComboBoxItem>Heures</ComboBoxItem>                                       
+                                    </ComboBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -74,6 +101,15 @@
                                 <DataTemplate>
                                     <Button Name="btnRetarder" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnRetarder_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
                                         <Image Source="pack://application:,,,/AirAmbe;component/Images/retard.png" />
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Annuler">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="btnAnnuler" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnAnnuler_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                                        <Image Source="pack://application:,,,/AirAmbe;component/Images/x.png" />
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

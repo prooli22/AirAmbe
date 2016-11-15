@@ -73,5 +73,10 @@ namespace AirAmbe
 
             Secondes = Int32.Parse(txtSecs.Text);
         }
+
+        private void btnAnnuler_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

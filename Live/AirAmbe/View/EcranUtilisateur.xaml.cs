@@ -143,7 +143,7 @@ namespace AirAmbe
         /// <param name="user">L'utilisateur à modifier</param>
         private Utilisateur Modifier(Utilisateur user)
         {
-            user.Adresse = txtAdresse.Text;
+            user.Adresse = txtAdresse.Text;            
             user.DateEmbauche = Convert.ToDateTime(txtDate.Text);
             if (txtNouvMdp.Password != "" && txtNouvMdp.Password == txtConfMdp.Password)
             {

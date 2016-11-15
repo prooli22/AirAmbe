@@ -35,7 +35,7 @@
         <PasswordBox Name="txtConfMdp" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,385,0,0" Height="25" Width="225"></PasswordBox>
 
         <Image Source="pack://application:,,,/AirAmbe;component/Images/Avatar.png" Height="125" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="25" />
-        <Button Name="btnParcourir" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="50,160,50,50" Click="btnParcourir_Click">Parcourir</Button>
+        <!--<Button Name="btnParcourir" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="50,160,50,50" Click="btnParcourir_Click">Parcourir</Button>-->
 
         <Button Name="btnAction" Height="25" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Click="btnAction_Click"></Button>
         <Button Name="btnRetour" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="btnRetour_Click">Retour</Button>
