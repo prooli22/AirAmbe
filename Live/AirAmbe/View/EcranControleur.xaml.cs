@@ -1,4 +1,5 @@
 ﻿using AirAmbe.Model;
+
 using AirAmbe.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -51,13 +52,12 @@ namespace AirAmbe
         {
             InitializeComponent();
             Controleur = U;
+            LstUserControlVols = new List<UserControlVol>();
+            
             
 
             if (Controleur == null)
-            {
-                btnConfig.Visibility = Visibility.Hidden;
                 btnProfil.Visibility = Visibility.Hidden;
-            }
 
 
             if (ChargerScenarios())
@@ -68,6 +68,25 @@ namespace AirAmbe
                     ModifierHeures();
                     ChargerDataGrid();
                     ChargerProchainsVols();
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(1);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(2);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(3);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(4);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(5);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreDecollage(1);
+
 
                     //FacteursExterieurs.StartTimer(this);
                     //Anim = new Animation(this);
@@ -88,7 +107,6 @@ namespace AirAmbe
                 btnProfil.Visibility = Visibility.Hidden;
                 btnRefresh.Visibility = Visibility.Hidden;
             }
-            
         }
 
 
@@ -112,7 +130,7 @@ namespace AirAmbe
                 return false;
 
             // On charge le nombre de pistes dans la liste.
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < Int32.Parse(scenarios[0]); i++)
             {
                 LstPistes.Add(new Piste());
                 LstPistes[i].NumPiste = i + 1;
@@ -205,16 +223,11 @@ namespace AirAmbe
 
             dgAtterissages.ItemsSource = LstAtterrissages;
             dgDecollages.ItemsSource = LstDecollages;
-
-            // DataGrid des pistes.
-            dgPistes.ItemsSource = LstPistes;
         }
 
 
         private void ChargerProchainsVols()
         {
-            LstUserControlVols = new List<UserControlVol>();
-
             for (int i = 0; i < LstVols.Count; i++)
             {
                 LstVols[i].IdVol = i + 1;
@@ -286,6 +299,7 @@ namespace AirAmbe
 
             // Stop les timers.
             for (int i = 0; i < LstUserControlVols.Count; i++)
+
                 LstUserControlVols[i].Dispose();
 
             // On vide la liste des UserControlVols.
@@ -300,7 +314,6 @@ namespace AirAmbe
                 if(LstUserControlVols[i].vol.IdVol == idVol)
                 {
                     LstUserControlVols[i].RetarderVol(millisecondes);
-                    break;
                 }
             }
 
@@ -331,14 +344,6 @@ namespace AirAmbe
             EcranConnexion eCon = new EcranConnexion();
             this.Close();
             eCon.Show();
-        }
-
-
-        private void btnConfig_Click(object sender, RoutedEventArgs e)
-        {
-            EcranConfiguration ec = new EcranConfiguration(this);
-
-            ec.Show();
         }
 
 

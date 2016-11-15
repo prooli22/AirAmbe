@@ -31,17 +31,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <Style  x:Key="Ellipse" TargetType="{x:Type Ellipse}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding estDisponible}" Value="False">
-                    <Setter Property="Fill" Value="Red" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding estDisponible}" Value="True">
-                    <Setter Property="Fill" Value="Green" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </Window.Resources>
 
     <Grid Name="grdPrincipale" Background="White">
@@ -58,21 +47,16 @@
         <Grid Grid.Row="0" Grid.Column="0" Background="White">
             <Label FontSize="25" Width="300" HorizontalAlignment="left">Centre de Contrôle</Label>
         </Grid>
-       
+
         <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,50,0" Grid.Column="1" Grid.Row="0" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/deconnexion.png" />
         </Button>
-        
-        <Button Name="btnProfil" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,100,0" Grid.Column="1" Grid.Row="0" Click="btnProfil_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
-            <Image Source="pack://application:,,,/AirAmbe;component/Images/profile.png" />
-        </Button>
 
-        <Button Name="btnConfig" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,150,0" Grid.Column="1" Grid.Row="0" Click="btnConfig_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
-            <Image Source="pack://application:,,,/AirAmbe;component/Images/Config.png" />
+        <Button Name="btnProfil" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,100,0" Grid.Column="1" Grid.Row="0" Click="btnProfil_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/AirAmbe;component/Images/parametre.png" />
         </Button>
 
         <Canvas Name="cnvEspaceAerien" Grid.Row="1" Grid.Column="0" Background="DimGray" Margin="10" />
-        
         <Border Name="brdCanvas" BorderBrush="Black" Grid.Column="0" Grid.Row="1" BorderThickness="1" Margin="10">
             <Canvas Name="cnvCarte" Background="LightGray" MouseWheel="cnvCarte_MouseWheel">
                 <Canvas.RenderTransform>
@@ -87,8 +71,24 @@
                 <Rectangle Name="Piste4"></Rectangle>
                 <Rectangle Name="Piste5"></Rectangle>
                 <Rectangle Name="hangar"></Rectangle>
+                <Rectangle Name="Terminal" Height="28" Width="513" Canvas.Top="196" Canvas.Left="369" Fill="Blue"></Rectangle>
+                <Rectangle Name="Terminal1" Height="257" Width="32" Canvas.Top="77" Canvas.Left="868" Fill="Blue"></Rectangle>
+                <Rectangle Name="Passerelle1" Height="42" Width="18" Canvas.Left="369" Canvas.Top="224" Fill="Blue"></Rectangle>
+                <Rectangle Name="Passerelle2" Height="42" Width="18" Canvas.Left="451" Canvas.Top="224" Fill="Blue"></Rectangle>
+                <Rectangle Name="Passerelle3" Height="42" Width="18" Canvas.Left="534" Canvas.Top="224" Fill="Blue"></Rectangle>
+                <Rectangle Name="Passerelle4" Height="42" Width="18" Canvas.Left="616" Canvas.Top="224" Fill="Blue"></Rectangle>
+                <Rectangle Name="Passerelle5" Height="42" Width="18" Canvas.Left="697" Canvas.Top="224" Fill="Blue"></Rectangle>
+                <Rectangle Name="Passerelle6" Height="42" Width="18" Canvas.Left="778" Canvas.Top="224" Fill="Blue"></Rectangle>
+                <Rectangle Name="Passerelle7" Height="42" Width="18" Canvas.Left="369" Canvas.Top="154" Fill="Blue"></Rectangle>
+                <Rectangle Name="Passerelle8" Height="42" Width="18" Canvas.Left="451" Canvas.Top="154" Fill="Blue" RenderTransformOrigin="1.611,0.333"></Rectangle>
+                <Rectangle Name="Passerelle9" Height="42" Width="18" Canvas.Left="534" Canvas.Top="154" Fill="Blue" RenderTransformOrigin="1.611,0.333"></Rectangle>
+                <Rectangle Name="Passerelle10" Height="42" Width="18" Canvas.Left="616" Canvas.Top="154" Fill="Blue" RenderTransformOrigin="1.611,0.333"></Rectangle>
+                <Rectangle Name="Passerelle11" Height="42" Width="18" Canvas.Left="697" Canvas.Top="154" Fill="Blue" RenderTransformOrigin="1.611,0.333"></Rectangle>
+                <Rectangle Name="Passerelle12" Height="42" Width="18" Canvas.Left="778" Canvas.Top="154" Fill="Blue" RenderTransformOrigin="1.611,0.333"></Rectangle>
+
             </Canvas>
         </Border>
+
 
         <Grid Grid.Column="1" Grid.Row="1" Background="White">
             <Border Name="brdScrollViewer" BorderBrush="Black" Width="280" HorizontalAlignment="left" Margin="10" BorderThickness="1">
@@ -136,27 +136,10 @@
                 </TabItem>
             </TabControl>
         </Grid>
-        
+
         <TabControl Name="tabInfo" Grid.Row="2" Grid.Column="1" Margin="10">
             <TabItem Header="Pistes">
-                <DataGrid Name="dgPistes" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn FontSize="14" Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}">
-                            <DataGridTextColumn.CellStyle>
-                                <Style>
-                                    <Setter Property="TextBlock.TextAlignment" Value="Center"></Setter>
-                                 </Style>
-                            </DataGridTextColumn.CellStyle>
-                        </DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Disponibilité" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Ellipse Style="{DynamicResource Ellipse}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+
             </TabItem>
 
             <TabItem Header="Légende">
