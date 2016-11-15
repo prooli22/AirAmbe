@@ -19,6 +19,8 @@ namespace AirAmbe
 
         public string[] NumVol { get; set; }
 
+        public int TempsRetard { get; set; }
+
         /// <summary>
         /// Constructeur par défaut de la classe Scenario
         /// </summary>

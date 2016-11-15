@@ -13,6 +13,7 @@ namespace AirAmbe
         Decollage,
         Atterrissage,
         Critique,
-        Retarde
+        Retarde,
+        Cancelle
     }
 }

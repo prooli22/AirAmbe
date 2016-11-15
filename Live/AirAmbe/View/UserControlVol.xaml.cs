@@ -82,15 +82,6 @@ namespace AirAmbe
             dt1000.Interval = TimeSpan.FromMilliseconds(1000);
         }
 
-        ~UserControlVol()
-        {
-            //if(dt.IsEnabled)
-            //{
-            //    dt.Stop();
-            //    dt = null;
-            //}
-        }
-
 
         // ---------------------------------------------------------------------------------- \\
 
@@ -279,22 +270,24 @@ namespace AirAmbe
         // À TERMINER.
         private void TesterPiste()
         {
-            for (int i = 0; EC.LstVols.Count > 20 ? i < 20 : i < EC.LstVols.Count; i++)
+            for (int i = 0; i < EC.LstVols.Count; i++)
             {
                 if (EC.LstVols[i] != vol)
                 {
                     TimeSpan t = EC.LstVols[i].DateVol - vol.DateVol;
 
-                    if (t.TotalMilliseconds <= 60000 && t.TotalMilliseconds >= -60000)
+                    if (t.TotalMilliseconds <= 30000 && t.TotalMilliseconds >= -30000)
                     {
-                        ComboBoxItem cboI = cboPistes.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
+                        if(vol.PisteAssigne != null)
+                        {
+                            ComboBoxItem cboI = cboPistes.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
 
-                        if (vol.EtatVol == Etat.Assigne)
-                            cboI.Foreground = Brushes.Red;
+                            if (vol.EtatVol == Etat.Assigne)
+                                cboI.Foreground = Brushes.Red;
 
-                        else
-                            cboI.Foreground = Brushes.Black;
-
+                            else
+                                cboI.Foreground = Brushes.Black;
+                        }
                     }
                 }
             }
@@ -344,7 +337,7 @@ namespace AirAmbe
 
         private void TesterEtat()
         {
-            if (vol.Delais.TotalMilliseconds < vol.TEMPSRETARD + vol.TEMPSFINAL && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
+            if (vol.Delais.TotalMilliseconds < vol.TempsCritque + vol.TempsFinal && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
             {
                 vol.EtatVol = Etat.Critique;
                 GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 144, 94));
@@ -444,7 +437,7 @@ namespace AirAmbe
 
                 GrdVol.Height = 60;
                 GrdVol.Background = Brushes.LightGray;
-                TesterEtat();
+                //TesterEtat();
                 //TesterPiste();
                 vol.PisteAssigne = null;
 
@@ -453,10 +446,10 @@ namespace AirAmbe
                 dtStart.Stop();
             }
 
-            else if (vol.Delais.TotalMilliseconds < vol.TEMPSFINAL + 500)
+            else if (vol.Delais.TotalMilliseconds < vol.TempsFinal + 500)
             {
                 if (vol.EtatVol == Etat.Retarde || vol.EtatVol == Etat.Critique)
-                    RetarderVol(vol.TEMPSRETARD);
+                    RetarderVol(vol.TempsCritque);
 
                 else
                 {
@@ -469,7 +462,7 @@ namespace AirAmbe
             }
 
             // Changer les secondes.
-            else if (vol.Delais.TotalMilliseconds < vol.TEMPSRETARD + vol.TEMPSFINAL + 1000)
+            else if (vol.Delais.TotalMilliseconds < 5 * 60000 + 1000)
             {
                 ChangerLabelDelais();
                 dt1000.Stop();
@@ -511,7 +504,7 @@ namespace AirAmbe
             if (cboI.Foreground == Brushes.Red)
             {
                 EcranConfirmation eC = new EcranConfirmation(EC.Controleur);
-                eC.ShowDialog();
+                eC.Show();
             }
 
             // Si l'utilisateur choisi une piste. On change l'état a ASSIGNE.
@@ -528,7 +521,7 @@ namespace AirAmbe
 
                 vol.EtatVol = Etat.Assigne;
                 vol.PisteAssigne = EC.LstPistes[cboPistes.SelectedIndex - 1];
-                //TesterPiste();
+                TesterPiste();
             }
 
             // Sinon on remet l'état a ATTENTE.
@@ -538,7 +531,7 @@ namespace AirAmbe
                 imgEtat.Margin = new Thickness(10, 0, 0, 0);
 
                 vol.EtatVol = Etat.Attente;
-                //TesterPiste();
+                TesterPiste();
                 vol.PisteAssigne = null;
                 TesterEtat();
             }
@@ -547,21 +540,9 @@ namespace AirAmbe
 
         private void dt_Tick(object sender, EventArgs e)
         {
-            //if (vol.Delais.TotalMilliseconds < 1000 && vol.Delais.TotalMilliseconds >= 0 && vol.PisteAssigne == null)
-            //{
-            //    dtStart.Stop();
-            //    dt1000.Stop();
-            //    dt500.Stop();
-            //}
-
-            //else
-            //{
-            //    ChangerUserControl();
-            //    TesterEtat();
-            //}
-
             ChangerUserControl();
             TesterEtat();
+            TesterPiste();
         }
 
 

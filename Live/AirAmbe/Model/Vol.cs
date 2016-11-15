@@ -26,8 +26,8 @@ namespace AirAmbe
         public TimeSpan Delais { get; set; }
         public Piste PisteAssigne { get; set; }
         public Piste PisteHistorique { get; set; }
-        public int TEMPSRETARD { get; } = 1 * 60000;
-        public int TEMPSFINAL { get; } = 2 * 60000;
+        public int TempsCritque { get; set; }
+        public int TempsFinal { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Vol

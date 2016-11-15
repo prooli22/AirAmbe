@@ -1,5 +1,4 @@
 ﻿using AirAmbe.Model;
-
 using AirAmbe.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -52,12 +51,13 @@ namespace AirAmbe
         {
             InitializeComponent();
             Controleur = U;
-            LstUserControlVols = new List<UserControlVol>();
-            
             
 
             if (Controleur == null)
+            {
+                btnConfig.Visibility = Visibility.Hidden;
                 btnProfil.Visibility = Visibility.Hidden;
+            }
 
 
             if (ChargerScenarios())
@@ -68,25 +68,6 @@ namespace AirAmbe
                     ModifierHeures();
                     ChargerDataGrid();
                     ChargerProchainsVols();
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(1);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(2);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(3);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(4);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(5);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreDecollage(1);
-
 
                     //FacteursExterieurs.StartTimer(this);
                     //Anim = new Animation(this);
@@ -106,7 +87,9 @@ namespace AirAmbe
                 MessageBox.Show("Le fichier de scénarios n'est pas présent ou encore il est vide. Veuillez contacter l'administrateur de l'application pour remédier au problème.", "Air-Ambe", MessageBoxButton.OK, MessageBoxImage.Error);
                 btnProfil.Visibility = Visibility.Hidden;
                 btnRefresh.Visibility = Visibility.Hidden;
+                btnConfig.Visibility = Visibility.Hidden;
             }
+            
         }
 
 
@@ -129,8 +112,9 @@ namespace AirAmbe
             if (scenarios.Length == 0)
                 return false;
 
+
             // On charge le nombre de pistes dans la liste.
-            for (int i = 0; i < Int32.Parse(scenarios[0]); i++)
+            for (int i = 0; i < 5; i++)
             {
                 LstPistes.Add(new Piste());
                 LstPistes[i].NumPiste = i + 1;
@@ -142,6 +126,9 @@ namespace AirAmbe
             for (int i = 1; i < scenarios.Length; i++)
             {
                 Scenario S = new Scenario();
+
+                // Get le temps de retard.
+                S.TempsRetard = Int32.Parse(scenarios[0]);
 
                 // Get l'intervalle de temps et la supprime de la chaine.
                 int position = scenarios[i].IndexOf(';');
@@ -171,6 +158,8 @@ namespace AirAmbe
                     Vol V = VA.Recuperer(LstScenarios[i].NumVol[j]);
                     V.Intervalle = LstScenarios[i].Intervalle;
                     V.NumScenario = i + 1;
+                    V.TempsCritque = LstScenarios[i].TempsRetard * 1000;
+                    V.TempsFinal = V.TempsCritque * 2;
                     LstVols.Add(V);
                 }
             }
@@ -184,11 +173,7 @@ namespace AirAmbe
 
             for (int i = 0; i < LstVols.Count; i++)
             {
-                LstVols[i].DateVol = LstVols[i].DateVol.AddMilliseconds(LstVols[i].TEMPSFINAL + (LstVols[i].Intervalle * 1000));
-
-                // Met les secondes à 00
-                if (LstVols[i].DateVol.Second != 0)
-                    //LstVols[i].DateVol = LstVols[i].DateVol.AddSeconds(-LstVols[i].DateVol.Second);
+                LstVols[i].DateVol = LstVols[i].DateVol.AddMilliseconds(LstVols[i].TempsFinal + (LstVols[i].Intervalle * 1000));
 
                 // Ajoute 2 minutes entre chaque scénario
                 if (i > 0 && (LstVols[i].NumScenario != LstVols[i - 1].NumScenario))
@@ -223,11 +208,16 @@ namespace AirAmbe
 
             dgAtterissages.ItemsSource = LstAtterrissages;
             dgDecollages.ItemsSource = LstDecollages;
+
+            // DataGrid des pistes.
+            dgPistes.ItemsSource = LstPistes;
         }
 
 
         private void ChargerProchainsVols()
         {
+            LstUserControlVols = new List<UserControlVol>();
+
             for (int i = 0; i < LstVols.Count; i++)
             {
                 LstVols[i].IdVol = i + 1;
@@ -299,7 +289,6 @@ namespace AirAmbe
 
             // Stop les timers.
             for (int i = 0; i < LstUserControlVols.Count; i++)
-
                 LstUserControlVols[i].Dispose();
 
             // On vide la liste des UserControlVols.
@@ -314,6 +303,22 @@ namespace AirAmbe
                 if(LstUserControlVols[i].vol.IdVol == idVol)
                 {
                     LstUserControlVols[i].RetarderVol(millisecondes);
+                    break;
+                }
+            }
+
+            RafraichirVols();
+        }
+
+
+        public void AnnulerVol(int idVol)
+        {
+            for (int i = 0; i < LstUserControlVols.Count; i++)
+            {
+                if (LstUserControlVols[i].vol.IdVol == idVol)
+                {
+                    LstUserControlVols[i].AnnulerVol();
+                    break;
                 }
             }
 
@@ -344,6 +349,14 @@ namespace AirAmbe
             EcranConnexion eCon = new EcranConnexion();
             this.Close();
             eCon.Show();
+        }
+
+
+        private void btnConfig_Click(object sender, RoutedEventArgs e)
+        {
+            EcranConfiguration ec = new EcranConfiguration(this);
+
+            ec.Show();
         }
 
 
