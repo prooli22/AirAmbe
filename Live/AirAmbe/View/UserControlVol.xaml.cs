@@ -278,7 +278,7 @@ namespace AirAmbe
 
                     if (t.TotalMilliseconds <= 30000 && t.TotalMilliseconds >= -30000)
                     {
-                        if(vol.PisteAssigne != null)
+                        if (vol.PisteAssigne != null)
                         {
                             ComboBoxItem cboI = cboPistes.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
 
@@ -290,6 +290,24 @@ namespace AirAmbe
                         }
                     }
                 }
+            }
+        }
+
+
+        public void ChangerEtatPiste(Piste piste)
+        {
+            ComboBoxItem cboI = cboPistes.Items[piste.NumPiste] as ComboBoxItem;
+
+            if (piste.estDisponible)
+                cboI.IsEnabled = true;
+            
+            else
+            {
+                cboI.IsEnabled = false;
+
+                if(vol.PisteAssigne.NumPiste == piste.NumPiste)
+                    vol.PisteAssigne = null;
+                
             }
         }
 

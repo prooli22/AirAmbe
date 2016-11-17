@@ -41,6 +41,8 @@ namespace AirAmbe
 
         public Animation Anim { get; set; }
 
+        private EcranConfiguration ec;
+
 
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace AirAmbe
         {
             InitializeComponent();
             Controleur = U;
-            
+
 
             if (Controleur == null)
             {
@@ -89,9 +91,17 @@ namespace AirAmbe
                 btnRefresh.Visibility = Visibility.Hidden;
                 btnConfig.Visibility = Visibility.Hidden;
             }
-            
+
+
+            ec = new EcranConfiguration(this);
         }
 
+
+        ~EcranControleur()
+        {
+            if(ec != null)
+                ec.Close();
+        }
 
         // ---------------------------------------------------------------------------------- \\
 
@@ -326,6 +336,15 @@ namespace AirAmbe
         }
 
 
+        public void ChangerEtatPiste(Piste piste)
+        {
+            for (int i = 0; i < LstUserControlVols.Count; i++)
+                LstUserControlVols[i].ChangerEtatPiste(piste);
+
+            RafraichirVols();
+        }
+
+
         // ---------------------------------------------------------------------------------- \\
 
 
@@ -354,8 +373,7 @@ namespace AirAmbe
 
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
-            EcranConfiguration ec = new EcranConfiguration(this);
-
+            
             ec.Show();
         }
 
