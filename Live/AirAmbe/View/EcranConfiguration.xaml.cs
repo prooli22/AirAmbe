@@ -76,7 +76,7 @@ namespace AirAmbe
 
         private void btnAnnuler_Click(object sender, RoutedEventArgs e)
         {
-
+            EC.AnnulerVol(((Vol)(dgVols.SelectedItem)).IdVol);
         }
     }
 }
