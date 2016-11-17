@@ -325,6 +325,10 @@ namespace AirAmbe
                     b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/exclamation.png");
                     break;
 
+                case Etat.Cancelle:
+                    b.UriSource = new Uri("pack://application:,,,/AirAmbe;component/Images/x.png");
+                    break;
+
                 default:
                     break;
             }
@@ -337,16 +341,39 @@ namespace AirAmbe
 
         private void TesterEtat()
         {
-            if (vol.Delais.TotalMilliseconds < vol.TempsCritque + vol.TempsFinal && (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique))
+            if (vol.Delais.TotalMilliseconds < vol.TempsCritque + vol.TempsFinal)
             {
-                vol.EtatVol = Etat.Critique;
-                GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 144, 94));
+                if (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique)
+                {
+                    vol.EtatVol = Etat.Critique;
+                    GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 144, 94)); // Orange
+
+                    // Faire clignoter l'image.
+                    if (imgEtat.Source == null)
+                        imgEtat.Source = TrouverEtat(vol.EtatVol);
+
+                    else
+                        imgEtat.Source = null;
+
+                    return;
+                }
+
+                else if (vol.EtatVol == Etat.Retarde)
+                {
+                    GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66)); // Rouge
+
+                    // Faire clignoter l'image.
+                    if (imgEtat.Source == null)
+                        imgEtat.Source = TrouverEtat(vol.EtatVol);
+
+                    else
+                        imgEtat.Source = null;
+
+                    return;
+                }
             }
 
-            else if (vol.EtatVol == Etat.Retarde)
-                GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66));
-
-            else if (vol.EtatVol == Etat.Atterrissage || vol.EtatVol == Etat.Decollage)
+            if (vol.EtatVol == Etat.Atterrissage || vol.EtatVol == Etat.Decollage)
             {
                 imgEtat.Height = 37;
                 imgEtat.Margin = new Thickness(12, 0, 0, 0);
@@ -364,12 +391,20 @@ namespace AirAmbe
             vol.EtatVol = Etat.Retarde;
 
             // Background rouge.
-            GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66));
+            //GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66));
 
             // On retarde le vol selon le nombre de millisecondes.
             vol.DateVol = vol.DateVol.AddMilliseconds(millisecondes);
+        }
 
-            EC.RafraichirVols();
+
+        public void AnnulerVol()
+        {
+            // Etat annuler
+            vol.EtatVol = Etat.Cancelle;
+
+            // On retarde le vol selon le nombre de millisecondes.
+            vol.DateVol = DateTime.Now.AddMilliseconds(500);
         }
 
 
@@ -403,43 +438,50 @@ namespace AirAmbe
             vol.Delais = vol.DateVol - DateTime.Now;
 
             // Changer quand le vol est terminée.
-            if (vol.Delais.TotalMilliseconds < 1000 && vol.Delais.TotalMilliseconds >= 0)
+            if (vol.Delais.TotalMilliseconds < 1000/* && vol.Delais.TotalMilliseconds >= 0*/)
             {
                 GrdVol.Children.Remove(btnDetailsVols);
+                GrdVol.Height = 60;
+                GrdVol.Background = Brushes.LightGray;
+                vol.PisteAssigne = null;
 
                 lblDelais.FontSize = 12;
                 lblDelais.FontWeight = FontWeights.Normal;
 
 
-                if (vol.EstAtterrissage)
+                if(vol.EtatVol != Etat.Cancelle)
                 {
-                    EC.Anim = new Animation(EC);
-                    EC.Anim.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
+                    if (vol.EstAtterrissage)
+                    {
+                        EC.Anim = new Animation(EC);
+                        EC.Anim.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
 
-                    lblDelais.Content = "Attérit sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-                    lblDelais.Width = 170;
-                    lblDelais.Margin = new Thickness(58, 0, 0, 0);
+                        lblDelais.Content = "Attérit sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                        lblDelais.Width = 170;
+                        lblDelais.Margin = new Thickness(58, 0, 0, 0);
 
-                    vol.EtatVol = Etat.Atterrissage;
+                        vol.EtatVol = Etat.Atterrissage;
+                    }
+
+                    else
+                    {
+                        EC.Anim = new Animation(EC);
+                        EC.Anim.DemarreDecollage(vol.PisteHistorique.NumPiste);
+
+                        lblDelais.Content = "Décolle sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                        lblDelais.Width = 170;
+                        lblDelais.Margin = new Thickness(58, 0, 0, 0);
+
+                        vol.EtatVol = Etat.Decollage;
+                    }
                 }
 
                 else
                 {
-                    EC.Anim = new Animation(EC);
-                    EC.Anim.DemarreDecollage(vol.PisteHistorique.NumPiste);
-
-                    lblDelais.Content = "Décolle sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                    lblDelais.Content = "Le vol a été annulé";
                     lblDelais.Width = 170;
                     lblDelais.Margin = new Thickness(58, 0, 0, 0);
-
-                    vol.EtatVol = Etat.Decollage;
                 }
-
-                GrdVol.Height = 60;
-                GrdVol.Background = Brushes.LightGray;
-                //TesterEtat();
-                //TesterPiste();
-                vol.PisteAssigne = null;
 
                 dt500.Stop();
                 dt1000.Stop();
@@ -450,7 +492,7 @@ namespace AirAmbe
             {
                 if (vol.EtatVol == Etat.Retarde || vol.EtatVol == Etat.Critique)
                     RetarderVol(vol.TempsCritque);
-
+                
                 else
                 {
                     ChangerLabelDelais();

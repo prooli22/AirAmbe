@@ -269,7 +269,7 @@ namespace AirAmbe
 
             for (int i = 0; i < LstVols.Count; i++)
             {
-                if(LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage)
+                if(LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage && LstVols[i].EtatVol != Etat.Cancelle)
                 {
                     LstUserControlVols.Add(new UserControlVol(this, LstVols[i], compteur));
 
