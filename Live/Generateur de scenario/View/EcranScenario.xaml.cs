@@ -90,8 +90,10 @@ namespace AirAmbe
             //Création des rangées
             RowDefinition gridRow1 = new RowDefinition();
             RowDefinition gridRow2 = new RowDefinition();
+            RowDefinition gridRow3 = new RowDefinition();
             gridScenario.RowDefinitions.Add(gridRow1);
             gridScenario.RowDefinitions.Add(gridRow2);
+            gridScenario.RowDefinitions.Add(gridRow3);
 
             //affichage des infos du scénario
             CheckBox chkBoxScenario = new CheckBox();
@@ -121,7 +123,7 @@ namespace AirAmbe
             Grid.SetColumn(lblDesc, 1);
 
             Label lblEntrants = new Label();
-            lblEntrants.Content = "Nb vols entrants : " + volsEntrants;
+            lblEntrants.Content = "Atterrissages : " + volsEntrants;
             lblEntrants.Width = 150;
             lblEntrants.Height = 25;
             lblEntrants.HorizontalAlignment = HorizontalAlignment.Left;
@@ -130,7 +132,7 @@ namespace AirAmbe
             Grid.SetColumn(lblEntrants, 2);
 
             Label lblSortants = new Label();
-            lblSortants.Content = "Nb vols sortants : " + volsSortants;
+            lblSortants.Content = "Décollages : " + volsSortants;
             lblSortants.Width = 150;
             lblSortants.Height = 25;
             lblSortants.HorizontalAlignment = HorizontalAlignment.Left;
@@ -139,7 +141,7 @@ namespace AirAmbe
             Grid.SetColumn(lblSortants, 2);
 
             Label lblInterval = new Label();
-            lblInterval.Content = "Interval de temps\nen minutes";
+            lblInterval.Content = "Interval de temps\nen secondes";
             lblInterval.Width = 105;
             lblInterval.Height = 50;
             lblInterval.HorizontalAlignment = HorizontalAlignment.Left;
@@ -148,10 +150,14 @@ namespace AirAmbe
             Grid.SetColumn(lblInterval, 3);
 
             ComboBox cboMin = new ComboBox();
-            cboMin.Items.Add(2);
-            cboMin.SelectedIndex = 0;
             cboMin.Items.Add(5);
+            cboMin.SelectedIndex = 0;
             cboMin.Items.Add(10);
+            cboMin.Items.Add(15);
+            cboMin.Items.Add(30);
+            cboMin.Items.Add(45);
+            cboMin.Items.Add(60);
+            cboMin.Items.Add(90);
             cboMin.Width = 50;
             cboMin.Height = 25;
             cboMin.HorizontalAlignment = HorizontalAlignment.Left;
@@ -161,6 +167,17 @@ namespace AirAmbe
             Grid.SetRow(cboMin, 1);
             Grid.SetColumn(cboMin, 3);
 
+            Button btnModifier = new Button();
+            btnModifier.Width = 75;
+            btnModifier.Height = 25;
+            btnModifier.HorizontalAlignment = HorizontalAlignment.Left;
+            btnModifier.VerticalAlignment = VerticalAlignment.Top;
+            btnModifier.Name = "btnModifier" + compteurScenario;
+            btnModifier.Content = "Modifier";
+            gridScen.RegisterName(btnModifier.Name, btnModifier);
+            Grid.SetRow(btnModifier, 2);
+            Grid.SetColumn(btnModifier, 1);
+
             gridScenario.Children.Add(chkBoxScenario);
             gridScenario.Children.Add(lblScenario);
             gridScenario.Children.Add(lblDesc);
@@ -168,6 +185,7 @@ namespace AirAmbe
             gridScenario.Children.Add(lblSortants);
             gridScenario.Children.Add(lblInterval);
             gridScenario.Children.Add(cboMin);
+            gridScenario.Children.Add(btnModifier);
 
             Grid.SetRow(gridScenario, compteurScenario+1);
             gridScen.Children.Add(gridScenario);
@@ -195,10 +213,6 @@ namespace AirAmbe
             lstScenarioAjouter = new List<Scenario>();
             ChargerListeScen();
 
-            /*if (lstScenarioAjouter.Count > 0)
-            {
-                EcrireFichier();
-            }*/
             EcrireFichier();
         }
 
@@ -206,7 +220,7 @@ namespace AirAmbe
         {
             string[] lines = ChargerTabString();
 
-            System.IO.File.WriteAllLines(@".\Scenarios.txt", lines);
+            System.IO.File.WriteAllLines(@".\scenarios.txt", lines);
 
             MessageBox.Show("Le fichier Scenarios.txt est prêt pour l'application AirAmbe");
         }
@@ -214,7 +228,8 @@ namespace AirAmbe
         private string[] ChargerTabString()
         {
             List<string> lstString = new List<string>();
-            ComboBox cbo = (ComboBox)gridPrincipal.FindName("cboPistes");            
+            //ComboBox cbo = (ComboBox)gridPrincipal.FindName("cboPistes");   
+            ComboBox cbo = cboCritique;     
 
             lstString.Add(cbo.Text);
 

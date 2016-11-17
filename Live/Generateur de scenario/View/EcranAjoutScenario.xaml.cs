@@ -31,7 +31,9 @@ namespace AirAmbe
 
             InitialiserListeVols();
             nbVol = 0;
-            AjouterVol();
+            //AjouterVol();
+
+            dgVols.ItemsSource = lstVols;
         }
 
         private void InitialiserListeVols()
@@ -52,7 +54,7 @@ namespace AirAmbe
             }
         }
 
-        private void AjouterVol()
+        /*private void AjouterVol()
         {
             RowDefinition gridRow = new RowDefinition();
             gridVols.RowDefinitions.Add(gridRow);
@@ -105,9 +107,9 @@ namespace AirAmbe
             gridVols.Children.Add(cboVols);
 
             nbVol++;
-        }
+        }*/
 
-        private void CboSelectionChange(object sender, RoutedEventArgs e)
+        /*private void CboSelectionChange(object sender, RoutedEventArgs e)
         {
             ComboBox cbo = sender as ComboBox;
             ComboBoxItem cbi = cbo.SelectedItem as ComboBoxItem;
@@ -125,16 +127,16 @@ namespace AirAmbe
             {
                 lblType.Content = "Décollage";
             }
-        }
+        }*/
 
         private void btnAjouterVol_Click(object sender, RoutedEventArgs e)
         {
-            AjouterVol();
+            //AjouterVol();
         }
 
         private void btnAjouterScenario_Click(object sender, RoutedEventArgs e)
         {
-            ChargerListVols();
+            //ChargerListVols();
             Scenario s =  CreerScenario();
             ScenarioAS sAS = new ScenarioAS();
 
@@ -145,7 +147,7 @@ namespace AirAmbe
             ES.Show();
         }
 
-        private Vol ChercherVol(int nb)
+        /*private Vol ChercherVol(int nb)
         {
             ComboBox cbo = (ComboBox)gridVols.FindName("cboVols" + nb);
             ComboBoxItem cbi = cbo.SelectedItem as ComboBoxItem;
@@ -161,9 +163,9 @@ namespace AirAmbe
             }
 
             return v;
-        }
+        }*/
 
-        private void ChargerListVols()
+        /*private void ChargerListVols()
         {
             for (int i = 0; i < nbVol; i++)
             {
@@ -179,7 +181,7 @@ namespace AirAmbe
                 v = lstVols[compt];
                 lstVolScen.Add(v);                
             }
-        }
+        }*/
 
         private Scenario CreerScenario()
         {
