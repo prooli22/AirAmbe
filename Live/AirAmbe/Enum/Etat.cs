@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace AirAmbe
 {
-    public enum Etat
+    public enum Etat : int
     {
-        Attente,
-        Assigne,
-        Decollage,
-        Atterrissage,
-        Critique,
-        Retarde,
-        Cancelle
+        Attente = 0,
+        Assigne = 1,
+        Decollage = 2,
+        Atterrissage = 3,
+        Critique = 4,
+        Retarde = 5,
+        Cancelle = 6
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AirAmbe.Model;
+using AirAmbe.Enum;
 using AirAmbe.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -41,8 +42,7 @@ namespace AirAmbe
 
         public Animation Anim { get; set; }
 
-        private EcranConfiguration ec;
-
+        private DispatcherTimer dtRefresh;
 
 
         /// <summary>
@@ -71,6 +71,11 @@ namespace AirAmbe
                     ChargerDataGrid();
                     ChargerProchainsVols();
 
+                    dtRefresh = new DispatcherTimer();
+                    dtRefresh.Interval = TimeSpan.FromSeconds(1);
+                    dtRefresh.Tick += dtRefresh_Tick;
+                    dtRefresh.Start();
+
                     //FacteursExterieurs.StartTimer(this);
                     //Anim = new Animation(this);
                     //Anim.DemarreAtterrissage(1);
@@ -91,16 +96,14 @@ namespace AirAmbe
                 btnRefresh.Visibility = Visibility.Hidden;
                 btnConfig.Visibility = Visibility.Hidden;
             }
-
-
-            ec = new EcranConfiguration(this);
         }
 
 
-        ~EcranControleur()
+        protected override void OnClosed(EventArgs e)
         {
-            if(ec != null)
-                ec.Close();
+            base.OnClosed(e);
+
+            Application.Current.Shutdown();
         }
 
         // ---------------------------------------------------------------------------------- \\
@@ -271,6 +274,26 @@ namespace AirAmbe
         }
 
 
+        public void RafaichirListe()
+        {
+            // Clear les listes.
+            LstAtterrissages.Clear();
+            LstDecollages.Clear();
+
+            for (int i = 0; i < LstVols.Count; i++)
+            {
+                if (LstVols[i].EstAtterrissage)
+                    LstAtterrissages.Add(LstVols[i]);
+
+                else
+                    LstDecollages.Add(LstVols[i]);
+            }
+
+            dgAtterissages.Items.Refresh();
+            dgDecollages.Items.Refresh();
+        }
+
+
         private void FlushVols()
         {
             ViderListes();
@@ -373,7 +396,7 @@ namespace AirAmbe
 
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
-            
+            EcranConfiguration ec = new EcranConfiguration(this);
             ec.Show();
         }
 
@@ -422,6 +445,11 @@ namespace AirAmbe
 
         }
 
+
+        private void dtRefresh_Tick(object sender, EventArgs e)
+        {
+            RafaichirListe();
+        }
 
     }
 }

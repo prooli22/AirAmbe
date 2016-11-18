@@ -364,6 +364,7 @@ namespace AirAmbe
                 if (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique)
                 {
                     vol.EtatVol = Etat.Critique;
+
                     GrdVol.Background = new SolidColorBrush(Color.FromRgb(251, 144, 94)); // Orange
 
                     // Faire clignoter l'image.
@@ -407,9 +408,6 @@ namespace AirAmbe
             vol.PisteAssigne = null;
             cboPistes.SelectedIndex = 0;
             vol.EtatVol = Etat.Retarde;
-
-            // Background rouge.
-            //GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66));
 
             // On retarde le vol selon le nombre de millisecondes.
             vol.DateVol = vol.DateVol.AddMilliseconds(millisecondes);
@@ -474,7 +472,7 @@ namespace AirAmbe
                         EC.Anim = new Animation(EC);
                         EC.Anim.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
 
-                        lblDelais.Content = "Attérit sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
+                        lblDelais.Content = "Atterrit sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
                         lblDelais.Width = 170;
                         lblDelais.Margin = new Thickness(58, 0, 0, 0);
 

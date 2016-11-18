@@ -42,6 +42,58 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <Style  x:Key="Ellipse2" TargetType="{x:Type Ellipse}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding EstAtterrissage}" Value="True">
+                    <Setter Property="Fill" Value="LightBlue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EstAtterrissage}" Value="False">
+                    <Setter Property="Fill" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="2">
+                    <Setter Property="Fill" Value="LightGray" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="3">
+                    <Setter Property="Fill" Value="LightGray" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="4">
+                    <Setter Property="Fill" Value="#FB905E" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="5">
+                    <Setter Property="Fill" Value="#FF4242" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="6">
+                    <Setter Property="Fill" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style  x:Key="Label" TargetType="{x:Type Label}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding EtatVol}" Value="0">
+                    <Setter Property="Content" Value="Attente"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="1">
+                    <Setter Property="Content" Value="Assigné" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="2">
+                    <Setter Property="Content" Value="Décollé" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="3">
+                    <Setter Property="Content" Value="Atterri" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="4">
+                    <Setter Property="Content" Value="Critique" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="5">
+                    <Setter Property="Content" Value="Retardé" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EtatVol}" Value="6">
+                    <Setter Property="Content" Value="Annulé" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Grid Name="grdPrincipale" Background="White">
@@ -126,7 +178,7 @@
             </Canvas>
         </Border>
 
-        <Grid Grid.Column="1" Grid.Row="1" Background="White">
+        <Grid Grid.Column="1" Grid.Row="1" Background="White" Grid.RowSpan="2">
             <Border Name="brdScrollViewer" BorderBrush="Black" Width="280" HorizontalAlignment="left" Margin="10" BorderThickness="1">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -147,81 +199,79 @@
         </Grid>
 
         <Grid Grid.Column="0" Grid.Row="2" Background="White">
-            <TabControl Name="tabVols" Grid.Row="2" Grid.Column="0" Margin="10">
+            <TabControl Name="tabVols" Width="Auto" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" Margin="10">
                 <TabItem Header="Atterissages">
-                    <DataGrid Name="dgAtterissages" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
+                    <DataGrid Name="dgAtterissages" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" CanUserResizeColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Provenance" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Prévu le" IsReadOnly="True" Binding="{Binding DatePrevu, StringFormat='{}{0:yyyy-MM-dd à H:mm}'}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Heure estimée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd H:mm:ss}'}"></DataGridTextColumn>
+                            <DataGridTemplateColumn Header="État Vol" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Style="{DynamicResource Label}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Ellipse Style="{DynamicResource Ellipse2}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
                 <TabItem Header="Décollages">
-                    <DataGrid Name="dgDecollages" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
+                    <DataGrid Name="dgDecollages" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" CanUserResizeColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Destination" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Prévu le" IsReadOnly="True" Binding="{Binding DatePrevu, StringFormat='{}{0:yyyy-MM-dd à H:mm}'}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Heure estimée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd H:mm:ss}'}"></DataGridTextColumn>
+                            <DataGridTemplateColumn Header="État Vol" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Style="{DynamicResource Label}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Ellipse Style="{DynamicResource Ellipse2}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
             </TabControl>
+            <DataGrid Name="dgPistes" Width="Auto" Margin="10" RowHeight="30" HorizontalAlignment="Right" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
+                <DataGrid.Columns>
+                    <DataGridTextColumn FontSize="14" Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"></Setter>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Disponibilité" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Ellipse Style="{DynamicResource Ellipse}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
         
-        <TabControl Name="tabInfo" Grid.Row="2" Grid.Column="1" Margin="10">
-            <TabItem Header="Pistes">
-                <DataGrid Name="dgPistes" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn FontSize="14" Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}">
-                            <DataGridTextColumn.CellStyle>
-                                <Style>
-                                    <Setter Property="TextBlock.TextAlignment" Value="Center"></Setter>
-                                 </Style>
-                            </DataGridTextColumn.CellStyle>
-                        </DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Disponibilité" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Ellipse Style="{DynamicResource Ellipse}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-
-            <TabItem Header="Légende">
-                <Grid Name="grdLegende" >
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-
-                        <Ellipse Grid.Column="0" Grid.Row="0" Width="30" Height="30" Fill="LightBlue" Stroke="Black" StrokeThickness="2"></Ellipse>
-                        <Ellipse Grid.Column="0" Grid.Row="1" Width="30" Height="30" Fill="LightGreen" Stroke="Black" StrokeThickness="2"></Ellipse>
-                        <Ellipse Grid.Column="0" Grid.Row="2" Width="30" Height="30" Fill="Firebrick" Stroke="Black" StrokeThickness="2"></Ellipse>
-                        <Ellipse Grid.Column="0" Grid.Row="3" Width="30" Height="30" Fill="LightGray" Stroke="Black" StrokeThickness="2"></Ellipse>
-
-                        <Label FontSize="14" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center">Atterrissage</Label>
-                        <Label FontSize="14" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">Décollage</Label>
-                        <Label FontSize="14" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">Critique</Label>
-                        <Label FontSize="14" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center">Terminée</Label>
-                    </Grid>
-                </Grid>
-            </TabItem>
-        </TabControl>
+        
 
     </Grid>
 
