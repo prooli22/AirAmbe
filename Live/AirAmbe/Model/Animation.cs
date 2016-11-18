@@ -38,6 +38,7 @@ namespace AirAmbe
         public DispatcherTimer GereBas;
 
         public DispatcherTimer RotationAvion;
+        public List<Hangar> LstHangar { get; set; }
 
         public EcranControleur Ec { get; set; }
 
@@ -53,27 +54,16 @@ namespace AirAmbe
 
         public int LongueurHorizontale { get; set; }
 
-        public int LongueurHorizontaleMinVoiePrincip = 160;
-
-        public int LongueurHorizontaleMaxVoiePrincip = 830;
-
-        public int LongueurVerticaleMinVoiePrincip = 62;
-
-        public int LongueurVerticaleMaxVoiePrincip = 350;
-       
-        public int PositionYFinPremiereRangeeHangar = 330;
-
-        public int PositionYDebutPremiereRangeeHangar = 300;
-
-        public int PositionYFinDeuxiemeRangeeHangar = 200;
-
-        public int PositionYDebutDeuxiemeRangeeHangar = 120;
+        public int DistanceAParcourirVoiePrincip { get; set; }
 
         public int PositionYDebutVoiePrincip { get; set; }
 
         public int LongueurHorizontaleVs { get; set; }
 
-        public int Angle { get; set; }
+        /// <summary>
+        /// Des propriétés pour l'orientation de l'avion
+        /// </summary>
+        public int Angle { get; set; }  
 
         public int AngleDesire { get; set; }
 
@@ -657,11 +647,13 @@ namespace AirAmbe
         public void GenererMouvDVoiePrincip(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
             LongueurHorizontale = 1000;
-                        
+            DistanceAParcourirVoiePrincip = 830;
+
+
             if (CoordX <= LongueurHorizontale)
             {
               
-                if (CoordX >= LongueurHorizontaleMaxVoiePrincip)
+                if (CoordX >= DistanceAParcourirVoiePrincip)
                 {
                    
                     //On arrete le déplacement en cours
@@ -693,11 +685,12 @@ namespace AirAmbe
         public void GenererMouvDVoiePrincipDirectionH(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
             LongueurHorizontale = 1000;
+            DistanceAParcourirVoiePrincip = 830;
 
             if (CoordX <= LongueurHorizontale)
             {
 
-                if (CoordX >= LongueurHorizontaleMaxVoiePrincip)
+                if (CoordX >= DistanceAParcourirVoiePrincip)
                 {
 
                     //On arrete le déplacement en cours
@@ -729,10 +722,12 @@ namespace AirAmbe
         public void GenererMouvGVoiePrincipDirectionB(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
             LongueurHorizontale = 0;
+            DistanceAParcourirVoiePrincip = 162;
+
             if (CoordX >= LongueurHorizontale)
             {
 
-                if (CoordX <= LongueurHorizontaleMinVoiePrincip)
+                if (CoordX <= DistanceAParcourirVoiePrincip)
                 {
 
                     //On arrete le déplacement en cours
@@ -765,11 +760,12 @@ namespace AirAmbe
         public void GenererMouvGVoiePrincipDirectionH(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
             LongueurHorizontale = 0;
-          
+            DistanceAParcourirVoiePrincip = 330;
+
             if (CoordX >= LongueurHorizontale)
             {
 
-                if (CoordX <= PositionYFinPremiereRangeeHangar)
+                if (CoordX <= DistanceAParcourirVoiePrincip)
                 {
                     
                     //On arrete le déplacement en cours
@@ -801,11 +797,12 @@ namespace AirAmbe
         public void GenererMouvBVoiePrincip(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
             LongueurVerticale = 1000;
+            DistanceAParcourirVoiePrincip = 350;
 
             if (CoordY <= LongueurVerticale)
             {
                
-                if (CoordY >= LongueurVerticaleMaxVoiePrincip)
+                if (CoordY >= DistanceAParcourirVoiePrincip)
                 {
                     //On arrete le déplacement en cours
                     GereBas.Stop();
@@ -837,11 +834,12 @@ namespace AirAmbe
         public void GenererMouvHVoiePrincipDirectionG(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
             LongueurVerticale = 0;
-            
+            DistanceAParcourirVoiePrincip = 300;
+
             if (CoordY >= LongueurVerticale)
             {
 
-                if (CoordY <= PositionYDebutPremiereRangeeHangar)
+                if (CoordY <= DistanceAParcourirVoiePrincip)
                 {
                     //On arrete le mouvement en cours
                     GereHaut.Stop();
@@ -870,11 +868,12 @@ namespace AirAmbe
         public void GenererMouvHVoiePrincipDirectionD(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
             LongueurVerticale = 0;
+            DistanceAParcourirVoiePrincip = 120;
 
             if (CoordY >= LongueurVerticale)
             {
 
-                if (CoordY <= PositionYDebutDeuxiemeRangeeHangar)
+                if (CoordY <= DistanceAParcourirVoiePrincip)
                 {
                     //On arrete le mouvement en cours
                     GereHaut.Stop();
@@ -903,11 +902,12 @@ namespace AirAmbe
         public void GenererMouvHVoiePrincipDirectionGFinCycle(object sender, EventArgs e, Rectangle avionAtterrissage, int piste)
         {
             LongueurVerticale = 0;
+            DistanceAParcourirVoiePrincip = 62;
 
             if (CoordY >= LongueurVerticale)
             {
 
-                if (CoordY <= LongueurVerticaleMinVoiePrincip)
+                if (CoordY <= DistanceAParcourirVoiePrincip)
                 {
                     //On arrete le mouvement en cours
                     GereHaut.Stop();
@@ -926,6 +926,103 @@ namespace AirAmbe
             Canvas.SetTop(avionAtterrissage, CoordY);
         }
 
+
+
+
+        public void InitialiserHangar()
+        {
+            LstHangar = new List<Hangar>();
+
+            //On ajoute des données à la liste de hangar
+            for (int i = 0; i < 12; i++)
+            {
+                LstHangar.Add(new Hangar());
+                LstHangar[i].NumHangar = i + 1;
+                LstHangar[i].estDisponible = true;
+            }
+        }
+
+        public void DisperserDecollageHangar()
+        {
+            InitialiserHangar();
+
+            foreach (Hangar h in LstHangar)
+            {
+                MessageBox.Show(h.NumHangar.ToString());
+                MessageBox.Show(h.estDisponible.ToString());
+
+                foreach(Vol v in Ec.LstDecollages)
+                {
+                    
+                }
+
+                //DessinerAvionDecollage(v.IdVol, LstHangar);
+
+            }
+
+            //foreach (Vol v in Ec.LstDecollages)
+            //{
+            //    MessageBox.Show(v.IdVol.ToString());
+
+            //    DessinerAvionDecollage(v.IdVol, LstHangar);
+
+            //}
+        }
+
+        public void DessinerAvionDecollage(int idVol, int noHangar)
+        {
+            MessageBox.Show(noHangar.ToString());
+            //Rectangle AvionD = new Rectangle();
+            //Rectangle rectRotation = new Rectangle();
+            //ImageBrush a = new ImageBrush();
+            //a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avion.png"));
+
+            //AvionD.Fill = a;
+            //AvionD.Width = 35;
+            //AvionD.Height = 35;
+            ////AvionD.Name = "vol" + i.ToString();
+            //Canvas.SetZIndex(AvionD, 100);
+
+            //int coordY = 0;
+            //int coordX = 0;
+            //int finPiste = 0;
+            //int finVoieService = 0;
+
+            //RotateTransform aiguillageDroit = new RotateTransform(90, 14, 14);
+            //RotateTransform aiguillageGauche = new RotateTransform(270, 14, 14);
+            //RotateTransform aiguillageBas = new RotateTransform(180, 14, 14);
+            //RotateTransform aiguillageHaut = new RotateTransform(360, 14, 14);
+
+            //Selon le numéro de la piste on initialise les coordonnées de départ ainsi que l'orientation de l'avion
+            //switch (piste)
+            //{
+            //    case 1:
+
+            //        break;
+
+            //    case 2:
+
+            //        break;
+
+            //    case 3:
+
+
+            //        break;
+
+            //    case 4:
+
+            //        break;
+
+            //    case 5:
+
+            //        break;
+            //}
+        }
+
+        public void TesterDisponibiliteHangar()
+        {
+
+        }
 
         /// <summary>
         /// Une méthode qui permet de démarrer un décollage 
@@ -1048,6 +1145,13 @@ namespace AirAmbe
             // GereDroit.Tick += new EventHandler((sender, e) => DeplacementDroitHangar(sender, e, avionDecollage, piste));
             GereDroit.Interval = TimeSpan.FromMilliseconds(50);
         }
+
+
+       
+
+
+
+
 
         /// <summary>
         /// Une méthode temporaire qui permet de déplacer un avion du hangar jusqua la voie de service (VERSION 0.5)
