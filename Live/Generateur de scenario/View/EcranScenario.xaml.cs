@@ -174,9 +174,19 @@ namespace AirAmbe
             btnModifier.VerticalAlignment = VerticalAlignment.Top;
             btnModifier.Name = "btnModifier" + compteurScenario;
             btnModifier.Content = "Modifier";
+            btnModifier.Click += BtnModifier_Click;
             gridScen.RegisterName(btnModifier.Name, btnModifier);
             Grid.SetRow(btnModifier, 2);
             Grid.SetColumn(btnModifier, 1);
+
+            Rectangle r = new Rectangle();
+            r.Height = 1;
+            r.Width = Double.NaN;
+            r.Fill = Brushes.Black;
+            r.VerticalAlignment = VerticalAlignment.Bottom;
+            r.Margin = new Thickness(0, 0, 0, 2);
+            Grid.SetRow(r, 2);
+            Grid.SetColumnSpan(r, 4);
 
             gridScenario.Children.Add(chkBoxScenario);
             gridScenario.Children.Add(lblScenario);
@@ -186,9 +196,20 @@ namespace AirAmbe
             gridScenario.Children.Add(lblInterval);
             gridScenario.Children.Add(cboMin);
             gridScenario.Children.Add(btnModifier);
+            gridScenario.Children.Add(r);
 
             Grid.SetRow(gridScenario, compteurScenario+1);
             gridScen.Children.Add(gridScenario);
+        }
+
+        private void BtnModifier_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            int numScen = Int32.Parse(btn.Name.Substring(11));
+            EcranAjoutScenario eAS = new EcranAjoutScenario(lstScenarios[numScen]);
+
+            eAS.Show();
+            this.Close();
         }
 
         private void ChkBoxScenario_Unchecked(object sender, RoutedEventArgs e)

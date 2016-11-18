@@ -21,19 +21,59 @@ namespace AirAmbe
     /// </summary>
     public partial class EcranAjoutScenario : Window
     {
-        public int nbVol { get; set; }
         public ObservableCollection<Vol> lstVols { get; set; } = new ObservableCollection<Vol>();
-        public ObservableCollection<Vol> lstVolScen { get; set; } = new ObservableCollection<Vol>();
+        public List<Vol> lstVolScen { get; set; } = new List<Vol>();
 
         public EcranAjoutScenario()
         {
             InitializeComponent();
 
             InitialiserListeVols();
-            nbVol = 0;
-            //AjouterVol();
 
             dgVols.ItemsSource = lstVols;
+            dgVolsScen.ItemsSource = lstVolScen;
+        }
+
+        public EcranAjoutScenario(Scenario s)
+        {
+            InitializeComponent();
+
+            InitialiserListeVols();
+
+            lstVolScen = FusionnerListesVols(s);
+            txtDesc.Text = s.Description;
+
+            btnAjouterScenario.Content = "Modifier";
+            btnAjouterScenario.Click += BtnAjouterScenario_ClickModifier;
+            btnAjouterScenario.Click -= btnAjouterScenario_ClickAjouter;
+
+            dgVols.ItemsSource = lstVols;
+            dgVolsScen.ItemsSource = lstVolScen;
+        }
+
+        private void BtnAjouterScenario_ClickModifier(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private List<Vol> FusionnerListesVols(Scenario s)
+        {
+            List<Vol> lstVolTemp = new List<Vol>();
+            s.lstVolsAtt.AddRange(s.lstVolsDec);
+            List<String> lstTemp = s.lstVolsAtt;
+
+            for (int i = 0; i < lstTemp.Count; i++)
+            {
+                for (int j = 0; j < lstVols.Count; j++)
+                {
+                    if (lstTemp[i] == lstVols[j].NumeroVol)
+                    {
+                        lstVolTemp.Add(lstVols[j]);
+                    }
+                }                
+            }
+
+            return lstVolTemp;
         }
 
         private void InitialiserListeVols()
@@ -53,135 +93,6 @@ namespace AirAmbe
                 cbo.SelectedItem = cbi;
             }
         }
-
-        /*private void AjouterVol()
-        {
-            RowDefinition gridRow = new RowDefinition();
-            gridVols.RowDefinitions.Add(gridRow);
-
-            Label lblVol = new Label();
-            lblVol.Name = "lblVol"+nbVol;
-            gridVols.RegisterName(lblVol.Name, lblVol);
-            lblVol.Content = "Vol" + nbVol;
-            lblVol.Width = 50;
-            lblVol.Height = 30;
-            lblVol.HorizontalAlignment = HorizontalAlignment.Left;
-            Grid.SetRow(lblVol, nbVol);
-            Grid.SetColumn(lblVol, 0);
-
-            ComboBox cboVols = new ComboBox();
-            cboVols.Name = "cboVols" + nbVol;
-            gridVols.RegisterName(cboVols.Name, cboVols);
-            RemplirCombobox(cboVols);
-            cboVols.Height = 25;
-            cboVols.Width = 75;
-            cboVols.Margin = new Thickness(10, 0, 0, 0);
-            Grid.SetRow(cboVols, nbVol);
-            Grid.SetColumn(cboVols, 0);                        
-
-            cboVols.SelectionChanged += new SelectionChangedEventHandler(CboSelectionChange);
-
-            Label lblType = new Label();
-            lblType.Name = "lblType" + nbVol;
-            gridVols.RegisterName(lblType.Name, lblType);
-
-            Vol v = ChercherVol(nbVol);
-            if (v.EstAtterrissage)
-            {
-                lblType.Content = "Atterrissage";
-            }
-            else
-            {
-                lblType.Content = "Décollage";
-            }
-
-            lblType.Width = 75;
-            lblType.Height = 30;
-            lblType.Margin = new Thickness(60, 0, 0, 0);
-            lblType.HorizontalAlignment = HorizontalAlignment.Left;
-            Grid.SetRow(lblType, nbVol);
-            Grid.SetColumn(lblType, 0);
-
-            gridVols.Children.Add(lblType);
-            gridVols.Children.Add(lblVol);
-            gridVols.Children.Add(cboVols);
-
-            nbVol++;
-        }*/
-
-        /*private void CboSelectionChange(object sender, RoutedEventArgs e)
-        {
-            ComboBox cbo = sender as ComboBox;
-            ComboBoxItem cbi = cbo.SelectedItem as ComboBoxItem;
-            int nb = -1;
-            nb = Int32.Parse(cbo.Name.ToString().Substring(7));
-
-            Vol v = ChercherVol(nb);
-            Label lblType = (Label)gridVols.FindName("lblType" + nb);
-
-            if (v.EstAtterrissage)
-            {
-                lblType.Content = "Atterrissage";
-            }
-            else
-            {
-                lblType.Content = "Décollage";
-            }
-        }*/
-
-        private void btnAjouterVol_Click(object sender, RoutedEventArgs e)
-        {
-            //AjouterVol();
-        }
-
-        private void btnAjouterScenario_Click(object sender, RoutedEventArgs e)
-        {
-            //ChargerListVols();
-            Scenario s =  CreerScenario();
-            ScenarioAS sAS = new ScenarioAS();
-
-            sAS.Inserer(s);
-
-            EcranScenario ES = new EcranScenario();
-            this.Close();
-            ES.Show();
-        }
-
-        /*private Vol ChercherVol(int nb)
-        {
-            ComboBox cbo = (ComboBox)gridVols.FindName("cboVols" + nb);
-            ComboBoxItem cbi = cbo.SelectedItem as ComboBoxItem;
-            string num = cbi.Content as string;
-
-            int compt = 0;
-            
-            Vol v = lstVols[compt];
-            while (num != lstVols[compt].NumeroVol)
-            {
-                compt++;
-                v = lstVols[compt];
-            }
-
-            return v;
-        }*/
-
-        /*private void ChargerListVols()
-        {
-            for (int i = 0; i < nbVol; i++)
-            {
-                ComboBox cbo = (ComboBox)gridVols.FindName("cboVols" + i);
-
-                int compt = 0;
-                string num = cbo.Text;
-                Vol v = lstVols[compt];
-                while (num != lstVols[compt].NumeroVol)
-                {
-                    compt++;
-                }
-                v = lstVols[compt];
-                lstVolScen.Add(v);                
-            }
-        }*/
 
         private Scenario CreerScenario()
         {
@@ -204,11 +115,54 @@ namespace AirAmbe
             return scen;
         }
 
+        private void AjouterVol(Vol v)
+        {
+            lstVolScen.Add(v);
+
+            dgVolsScen.Items.Refresh();
+        }
+
+        private void EnleverVol(Vol v)
+        {
+            lstVolScen.Remove(v);
+
+            dgVolsScen.Items.Refresh();
+        }
+
+        private void btnAjouterScenario_ClickAjouter(object sender, RoutedEventArgs e)
+        {
+            if (lstVolScen.Count <= 0)
+            {
+                MessageBox.Show("Il doit avoir au moins un vol dans le scénario.");
+            }
+            else
+            {
+                Scenario s = CreerScenario();
+                ScenarioAS sAS = new ScenarioAS();
+
+                sAS.Inserer(s);
+
+                EcranScenario ES = new EcranScenario();
+                this.Close();
+                ES.Show();
+            }            
+        }        
+
         private void btnAnnuler_Click(object sender, RoutedEventArgs e)
         {
             EcranScenario eS = new EcranScenario();
             this.Close();
             eS.Show();
+        }
+
+        private void btnEnlever_Click(object sender, RoutedEventArgs e)
+        {
+            EnleverVol((Vol)dgVolsScen.SelectedItem);
+        }
+
+        private void btnAjouter_Click(object sender, RoutedEventArgs e)
+        {
+            AjouterVol((Vol)(dgVols.SelectedItem));
         }
     }
 }

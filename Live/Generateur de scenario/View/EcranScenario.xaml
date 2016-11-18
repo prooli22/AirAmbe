@@ -31,7 +31,7 @@
         </ComboBox>
 
         <Button Name="btnCreer" Content="Créer un scénario" Height="25" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,35" Grid.Row="2" Click="btnCreer_Click"></Button>
-        <Button Name="btnGenerer" Content="Générer" Height="25" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5" Grid.Row="2" Click="btnGenerer_Click"></Button>
+        <Button Name="btnGenerer" Content="Activer" Height="25" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5" Grid.Row="2" Click="btnGenerer_Click"></Button>
         <Button Name="btnQuitter" Content="Quitter" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Grid.Row="2" Click="btnQuitter_Click"></Button>
 
         <ScrollViewer MaxHeight="500" Grid.Row="1">
