@@ -1,5 +1,5 @@
 ﻿using AirAmbe.Model;
-using AirAmbe.Enum;
+//using AirAmbe.Enum;
 using AirAmbe.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -40,6 +40,8 @@ namespace AirAmbe
 
         public List<UserControlVol> LstUserControlVols { get; set; }
 
+        public List<Hangar> LstHangar { get; set; }
+
         public Animation Anim { get; set; }
 
         private DispatcherTimer dtRefresh;
@@ -67,6 +69,7 @@ namespace AirAmbe
                 if(LstScenarios.Count > 0)
                 {
                     ChargerVols();
+                    InitialiserHangar();
                     ModifierHeures();
                     ChargerDataGrid();
                     ChargerProchainsVols();
@@ -75,14 +78,10 @@ namespace AirAmbe
                     dtRefresh.Interval = TimeSpan.FromSeconds(1);
                     dtRefresh.Tick += dtRefresh_Tick;
                     dtRefresh.Start();
-
-                    //FacteursExterieurs.StartTimer(this);
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(1);
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(2);
+                                      
+                    //FacteursExterieurs.StartTimer(this);    
                 }
-
+  
                 Anim = new Animation(this);
                 Anim.DessinerHangar();
                 Anim.GererDessinPiste(LstPistes.Count);
@@ -449,6 +448,22 @@ namespace AirAmbe
         private void dtRefresh_Tick(object sender, EventArgs e)
         {
             RafaichirListe();
+        }
+
+        /// <summary>
+        /// Une méthode pour initialiser les hangars de la carte
+        /// </summary>
+        public void InitialiserHangar()
+        {
+            LstHangar = new List<Hangar>();
+
+            //Pour chaque hangar on donne un numero et une disponibilité
+            for (int i = 0; i < 12; i++)
+            {
+                LstHangar.Add(new Hangar());
+                LstHangar[i].NumHangar = i + 1;
+                LstHangar[i].estDisponible = true;
+            }
         }
 
     }
