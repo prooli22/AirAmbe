@@ -1,5 +1,4 @@
 ﻿using AirAmbe.Model;
-//using AirAmbe.Enum;
 using AirAmbe.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -246,6 +245,20 @@ namespace AirAmbe
         }
 
 
+        public void InitialiserHangar()
+        {
+            LstHangar = new List<Hangar>();
+
+            //Pour chaque hangar on donne un numero et une disponibilité
+            for (int i = 0; i < 12; i++)
+            {
+                LstHangar.Add(new Hangar());
+                LstHangar[i].NumHangar = i + 1;
+                LstHangar[i].estDisponible = true;
+            }
+        }
+
+
         public void RafraichirVols()
         {
             ViderListes();
@@ -450,21 +463,6 @@ namespace AirAmbe
             RafaichirListe();
         }
 
-        /// <summary>
-        /// Une méthode pour initialiser les hangars de la carte
-        /// </summary>
-        public void InitialiserHangar()
-        {
-            LstHangar = new List<Hangar>();
-
-            //Pour chaque hangar on donne un numero et une disponibilité
-            for (int i = 0; i < 12; i++)
-            {
-                LstHangar.Add(new Hangar());
-                LstHangar[i].NumHangar = i + 1;
-                LstHangar[i].estDisponible = true;
-            }
-        }
 
     }
 }

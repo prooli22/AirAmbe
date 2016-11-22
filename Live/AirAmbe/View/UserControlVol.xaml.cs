@@ -46,7 +46,7 @@ namespace AirAmbe
 
         private ComboBox cboPistes = new ComboBox();
 
-        private Label lblEstime = new Label();
+       
 
 
         /// <summary>
@@ -58,6 +58,7 @@ namespace AirAmbe
         {
             InitializeComponent();
 
+
             EC = ec;
             vol = volEC;
             compteurVol = compteur;
@@ -65,7 +66,7 @@ namespace AirAmbe
             AfficherDetailsVols();
             AfficherDetailsVolsH();
             AfficherDetailsVolsB();
-            TesterEtat();
+            //TesterEtat();
             //TesterPiste();
 
             dtStart = new DispatcherTimer();
@@ -251,7 +252,7 @@ namespace AirAmbe
 
             Grid.SetRow(cboPistes, 1);
 
-
+            Label lblEstime = new Label();
             lblEstime.Content = estime + vol.DateVol.ToString("HH:mm:ss");
             lblEstime.Height = 30;
             lblEstime.VerticalAlignment = VerticalAlignment.Top;
