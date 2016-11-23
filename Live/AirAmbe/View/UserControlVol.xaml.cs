@@ -396,6 +396,19 @@ namespace AirAmbe
 
             imgEtat.Source = TrouverEtat(vol.EtatVol);
         }
+
+
+        private void TesterHangar()
+        {
+            int compteur = 0;
+
+            foreach(Hangar hanger in EC.LstHangar)
+                if (!hanger.estDisponible)
+                    compteur++;
+
+            if (compteur == EC.LstHangar.Count && vol.EstAtterrissage)
+                cboPistes.IsEnabled = false;
+        }
          
 
         public void RetarderVol(int millisecondes)
@@ -521,6 +534,7 @@ namespace AirAmbe
             // Changer les minutes.
             else
                 lblDelais.Content = "Dans " + (vol.Delais.Minutes + (vol.Delais.Hours * 60) + 1).ToString() + " minutes";
+
         }
 
 
@@ -583,6 +597,7 @@ namespace AirAmbe
         private void dt_Tick(object sender, EventArgs e)
         {
             ChangerUserControl();
+            TesterHangar();
             TesterEtat();
             TesterPiste();
         }
