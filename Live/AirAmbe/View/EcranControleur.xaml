@@ -211,14 +211,14 @@
                             <DataGridTemplateColumn Header="État Vol" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Style="{DynamicResource Label}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Ellipse Style="{DynamicResource Ellipse2}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition></ColumnDefinition>
+                                                <ColumnDefinition></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Style="{DynamicResource Label}" Grid.Column="0"/>
+                                            <Ellipse Style="{DynamicResource Ellipse2}" Height="20" Width="20" Grid.Column="1" Stroke="Black" StrokeThickness="1"/>
+                                        </Grid>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -236,14 +236,14 @@
                             <DataGridTemplateColumn Header="État Vol" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Style="{DynamicResource Label}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Ellipse Style="{DynamicResource Ellipse2}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition></ColumnDefinition>
+                                                <ColumnDefinition></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Style="{DynamicResource Label}" Grid.Column="0"/>
+                                            <Ellipse Style="{DynamicResource Ellipse2}" Height="20" Width="20" Grid.Column="1" Stroke="Black" StrokeThickness="1"/>
+                                        </Grid>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -251,7 +251,8 @@
                     </DataGrid>
                 </TabItem>
             </TabControl>
-            <DataGrid Name="dgPistes" Width="Auto" Margin="10" RowHeight="30" HorizontalAlignment="Right" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
+            
+            <DataGrid Name="dgPistes" Width="Auto" Height="180" Margin="10" RowHeight="30" HorizontalAlignment="Right" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" CanUserResizeColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn FontSize="14" Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}">
                         <DataGridTextColumn.CellStyle>
