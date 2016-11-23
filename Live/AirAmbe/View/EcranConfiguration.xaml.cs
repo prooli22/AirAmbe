@@ -20,7 +20,6 @@ namespace AirAmbe
     public partial class EcranConfiguration : Window
     {
         public EcranControleur EC { get; set; }
-        public int Secondes { get; set; } = 30;
         public EcranConfiguration(EcranControleur ec)
         {
             InitializeComponent();
@@ -33,14 +32,20 @@ namespace AirAmbe
 
         private void btnRetarder_Click(object sender, RoutedEventArgs e)
         {
-            /*DataGridRow row = dgVols.ItemContainerGenerator.ContainerFromIndex(dgVols.SelectedIndex) as DataGridRow;
-            var i = 5;
-            var ele = ((ContentPresenter)(dgVols.Columns[i].GetCellContent(row))).Content;
-            MessageBox.Show(ele.GetType().ToString());*/
+            Vol v = (Vol)(dgVols.SelectedItem);
 
-            FacteursExterieurs.VolRetarde((Vol)(dgVols.SelectedItem),Secondes, EC);
-
-            Secondes = 30;
+            switch (v.TempsUnite)
+            {
+                case "Secondes":
+                    FacteursExterieurs.VolRetarde((Vol)(dgVols.SelectedItem), v.TempsRetard * 1, EC);
+                    break;
+                case "Minutes":
+                    FacteursExterieurs.VolRetarde((Vol)(dgVols.SelectedItem), v.TempsRetard * 60, EC);
+                    break;
+                case "Heures":
+                    FacteursExterieurs.VolRetarde((Vol)(dgVols.SelectedItem), v.TempsRetard * 60 * 60, EC);
+                    break;
+            }
             
             dgVols.Items.Refresh();
         }
@@ -67,16 +72,34 @@ namespace AirAmbe
             btn.Width -= 2;
         }
 
-        private void txtSecondes_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox txtSecs = sender as TextBox;
-
-            Secondes = Int32.Parse(txtSecs.Text);
-        }
-
         private void btnAnnuler_Click(object sender, RoutedEventArgs e)
         {
             EC.AnnulerVol(((Vol)(dgVols.SelectedItem)).IdVol);
+        }
+
+        private void cboTemps_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Vol v = ((Vol)dgVols.SelectedItem);
+            if (v != null)
+            {
+                ComboBox cboTemps = (ComboBox)sender;
+                ComboBoxItem cboiTemps = (ComboBoxItem)cboTemps.Items[cboTemps.SelectedIndex];           
+
+                v.TempsRetard = int.Parse(cboiTemps.Content.ToString());
+            }
+            
+        }
+
+        private void cboValeur_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Vol v = ((Vol)dgVols.SelectedItem);
+            if (v != null)
+            {
+                ComboBox cboUnite = (ComboBox)sender;
+                ComboBoxItem cboiUnite = (ComboBoxItem)cboUnite.Items[cboUnite.SelectedIndex];
+
+                v.TempsUnite = cboiUnite.Content.ToString();
+            }            
         }
     }
 }

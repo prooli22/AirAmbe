@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AirAmbe"
         mc:Ignorable="d"
-        Title="EcranConfiguration" Height="500" Width="750">
+        Title="EcranConfiguration" Height="500" Width="1000">
     <Window.Resources>
         <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="Transparent"/>
@@ -72,8 +72,8 @@
                         <DataGridTemplateColumn Header="Temps">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox Name="cboTemps">
-                                        <ComboBoxItem>1</ComboBoxItem>
+                                    <ComboBox Name="cboTemps" SelectionChanged="cboTemps_SelectionChanged">
+                                        <ComboBoxItem IsSelected="true">1</ComboBoxItem>
                                         <ComboBoxItem>2</ComboBoxItem>
                                         <ComboBoxItem>3</ComboBoxItem>
                                         <ComboBoxItem>4</ComboBoxItem>
@@ -85,11 +85,11 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Unité" Width="80">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox Name="cboValeur">
-                                        <ComboBoxItem>Secondes</ComboBoxItem>
+                                    <ComboBox Name="cboValeur" SelectionChanged="cboValeur_SelectionChanged">
+                                        <ComboBoxItem IsSelected="true">Secondes</ComboBoxItem>
                                         <ComboBoxItem>Minutes</ComboBoxItem>
                                         <ComboBoxItem>Heures</ComboBoxItem>                                       
                                     </ComboBox>

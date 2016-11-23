@@ -6,17 +6,39 @@ using System.Threading.Tasks;
 using AirAmbe.ViewModel;
 using System.Data;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace AirAmbe.Model
 {
     public class ScenarioAS
     {
-        //Déclaration des attributs de la classe VolAS
         private BdService MaBd;
 
         public ScenarioAS()
         {
             MaBd = new BdService();
+        }
+
+        public void Modifier(Scenario scenModification)
+        {
+            string modif = "UPDATE scenarios SET description='" 
+                + scenModification.Description + "' WHERE idScenario=" + scenModification.IdScenario + ";";
+            MaBd.Commande(modif);
+
+            modif = " DELETE FROM volscenarios WHERE idScenario=" + scenModification.IdScenario + ";";
+            MaBd.Commande(modif);
+
+            for (int i = 0; i < scenModification.lstVolsAtt.Count; i++)
+            {
+                modif = " INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + scenModification.lstVolsAtt[i] + "')," + scenModification.IdScenario + ");";
+                MaBd.Commande(modif);
+            }
+
+            for (int i = 0; i < scenModification.lstVolsDec.Count; i++)
+            {
+                modif = " INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + scenModification.lstVolsDec[i] + "')," + scenModification.IdScenario + ");";
+                MaBd.Commande(modif);
+            }
         }
 
         public void Inserer(Scenario Sc)

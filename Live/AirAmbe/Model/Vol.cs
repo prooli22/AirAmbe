@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace AirAmbe
 {
@@ -28,6 +29,8 @@ namespace AirAmbe
         public Piste PisteHistorique { get; set; }
         public int TempsCritque { get; set; }
         public int TempsFinal { get; set; }
+        public int TempsRetard { get; set; } = 1;
+        public string TempsUnite { get; set; } = "Secondes";
 
         /// <summary>
         /// Constructeur de la classe Vol

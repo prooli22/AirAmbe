@@ -23,6 +23,7 @@ namespace AirAmbe
     {
         public ObservableCollection<Vol> lstVols { get; set; } = new ObservableCollection<Vol>();
         public List<Vol> lstVolScen { get; set; } = new List<Vol>();
+        public int IdScenarioModif { get; set; }
 
         public EcranAjoutScenario()
         {
@@ -43,9 +44,10 @@ namespace AirAmbe
             lstVolScen = FusionnerListesVols(s);
             txtDesc.Text = s.Description;
 
-            btnAjouterScenario.Content = "Modifier";
             btnAjouterScenario.Click += BtnAjouterScenario_ClickModifier;
             btnAjouterScenario.Click -= btnAjouterScenario_ClickAjouter;
+
+            IdScenarioModif = s.IdScenario;
 
             dgVols.ItemsSource = lstVols;
             dgVolsScen.ItemsSource = lstVolScen;
@@ -53,7 +55,23 @@ namespace AirAmbe
 
         private void BtnAjouterScenario_ClickModifier(object sender, RoutedEventArgs e)
         {
-            
+            if (lstVolScen.Count <= 0)
+            {
+                MessageBox.Show("Il doit avoir au moins un vol dans le scénario.");
+            }
+            else
+            {
+                Scenario s = CreerScenario();
+                s.IdScenario = IdScenarioModif;
+                ScenarioAS sAS = new ScenarioAS();
+
+                sAS.Modifier(s);
+
+                MessageBox.Show("Scénario #" + s.IdScenario + " modifié.");
+                EcranScenario ES = new EcranScenario();
+                this.Close();
+                ES.Show();
+            }
         }
 
         private List<Vol> FusionnerListesVols(Scenario s)
@@ -141,6 +159,8 @@ namespace AirAmbe
                 ScenarioAS sAS = new ScenarioAS();
 
                 sAS.Inserer(s);
+
+                MessageBox.Show("Scénario créé.");
 
                 EcranScenario ES = new EcranScenario();
                 this.Close();
