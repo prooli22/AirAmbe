@@ -46,8 +46,6 @@ namespace AirAmbe
 
         public Animation Anim { get; set; }
 
-        public Rectangle ImageAvionD { get; set; }
-
         private DispatcherTimer dtRefresh;
 
 
@@ -93,17 +91,21 @@ namespace AirAmbe
                     Anim = new Animation(this);
                     Anim.DisperserDecollageHangar();
 
-                    Anim = new Animation(this);
-                    Anim.DemarreDecollage(2);
+                    //Anim = new Animation(this);
+                    //Anim.DemarreDecollage(1);
+
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreDecollage(3);
 
                     //Anim = new Animation(this);
                     //Anim.DemarreDecollage(2);
 
                     //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(1);
+                    //Anim.DemarreAtterrissage(2);
 
                     //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(2);
+                    //Anim.DemarreAtterrissage(4);
 
 
                     //Anim = new Animation(this);
@@ -147,7 +149,7 @@ namespace AirAmbe
                     //Anim.DemarreDecollage(3);
 
                 }
-  
+
                 Anim = new Animation(this);
                 Anim.DessinerHangar();
              
@@ -330,7 +332,7 @@ namespace AirAmbe
             LstAvion = new List<Avion>();
 
             //Pour chaque avion on donne un numero et une disponibilité        
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 2; i++)
             {
                 LstAvion.Add(new Avion());
                 LstAvion[i].NumAvion = i + 1;
@@ -338,7 +340,8 @@ namespace AirAmbe
                 LstAvion[i].EstDisponibleDecollage = true;
             }
 
-            for (int i = 1; i < 12; i++)
+          
+            for (int i = 2; i < LstVols.Count(); i++)
             {
                 LstAvion.Add(new Avion());
                 LstAvion[i].NumAvion = i + 1;
