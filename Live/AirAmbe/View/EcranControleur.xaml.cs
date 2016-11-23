@@ -1,4 +1,5 @@
 ﻿using AirAmbe.Model;
+//using AirAmbe.Enum;
 using AirAmbe.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,11 @@ namespace AirAmbe
 
         public List<Hangar> LstHangar { get; set; }
 
+        public List<Avion> LstAvion { get; set; }
+
         public Animation Anim { get; set; }
+
+        public Rectangle ImageAvionD { get; set; }
 
         private DispatcherTimer dtRefresh;
 
@@ -67,8 +72,14 @@ namespace AirAmbe
             {
                 if(LstScenarios.Count > 0)
                 {
+                
                     ChargerVols();
                     InitialiserHangar();
+             
+
+
+                    InitialiserAvion();
+                 
                     ModifierHeures();
                     ChargerDataGrid();
                     ChargerProchainsVols();
@@ -77,12 +88,69 @@ namespace AirAmbe
                     dtRefresh.Interval = TimeSpan.FromSeconds(1);
                     dtRefresh.Tick += dtRefresh_Tick;
                     dtRefresh.Start();
-                                      
+                    //Anim = new Animation(this);
+                    //Anim.DisperserDecollageHangar();
+                    Anim = new Animation(this);
+                    Anim.DisperserDecollageHangar();
+
+                    Anim = new Animation(this);
+                    Anim.DemarreDecollage(2);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreDecollage(2);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(1);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(2);
+
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreDecollage(3);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(2);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(3);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(4);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(5);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(2);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(5);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(2);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(1);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(4);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(3);
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreAtterrissage(5);
                     //FacteursExterieurs.StartTimer(this);    
+
+                    //Anim = new Animation(this);
+                    //Anim.DemarreDecollage(3);
+
                 }
   
                 Anim = new Animation(this);
                 Anim.DessinerHangar();
+             
                 Anim.GererDessinPiste(LstPistes.Count);
                 //Anim.DessinerVoieService();
             }
@@ -244,7 +312,6 @@ namespace AirAmbe
             }
         }
 
-
         public void InitialiserHangar()
         {
             LstHangar = new List<Hangar>();
@@ -254,10 +321,31 @@ namespace AirAmbe
             {
                 LstHangar.Add(new Hangar());
                 LstHangar[i].NumHangar = i + 1;
-                LstHangar[i].estDisponible = true;
+                LstHangar[i].EstDisponible = true;
             }
         }
 
+        public void InitialiserAvion()
+        {
+            LstAvion = new List<Avion>();
+
+            //Pour chaque avion on donne un numero et une disponibilité        
+            for (int i = 0; i < 1; i++)
+            {
+                LstAvion.Add(new Avion());
+                LstAvion[i].NumAvion = i + 1;
+                LstAvion[i].EstDisponibleAtterrissage = false;
+                LstAvion[i].EstDisponibleDecollage = true;
+            }
+
+            for (int i = 1; i < 12; i++)
+            {
+                LstAvion.Add(new Avion());
+                LstAvion[i].NumAvion = i + 1;
+                LstAvion[i].EstDisponibleAtterrissage = true;
+                LstAvion[i].EstDisponibleDecollage = false;
+            }
+        }
 
         public void RafraichirVols()
         {
@@ -461,8 +549,6 @@ namespace AirAmbe
         private void dtRefresh_Tick(object sender, EventArgs e)
         {
             RafaichirListe();
-        }
-
-
+        }   
     }
 }
