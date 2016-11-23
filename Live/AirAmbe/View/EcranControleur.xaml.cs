@@ -314,6 +314,7 @@ namespace AirAmbe
             }
         }
 
+
         public void InitialiserHangar()
         {
             LstHangar = new List<Hangar>();
@@ -326,6 +327,7 @@ namespace AirAmbe
                 LstHangar[i].EstDisponible = true;
             }
         }
+
 
         public void InitialiserAvion()
         {
@@ -350,35 +352,23 @@ namespace AirAmbe
             }
         }
 
+
         public void RafraichirVols()
         {
             ViderListes();
 
-            // On tri la liste des vols.
-            LstVols.Sort((a, b) => DateTime.Compare(a.DateVol, b.DateVol));
-
-            // Clear les listes.
-            LstAtterrissages.Clear();
-            LstDecollages.Clear();
-
-            for (int i = 0; i < LstVols.Count; i++)
-            {
-                if (LstVols[i].EstAtterrissage)
-                    LstAtterrissages.Add(LstVols[i]);
-
-                else
-                    LstDecollages.Add(LstVols[i]);
-
+            for (int i = 0; i < 10; i++)
                 LstUserControlVols.Add(new UserControlVol(this, LstVols[i], i));
-            }
+            
 
-            dgAtterissages.Items.Refresh();
-            dgDecollages.Items.Refresh();
         }
 
 
         public void RafaichirListe()
         {
+            // On tri la liste des vols.
+            LstVols.Sort((a, b) => DateTime.Compare(a.DateVol, b.DateVol));
+
             // Clear les listes.
             LstAtterrissages.Clear();
             LstDecollages.Clear();
@@ -484,7 +474,7 @@ namespace AirAmbe
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            RafraichirVols();
+            //RafraichirVols();
             FlushVols();
         }
 

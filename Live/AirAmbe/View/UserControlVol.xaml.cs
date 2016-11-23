@@ -402,8 +402,8 @@ namespace AirAmbe
         {
             int compteur = 0;
 
-            foreach(Hangar hanger in EC.LstHangar)
-                if (!hanger.estDisponible)
+            foreach(Hangar hangar in EC.LstHangar)
+                if (!hangar.EstDisponible)
                     compteur++;
 
             if (compteur == EC.LstHangar.Count && vol.EstAtterrissage)
