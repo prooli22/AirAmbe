@@ -66,8 +66,7 @@ namespace AirAmbe
         public int NumeroAvionDisponible { get; set; }
 
         public Rectangle ImageAvion { get; set; }
-
-      
+    
         public int Angle { get; set; }  
 
         public int AngleDesire { get; set; }
@@ -123,6 +122,8 @@ namespace AirAmbe
             Ec.Piste1.Fill = ib;
             Ec.Piste1.Width = 330;
             Ec.Piste1.Height = 40;
+
+          
             Canvas.SetLeft(Ec.Piste1, 45);
             Canvas.SetTop(Ec.Piste1,75);
             
@@ -304,6 +305,7 @@ namespace AirAmbe
             ImageBrush a = new ImageBrush();
             a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avion.png"));
 
+            ImageAvion = new Rectangle();
 
             //On test la disponibilité des hangars 1 à 6 
             NumeroHangarDisponible = TesterDisponibiliteHangar();
@@ -413,9 +415,6 @@ namespace AirAmbe
                         LongueurVerticale = 500;
                     }
 
-         
-           
-
             //On appelle la fonction d'atterrissage en fonction de sa piste ainsi que de ses coordonnées
                     GererAtterrissage(ImageAvion, piste, NumeroHangarDisponible,NumeroAvionDisponible);
           
@@ -500,6 +499,12 @@ namespace AirAmbe
             //Si il s'agit de la piste 1 ou 3
             if (piste == 1 || piste == 3)
             {
+                //Pour gérer l'aiguillage de l'avion
+                Angle = 180;
+                AngleDesire = 90;
+                Operation = false;
+                GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
                 if (CoordX <= LongueurHorizontale)
                 {
                     if (CoordX >= FinVoieService)
@@ -525,6 +530,7 @@ namespace AirAmbe
             }
             else if (piste == 2 || piste == 4 || piste == 5)    //Si il s'agit de la piste 2 ou 4 ou 5
             {
+              
                 if (CoordX >= LongueurHorizontale)
                 {
 
@@ -576,6 +582,12 @@ namespace AirAmbe
             //Si il s'agit de la piste 1 ou 3
             if (piste == 1 || piste == 3)
             {
+                //Pour gérer l'aiguillage de l'avion
+                Angle = 270;
+                AngleDesire = 360;
+                Operation = true;
+                GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
                 if (CoordY >= longueurVerticaleMax)
                 {
 
@@ -602,6 +614,12 @@ namespace AirAmbe
             }
             else if (piste == 2 || piste == 4)  //Si il s'agit de la piste 2 ou 4
             {
+                //Pour gérer l'aiguillage de l'avion
+                Angle = 90;
+                AngleDesire = 0;
+                Operation = false;
+                GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
                 if (CoordY >= longueurVerticaleMax)
                 {
 
@@ -666,7 +684,13 @@ namespace AirAmbe
             LongueurHorizontale = 1000;
             DistanceAParcourirVoiePrincip = 830;
 
-            if(EstAtterrissage == false)
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 0;
+            AngleDesire = 90;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
+            if (EstAtterrissage == false)
             {
                 switch (piste)
                 {
@@ -746,6 +770,13 @@ namespace AirAmbe
         public void GenererMouvDVoiePrincipDirectionH(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurHorizontale = 1000;
+
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 0;
+            AngleDesire = 90;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
             switch (hangar)
             {
                 case 7:
@@ -770,7 +801,7 @@ namespace AirAmbe
                     DistanceAParcourirVoiePrincip = 830;
                     break;
             }
-
+         
             if (CoordX <= LongueurHorizontale)
             {
 
@@ -819,7 +850,13 @@ namespace AirAmbe
         {
             LongueurHorizontale = 0;
             DistanceAParcourirVoiePrincip = 162;
-            
+
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 360;
+            AngleDesire = 270;
+            Operation = false;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
             if (EstAtterrissage == false && piste==5)
             {
                 DistanceAParcourirVoiePrincip = 220;
@@ -873,8 +910,6 @@ namespace AirAmbe
             Canvas.SetLeft(imageAvion, CoordX);
         }
 
-       
-
         /// <summary>
         /// Une méthode pour générer un mouvement GAUCHE sur la voie de principale
         /// </summary>
@@ -884,6 +919,12 @@ namespace AirAmbe
         /// <param name="piste"></param>
         public void GenererMouvGVoiePrincipDirectionH(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 360;
+            AngleDesire = 270;
+            Operation = false;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
             LongueurHorizontale = 0;    
             switch(hangar)
             {
@@ -959,6 +1000,12 @@ namespace AirAmbe
             LongueurVerticale = 1000;
             DistanceAParcourirVoiePrincip = 350;
 
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 270;
+            AngleDesire = 180;
+            Operation = false;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
             if (CoordY <= LongueurVerticale)
             {
                
@@ -997,6 +1044,12 @@ namespace AirAmbe
         {
             LongueurVerticale = 1000;
             DistanceAParcourirVoiePrincip = 150;
+
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 90;
+            AngleDesire = 180;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
 
             if (CoordY <= LongueurVerticale)
             {
@@ -1041,6 +1094,12 @@ namespace AirAmbe
             LongueurVerticale = 0;
             DistanceAParcourirVoiePrincip = 300;
 
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 90;
+            AngleDesire = 0;
+            Operation = false;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
             if (CoordY >= LongueurVerticale)
             {
 
@@ -1075,7 +1134,11 @@ namespace AirAmbe
             LongueurVerticale = 0;
             DistanceAParcourirVoiePrincip = 120;
 
-
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 270;
+            AngleDesire = 360;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
 
             if (CoordY >= LongueurVerticale)
             {
@@ -1112,6 +1175,12 @@ namespace AirAmbe
         {
             LongueurVerticale = 0;
             DistanceAParcourirVoiePrincip = 250;
+
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 270;
+            AngleDesire = 360;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
 
             if (CoordY >= LongueurVerticale)
             {
@@ -1153,6 +1222,12 @@ namespace AirAmbe
         {
             LongueurVerticale = 0;
             DistanceAParcourirVoiePrincip = 62;
+
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 90;
+            AngleDesire = 0;
+            Operation = false;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
 
             if (CoordY >= LongueurVerticale)
             {
@@ -1366,7 +1441,7 @@ namespace AirAmbe
             Rectangle rectRotation = new Rectangle();
             ImageBrush a = new ImageBrush();
             a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avion.png"));
-      
+
             foreach (Avion av in Ec.LstAvion)
             {
                 //for (int i = 0; i < Ec.LstAvion.Count(); i++)
@@ -1478,6 +1553,12 @@ namespace AirAmbe
             LongueurVerticale = 0;
             DistanceAParcourirVoiePrincip = 22;
 
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 270;
+            AngleDesire = 360;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
             if (CoordY >= LongueurVerticale)
             {
 
@@ -1505,6 +1586,12 @@ namespace AirAmbe
             LongueurHorizontale = 2000;
             DistanceAParcourirVoiePrincip = 1830;
 
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 0;
+            AngleDesire = 90;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
             if (CoordX <= LongueurHorizontale)
             {
 
@@ -1525,6 +1612,12 @@ namespace AirAmbe
         public void GenererMouvBVoieServDirectionGD(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurVerticale = 1000;
+
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 90;
+            AngleDesire = 180;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
 
             switch (piste)
             {
@@ -1583,8 +1676,14 @@ namespace AirAmbe
         public void GenererMouvGVoieServDirectionDecollage(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurHorizontale = 0;
-        
-            if(piste==1)
+
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 180;
+            AngleDesire = 270;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
+            if (piste==1)
             {
                 DistanceAParcourirVoiePrincip = 40;
             }
@@ -1626,6 +1725,12 @@ namespace AirAmbe
             LongueurVerticale = -1000;
             DistanceAParcourirVoiePrincip = -2000;
 
+            //Pour gérer l'aiguillage de l'avion
+            Angle = 270;
+            AngleDesire = 360;
+            Operation = true;
+            GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
+
             if (CoordY >= LongueurVerticale)
             {
 
@@ -1640,5 +1745,64 @@ namespace AirAmbe
             //On génère le mouvement HAUT ou BAS 
             Canvas.SetTop(imageAvion, CoordY);
         }
+
+
+        public void ChangerOpacitePiste(Piste piste)
+        {         
+            switch(piste.NumPiste)
+            {
+                case 1:
+                    if (piste.estDisponible)
+                    {
+                        Ec.Piste1.Opacity = 1;
+                    }
+                    else
+                    {
+                        Ec.Piste1.Opacity = 0.3;
+                    }
+
+                    break;
+                case 2:
+                    if (piste.estDisponible)
+                    {
+                        Ec.Piste4.Opacity = 1;
+                    }
+                    else
+                    {
+                        Ec.Piste4.Opacity = 0.3;
+                    }
+                    break;
+                case 3:
+                    if (piste.estDisponible)
+                    {
+                        Ec.Piste3.Opacity = 1;
+                    }
+                    else
+                    {
+                        Ec.Piste3.Opacity = 0.3;
+                    }
+                    break;
+                case 4:
+                    if (piste.estDisponible)
+                    {
+                        Ec.Piste2.Opacity = 1;
+                    }
+                    else
+                    {
+                        Ec.Piste2.Opacity = 0.3;
+                    }
+                    break;
+                case 5:
+                    if (piste.estDisponible)
+                    {
+                        Ec.Piste5.Opacity = 1;
+                    }
+                    else
+                    {
+                        Ec.Piste5.Opacity = 0.3;
+                    }
+                    break;
+            }                    
+        }       
     }
 }
