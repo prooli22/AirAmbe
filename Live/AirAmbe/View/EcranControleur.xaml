@@ -94,6 +94,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
     </Window.Resources>
 
     <Grid Name="grdPrincipale" Background="White">
@@ -128,7 +129,7 @@
         <Border Name="brdCanvas" BorderBrush="Black" Grid.Column="0" Grid.Row="1" BorderThickness="1" Margin="10">
             <Canvas Name="cnvCarte" Background="LightGray" MouseWheel="cnvCarte_MouseWheel">
                 <Canvas.RenderTransform>
-                    <ScaleTransform x:Name="zoom" CenterX="125" CenterY="74"></ScaleTransform>
+                    <ScaleTransform x:Name="zoom" CenterX="155" CenterY="74"></ScaleTransform>
                 </Canvas.RenderTransform>
                 <Rectangle Name="Asphalthe1"></Rectangle>
                 <Rectangle Name="Asphalthe2"></Rectangle>

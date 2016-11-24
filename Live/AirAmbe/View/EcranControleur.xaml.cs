@@ -1,5 +1,4 @@
 ﻿using AirAmbe.Model;
-//using AirAmbe.Enum;
 using AirAmbe.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -46,7 +45,11 @@ namespace AirAmbe
 
         public Animation Anim { get; set; }
 
+
         private DispatcherTimer dtRefresh;
+
+
+        private EcranConfiguration ec;
 
 
         /// <summary>
@@ -57,6 +60,7 @@ namespace AirAmbe
         {
             InitializeComponent();
             Controleur = U;
+            
 
 
             if (Controleur == null)
@@ -73,86 +77,26 @@ namespace AirAmbe
                 
                     ChargerVols();
                     InitialiserHangar();
-             
-
-
                     InitialiserAvion();
                  
                     ModifierHeures();
                     ChargerDataGrid();
                     ChargerProchainsVols();
 
+                    ec = new EcranConfiguration(this);
+
                     dtRefresh = new DispatcherTimer();
                     dtRefresh.Interval = TimeSpan.FromSeconds(1);
                     dtRefresh.Tick += dtRefresh_Tick;
                     dtRefresh.Start();
-                    //Anim = new Animation(this);
-                    //Anim.DisperserDecollageHangar();
+
+
                     Anim = new Animation(this);
                     Anim.DisperserDecollageHangar();
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreDecollage(1);
-
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreDecollage(3);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreDecollage(2);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(2);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(4);
-
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreDecollage(3);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(2);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(3);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(4);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(5);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(2);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(5);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(2);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(1);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(4);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(3);
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreAtterrissage(5);
-                    //FacteursExterieurs.StartTimer(this);    
-
-                    //Anim = new Animation(this);
-                    //Anim.DemarreDecollage(3);
-
                 }
 
                 Anim = new Animation(this);
                 Anim.DessinerHangar();
-             
                 Anim.GererDessinPiste(LstPistes.Count);
                 //Anim.DessinerVoieService();
             }
@@ -170,8 +114,7 @@ namespace AirAmbe
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-
-            Application.Current.Shutdown();
+            ec.Close();
         }
 
         // ---------------------------------------------------------------------------------- \\
@@ -355,12 +298,37 @@ namespace AirAmbe
 
         public void RafraichirVols()
         {
-            ViderListes();
+            // On vide la grille des prochains vols.
+            grdProchainsVols.Children.Clear();
 
-            for (int i = 0; i < 10; i++)
-                LstUserControlVols.Add(new UserControlVol(this, LstVols[i], i));
-            
+            // Stop les timers.
+            for (int i = 0; i < LstUserControlVols.Count; i++)
+                LstUserControlVols[i].Dispose();
 
+            // On vide la liste des UserControlVols.
+            LstUserControlVols.Clear();
+
+            // On tri la liste des vols.
+            LstVols.Sort((a, b) => DateTime.Compare(a.DateVol, b.DateVol));
+
+            //for (int i = 0; i < LstVols.Count; i++)
+            //    if (i < 10 && LstVols[i].EtatVol != Etat.Decollage && LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Cancelle)
+            //        LstUserControlVols.Add(new UserControlVol(this, LstVols[i], i));
+
+            int compteur = 0;
+
+            for (int i = 0; i < LstVols.Count; i++)
+            {
+                if (LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage && LstVols[i].EtatVol != Etat.Cancelle)
+                {
+                    LstUserControlVols.Add(new UserControlVol(this, LstVols[i], compteur));
+
+                    compteur++;
+                }
+
+                if (compteur == 10)
+                    break;
+            }
         }
 
 
@@ -387,6 +355,7 @@ namespace AirAmbe
         }
 
 
+        // INUTILISÉE ! Au cas ou on en aurait de besoin ...
         private void FlushVols()
         {
             ViderListes();
@@ -408,6 +377,7 @@ namespace AirAmbe
         }
 
 
+        // INUTILISÉE !Au cas ou on en aurait de besoin ...
         private void ViderListes()
         {
             // On vide la grille des prochains vols.
@@ -432,8 +402,6 @@ namespace AirAmbe
                     break;
                 }
             }
-
-            RafraichirVols();
         }
 
 
@@ -461,6 +429,13 @@ namespace AirAmbe
         }
 
 
+        public void AccelererTemps(int accelerateur)
+        {
+            for (int i = 0; i < LstUserControlVols.Count; i++)
+                LstUserControlVols[i].Accelerateur = accelerateur;
+        }
+
+
         // ---------------------------------------------------------------------------------- \\
 
 
@@ -474,8 +449,7 @@ namespace AirAmbe
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            //RafraichirVols();
-            FlushVols();
+            RafraichirVols();
         }
 
 
@@ -489,7 +463,6 @@ namespace AirAmbe
 
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
-            EcranConfiguration ec = new EcranConfiguration(this);
             ec.Show();
         }
 
@@ -512,7 +485,7 @@ namespace AirAmbe
 
         private void cnvCarte_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            const double GROSSISSEMENTEXTERIEUR = 4.1;
+            const double GROSSISSEMENTEXTERIEUR = 3;
             const double GROSSISSEMENTINTERIEUR = 1;
 
             zoom.ScaleX = 1;

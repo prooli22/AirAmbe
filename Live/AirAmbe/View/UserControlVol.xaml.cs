@@ -76,6 +76,8 @@ namespace AirAmbe
             dtDelais.Tick += dtDelais_Tick;
             dtDelais.Interval = TimeSpan.FromMilliseconds(1000);
             dtDelais.Start();
+
+            this.Loaded += new RoutedEventHandler(onLoaded);
         }
 
 
@@ -240,7 +242,12 @@ namespace AirAmbe
                 cboPistes.Name = "cbo" + Etat.Decollage.ToString() + vol.IdVol.ToString();
 
             for (int i = 0; i < EC.LstPistes.Count; i++)
-                cboPistes.Items.Add(new ComboBoxItem() { Content = "Piste #" + (i + 1) });
+            {
+                ComboBoxItem cmbItemPiste = new ComboBoxItem() { Content = "Piste #" + (i + 1) };
+                cboPistes.Items.Add(cmbItemPiste);
+                ChangerEtatPiste(EC.LstPistes[i]);
+            }
+                
 
             if (EC.Controleur == null)
                 cboPistes.IsEnabled = false;
@@ -292,18 +299,19 @@ namespace AirAmbe
 
         public void ChangerEtatPiste(Piste piste)
         {
-            ComboBoxItem cboI = cboPistes.Items[piste.NumPiste] as ComboBoxItem;
-
             if (piste.estDisponible)
-                cboI.IsEnabled = true;
-            
+            {
+                ((ComboBoxItem)cboPistes.Items[piste.NumPiste]).IsEnabled = true;
+                ((ComboBoxItem)cboPistes.Items[piste.NumPiste]).Focusable = true;
+            }
+
             else
             {
-                cboI.IsEnabled = false;
+                ((ComboBoxItem)cboPistes.Items[piste.NumPiste]).IsEnabled = false;
+                ((ComboBoxItem)cboPistes.Items[piste.NumPiste]).Focusable = false;
 
-                if(vol.PisteAssigne.NumPiste == piste.NumPiste)
-                    vol.PisteAssigne = null;
-                
+                if (vol.PisteAssigne == piste)
+                    RemettreVolAttente();
             }
         }
 
@@ -355,7 +363,7 @@ namespace AirAmbe
 
         private void TesterEtat()
         {
-            if (vol.Delais.TotalMilliseconds / Accelerateur < (vol.TempsCritque / Accelerateur) + (vol.TempsFinal / Accelerateur))
+            if (vol.Delais.TotalMilliseconds < (vol.TempsCritque) + (vol.TempsFinal))
             {
                 if (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique)
                 {
@@ -421,6 +429,8 @@ namespace AirAmbe
             // On retarde le vol selon le nombre de millisecondes.
             vol.DateVol = vol.DateVol.AddMilliseconds(millisecondes);
             vol.Delais += TimeSpan.FromMilliseconds(millisecondes);
+
+            EC.RafraichirVols();
         }
 
 
@@ -538,6 +548,18 @@ namespace AirAmbe
         }
 
 
+        private void RemettreVolAttente()
+        {
+            imgEtat.Source = TrouverEtat(Etat.Attente);
+            imgEtat.Margin = new Thickness(10, 0, 0, 0);
+
+            vol.EtatVol = Etat.Attente;
+            TesterPiste();
+            vol.PisteAssigne = null;
+            TesterEtat();
+        }
+
+
         // ---------------------------------------------------------------------------------- \\
 
 
@@ -582,15 +604,7 @@ namespace AirAmbe
 
             // Sinon on remet l'état a ATTENTE.
             else
-            {
-                imgEtat.Source = TrouverEtat(Etat.Attente);
-                imgEtat.Margin = new Thickness(10, 0, 0, 0);
-
-                vol.EtatVol = Etat.Attente;
-                TesterPiste();
-                vol.PisteAssigne = null;
-                TesterEtat();
-            }
+                RemettreVolAttente();
         }
 
 
@@ -620,6 +634,12 @@ namespace AirAmbe
         {
             dt500.Stop();
             dtDelais.Stop();
+        }
+
+        private void onLoaded(object sender, RoutedEventArgs e)
+        {
+            cboPistes.IsDropDownOpen = true;
+            cboPistes.IsDropDownOpen = false;
         }
     }
 }
