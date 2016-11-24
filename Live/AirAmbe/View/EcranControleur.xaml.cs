@@ -46,6 +46,9 @@ namespace AirAmbe
         public Animation Anim { get; set; }
 
 
+        public int Accelerateur { get; set; } = 1;
+
+
         private DispatcherTimer dtRefresh;
 
 
@@ -415,8 +418,6 @@ namespace AirAmbe
                     break;
                 }
             }
-
-            RafraichirVols();
         }
 
 
@@ -424,15 +425,15 @@ namespace AirAmbe
         {
             for (int i = 0; i < LstUserControlVols.Count; i++)
                 LstUserControlVols[i].ChangerEtatPiste(piste);
-
-            RafraichirVols();
         }
 
 
         public void AccelererTemps(int accelerateur)
         {
+            Accelerateur = accelerateur;
+
             for (int i = 0; i < LstUserControlVols.Count; i++)
-                LstUserControlVols[i].Accelerateur = accelerateur;
+                LstUserControlVols[i].Accelerateur = Accelerateur;
         }
 
 
@@ -515,6 +516,7 @@ namespace AirAmbe
         private void dtRefresh_Tick(object sender, EventArgs e)
         {
             RafaichirListe();
-        }   
+        }
+
     }
 }
