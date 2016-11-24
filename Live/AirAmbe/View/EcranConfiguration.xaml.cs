@@ -112,17 +112,31 @@ namespace AirAmbe
         {
             ComboBox cbo = (ComboBox)sender;
             ComboBoxItem cboi = (ComboBoxItem)cbo.Items[cbo.SelectedIndex];
-            int accel = 1;
+            int accel;
             if (cboi.Content != null)
             {
                 char c = cboi.Content.ToString()[0];
                 if (c == '-')
                 {
-                    accel = int.Parse(cboi.Content.ToString().Substring(0, 2));
+                    if (cboi.Content.ToString() == "-10x")
+                    {
+                        accel = int.Parse(cboi.Content.ToString().Substring(0, 3));
+                    }
+                    else
+                    {
+                        accel = int.Parse(cboi.Content.ToString().Substring(0, 2));
+                    }
                 }
                 else
                 {
-                    accel = int.Parse(cboi.Content.ToString().Substring(0, 1));
+                    if (cboi.Content.ToString() == "10x")
+                    {
+                        accel = int.Parse(cboi.Content.ToString().Substring(0, 2));
+                    }
+                    else
+                    {
+                        accel = int.Parse(cboi.Content.ToString().Substring(0, 1));
+                    }
                 }
 
                 EC.AccelererTemps(accel);
