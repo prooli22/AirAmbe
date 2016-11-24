@@ -52,10 +52,12 @@ namespace AirAmbe
 
         private void btnChangerEtatPiste_Click(object sender, RoutedEventArgs e)
         {
-            FacteursExterieurs.ChangerEtatPiste((Piste)dgPistes.SelectedItem);
+            FacteursExterieurs.ChangerEtatPiste((Piste)dgPistes.SelectedItem, EC);
 
             dgPistes.Items.Refresh();
             EC.dgPistes.Items.Refresh();
+
+            EC.ChangerEtatPiste((Piste)dgPistes.SelectedItem);
         }
 
         private void btn_MouseEnter(object sender, MouseEventArgs e)
@@ -74,6 +76,10 @@ namespace AirAmbe
 
         private void btnAnnuler_Click(object sender, RoutedEventArgs e)
         {
+            EcranConfirmation eConf = new EcranConfirmation(EC.Controleur);
+
+            eConf.Show();
+
             EC.AnnulerVol(((Vol)(dgVols.SelectedItem)).IdVol);
         }
 
@@ -100,6 +106,27 @@ namespace AirAmbe
 
                 v.TempsUnite = cboiUnite.Content.ToString();
             }            
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox cbo = (ComboBox)sender;
+            ComboBoxItem cboi = (ComboBoxItem)cbo.Items[cbo.SelectedIndex];
+            int accel = 1;
+            if (cboi.Content != null)
+            {
+                char c = cboi.Content.ToString()[0];
+                if (c == '-')
+                {
+                    accel = int.Parse(cboi.Content.ToString().Substring(0, 2));
+                }
+                else
+                {
+                    accel = int.Parse(cboi.Content.ToString().Substring(0, 1));
+                }
+
+                EC.AccelererTemps(accel);
+            }
         }
     }
 }

@@ -12,9 +12,14 @@ namespace AirAmbe
 {
     public static class FacteursExterieurs
     {
-        public static void ChangerEtatPiste(Piste piste)
+        public static void ChangerEtatPiste(Piste piste, EcranControleur ec)
         {
             piste.estDisponible = !piste.estDisponible;
+
+            Animation a = new Animation(ec);
+
+            a.ChangerOpacitePiste(piste);
+
         }
 
         public static void VolRetarde(Vol v, int secondes, EcranControleur ec)

@@ -51,6 +51,17 @@
 
         <Label FontSize="25" Grid.Row="0">Configuration des vols et pistes</Label>
 
+        <Label Grid.Row="0" Height="25" Width="150" HorizontalAlignment="Right" Margin="0,0,50,0">Vitesse de la simulation: </Label>
+        <ComboBox Grid.Row="0" Height="25" Width="50" HorizontalAlignment="Right" Margin="0,0,10,0" SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBoxItem>-10x</ComboBoxItem>
+            <ComboBoxItem>-5x</ComboBoxItem>
+            <ComboBoxItem>-2x</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">1x</ComboBoxItem>
+            <ComboBoxItem>2x</ComboBoxItem>
+            <ComboBoxItem>5x</ComboBoxItem>
+            <ComboBoxItem>10x</ComboBoxItem>
+        </ComboBox>
+        
         <TabControl Name="tabConfig" Grid.Row="1"  Margin="10">
             <TabItem Header="Vols">
                 <DataGrid Name="dgVols" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
