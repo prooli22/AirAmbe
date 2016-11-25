@@ -111,11 +111,11 @@
         <Grid Grid.Row="0" Grid.Column="0" Background="White">
             <Label FontSize="25" Width="300" HorizontalAlignment="left">Centre de Contrôle</Label>
         </Grid>
-       
+
         <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,50,0" Grid.Column="1" Grid.Row="0" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/deconnexion.png" />
         </Button>
-        
+
         <Button Name="btnProfil" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,100,0" Grid.Column="1" Grid.Row="0" Click="btnProfil_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/profile.png" />
         </Button>
@@ -124,17 +124,17 @@
             <Image Source="pack://application:,,,/AirAmbe;component/Images/Config.png" />
         </Button>
 
-        
+
         <Canvas Name="cnvEspaceAerien" Grid.Row="1" Grid.Column="0" Background="DimGray" Margin="10" MouseWheel="cnvCarte_MouseWheel">
             <Canvas.RenderTransform>
                 <ScaleTransform x:Name="zoomExt" CenterX="155" CenterY="74"></ScaleTransform>
             </Canvas.RenderTransform>
         </Canvas>
-            
+
         <Border Name="brdCanvas" BorderBrush="Black" Grid.Column="0" Grid.Row="1" BorderThickness="1" Margin="10">
             <Canvas Name="cnvCarte" Background="LightGray" MouseWheel="cnvCarte_MouseWheel">
                 <Canvas.RenderTransform>
-                    <ScaleTransform x:Name="zoom" CenterX="155" CenterY="74"></ScaleTransform>
+                    <ScaleTransform x:Name="zoom" CenterX="300" CenterY="160"></ScaleTransform>
                 </Canvas.RenderTransform>
                 <Rectangle Name="Asphalthe1"></Rectangle>
                 <Rectangle Name="Asphalthe2"></Rectangle>
@@ -146,7 +146,7 @@
                 <Rectangle Name="Piste5"></Rectangle>
                 <Rectangle Name="hangar"></Rectangle>
                 <Rectangle Name="Terminal" Height="28" Width="513" Canvas.Top="196" Canvas.Left="369" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Terminal1" Height="276" Width="32" Canvas.Top="77" Canvas.Left="868" Fill="CornflowerBlue"></Rectangle>
+                <Rectangle Name="Terminal1" Height="289" Width="32" Canvas.Top="65" Canvas.Left="868" Fill="CornflowerBlue"></Rectangle>
                 <Rectangle Name="Passerelle1" Height="42" Width="18" Canvas.Left="369" Canvas.Top="224" Fill="CornflowerBlue"></Rectangle>
                 <Rectangle Name="Passerelle2" Height="42" Width="18" Canvas.Left="451" Canvas.Top="224" Fill="CornflowerBlue"></Rectangle>
                 <Rectangle Name="Passerelle3" Height="42" Width="18" Canvas.Left="534" Canvas.Top="224" Fill="CornflowerBlue"></Rectangle>
@@ -257,7 +257,7 @@
                     </DataGrid>
                 </TabItem>
             </TabControl>
-            
+
             <DataGrid Name="dgPistes" Width="Auto" Height="180" Margin="10" RowHeight="30" HorizontalAlignment="Right" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" CanUserResizeColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn FontSize="14" Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}">
@@ -277,8 +277,8 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        
-        
+
+
 
     </Grid>
 

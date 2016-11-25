@@ -80,7 +80,7 @@ namespace AirAmbe
                     ChargerDataGrid();
                     ChargerProchainsVols();
 
-                    ec = new EcranConfiguration(this);
+                    
 
                     dtRefresh = new DispatcherTimer();
                     dtRefresh.Interval = TimeSpan.FromSeconds(1);
@@ -89,12 +89,26 @@ namespace AirAmbe
 
                     Anim = new Animation(this);
                     Anim.DisperserDecollageHangar();
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(2);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(4);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(5);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(1);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(3);
                 }
 
                 Anim = new Animation(this);
                 Anim.DessinerHangar();
-                Anim.GererDessinPiste(LstPistes.Count);
-                //Anim.DessinerVoieService();
+                Anim.GererDessinPiste(LstPistes.Count);            
             }
 
             else
@@ -271,9 +285,23 @@ namespace AirAmbe
         public void InitialiserAvion()
         {
             LstAvion = new List<Avion>();
+            int nbDecollage=0;
+     
+            for (int i = 0; i < LstVols.Count; i++)
+            {
+                if (LstVols[i].EstAtterrissage==false)
+                {
+                    nbDecollage++;
+                }
+            }
 
+            if (LstVols.Count() > 12)
+            {
+                nbDecollage = (nbDecollage / 2) + 1;
+            }
+        
             //Pour chaque avion on donne un numero et une disponibilité        
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < nbDecollage; i++)
             {
                 LstAvion.Add(new Avion());
                 LstAvion[i].NumAvion = i + 1;
@@ -282,7 +310,7 @@ namespace AirAmbe
             }
 
           
-            for (int i = 2; i < LstVols.Count(); i++)
+            for (int i = nbDecollage; i < LstVols.Count(); i++)
             {
                 LstAvion.Add(new Avion());
                 LstAvion[i].NumAvion = i + 1;
@@ -420,6 +448,7 @@ namespace AirAmbe
 
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
+            ec = new EcranConfiguration(this);
             ec.Show();
         }
 
@@ -442,7 +471,7 @@ namespace AirAmbe
 
         private void cnvCarte_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            const double GROSSISSEMENTEXTERIEUR = 3;
+            const double GROSSISSEMENTEXTERIEUR = 1.6;
             const double GROSSISSEMENTINTERIEUR = 1;
 
             zoom.ScaleX = 1;
