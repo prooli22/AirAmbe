@@ -26,13 +26,15 @@ namespace AirAmbe
 
         public Vol vol { get; set; }
 
-        private Grid GrdVol { get; set; }
+        public int Accelerateur { get; set; }
 
         private int compteurVol;
 
         private DispatcherTimer dt500;
 
         private DispatcherTimer dtDelais;
+
+        private Grid GrdVol;
 
         private Image imgEtat = new Image();
 
@@ -44,7 +46,7 @@ namespace AirAmbe
 
         private ComboBox cboPistes = new ComboBox();
 
-        public int Accelerateur { get; set; }
+        
 
 
         /// <summary>
@@ -556,6 +558,8 @@ namespace AirAmbe
             imgEtat.Source = TrouverEtat(Etat.Attente);
             imgEtat.Margin = new Thickness(10, 0, 0, 0);
 
+            cboPistes.SelectedIndex = 0;
+
             vol.EtatVol = Etat.Attente;
             TesterPiste();
             vol.PisteAssigne = null;
@@ -585,7 +589,9 @@ namespace AirAmbe
             if (cboI.Foreground == Brushes.Red)
             {
                 EcranConfirmation eC = new EcranConfirmation(EC.Controleur);
-                eC.Show();
+
+                if (eC.ShowDialog() == false)
+                    cboPistes.SelectedIndex = 0;
             }
 
             // Si l'utilisateur choisi une piste. On change l'état a ASSIGNE.

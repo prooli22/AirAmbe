@@ -78,9 +78,8 @@ namespace AirAmbe
         {
             EcranConfirmation eConf = new EcranConfirmation(EC.Controleur);
 
-            eConf.Show();
-
-            EC.AnnulerVol(((Vol)(dgVols.SelectedItem)).IdVol);
+            if(eConf.ShowDialog() == true)
+                EC.AnnulerVol(((Vol)(dgVols.SelectedItem)).IdVol);
         }
 
         private void cboTemps_SelectionChanged(object sender, SelectionChangedEventArgs e)
