@@ -45,12 +45,9 @@ namespace AirAmbe
 
         public Animation Anim { get; set; }
 
-
         public int Accelerateur { get; set; } = 1;
 
-
         private DispatcherTimer dtRefresh;
-
 
         private EcranConfiguration ec;
 
@@ -65,7 +62,6 @@ namespace AirAmbe
             Controleur = U;
             
 
-
             if (Controleur == null)
             {
                 btnConfig.Visibility = Visibility.Hidden;
@@ -77,11 +73,9 @@ namespace AirAmbe
             {
                 if(LstScenarios.Count > 0)
                 {
-                
                     ChargerVols();
                     InitialiserHangar();
                     InitialiserAvion();
-                 
                     ModifierHeures();
                     ChargerDataGrid();
                     ChargerProchainsVols();
@@ -92,7 +86,6 @@ namespace AirAmbe
                     dtRefresh.Interval = TimeSpan.FromSeconds(1);
                     dtRefresh.Tick += dtRefresh_Tick;
                     dtRefresh.Start();
-
 
                     Anim = new Animation(this);
                     Anim.DisperserDecollageHangar();
@@ -355,43 +348,6 @@ namespace AirAmbe
 
             dgAtterissages.Items.Refresh();
             dgDecollages.Items.Refresh();
-        }
-
-
-        // INUTILISÉE ! Au cas ou on en aurait de besoin ...
-        private void FlushVols()
-        {
-            ViderListes();
-
-            int compteur = 0;
-
-            for (int i = 0; i < LstVols.Count; i++)
-            {
-                if(LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage && LstVols[i].EtatVol != Etat.Cancelle)
-                {
-                    LstUserControlVols.Add(new UserControlVol(this, LstVols[i], compteur));
-
-                    compteur++;
-                }
-
-                if (compteur == 10)
-                    break;
-            }
-        }
-
-
-        // INUTILISÉE !Au cas ou on en aurait de besoin ...
-        private void ViderListes()
-        {
-            // On vide la grille des prochains vols.
-            grdProchainsVols.Children.Clear();
-
-            // Stop les timers.
-            for (int i = 0; i < LstUserControlVols.Count; i++)
-                LstUserControlVols[i].Dispose();
-
-            // On vide la liste des UserControlVols.
-            LstUserControlVols.Clear();
         }
 
 

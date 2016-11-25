@@ -44,7 +44,7 @@ namespace AirAmbe
 
         private ComboBox cboPistes = new ComboBox();
 
-        public int Accelerateur { get; set; } = 1;
+        public int Accelerateur { get; set; }
 
 
         /// <summary>
@@ -55,10 +55,10 @@ namespace AirAmbe
         public UserControlVol(EcranControleur ec, Vol volEC, int compteur)
         {
             InitializeComponent();
-
             EC = ec;
             vol = volEC;
             compteurVol = compteur;
+            Accelerateur = ec.Accelerateur;
 
             AfficherDetailsVols();
             AfficherDetailsVolsH();
@@ -76,8 +76,6 @@ namespace AirAmbe
             dtDelais.Tick += dtDelais_Tick;
             dtDelais.Interval = TimeSpan.FromMilliseconds(1000);
             dtDelais.Start();
-
-            this.Loaded += new RoutedEventHandler(onLoaded);
         }
 
 
@@ -310,7 +308,7 @@ namespace AirAmbe
                 ((ComboBoxItem)cboPistes.Items[piste.NumPiste]).IsEnabled = false;
                 ((ComboBoxItem)cboPistes.Items[piste.NumPiste]).Focusable = false;
 
-                if (vol.PisteAssigne == piste)
+                if (vol.PisteAssigne == piste && vol.Delais.TotalMilliseconds > vol.TempsFinal)
                     RemettreVolAttente();
             }
         }
@@ -415,7 +413,12 @@ namespace AirAmbe
                     compteur++;
 
             if (compteur == EC.LstHangar.Count && vol.EstAtterrissage)
+            {
                 cboPistes.IsEnabled = false;
+
+                if (vol.Delais.TotalMilliseconds > vol.TempsFinal)
+                    RemettreVolAttente();
+            }
         }
          
 
@@ -487,7 +490,7 @@ namespace AirAmbe
                 lblDelais.Margin = new Thickness(58, 0, 0, 0);
 
 
-                if (vol.EtatVol != Etat.Cancelle)
+                if (vol.EtatVol != Etat.Cancelle && vol.PisteHistorique != null)
                 {
                     if (vol.EstAtterrissage)
                     {
@@ -620,13 +623,10 @@ namespace AirAmbe
         private void dtDelais_Tick(object sender, EventArgs e)
         {
             if(Accelerateur > 0)
-                vol.Delais = TimeSpan.FromMilliseconds(vol.Delais.TotalMilliseconds - (Accelerateur * 1000));
+                vol.Delais -= TimeSpan.FromMilliseconds(Accelerateur * 1000);
 
             else
-            {
-                dtDelais.Interval = TimeSpan.FromMilliseconds(-(Accelerateur * 1000));
-                vol.Delais -= TimeSpan.FromMilliseconds(1000);
-            }
+                vol.Delais -= TimeSpan.FromMilliseconds(-(1000 / Accelerateur));
         }
 
 
@@ -636,10 +636,5 @@ namespace AirAmbe
             dtDelais.Stop();
         }
 
-        private void onLoaded(object sender, RoutedEventArgs e)
-        {
-            cboPistes.IsDropDownOpen = true;
-            cboPistes.IsDropDownOpen = false;
-        }
     }
 }
