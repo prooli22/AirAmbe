@@ -258,14 +258,12 @@ namespace AirAmbe
             {
                 string ligne = "";
                 ligne = ligne + lstScenarioAjouter[i].Intervalle;
-                for (int j = 0; j < lstScenarioAjouter[i].lstVolsAtt.Count; j++)
+
+                for (int j = 0; j < lstScenarioAjouter[i].lstVols.Count; j++)
                 {
-                    ligne = ligne + ";" + lstScenarioAjouter[i].lstVolsAtt[j];
+                    ligne = ligne + ";" + lstScenarioAjouter[i].lstVols[j];
                 }
-                for (int j = 0; j < lstScenarioAjouter[i].lstVolsDec.Count; j++)
-                {
-                    ligne = ligne + ";" + lstScenarioAjouter[i].lstVolsDec[j];
-                }
+
                 lstString.Add(ligne);
             }
 

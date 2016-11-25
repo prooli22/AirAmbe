@@ -17,6 +17,7 @@ namespace AirAmbe
         public string Description { get; set; }
         public List<String> lstVolsAtt { get; set; } = new List<string>();
         public List<String> lstVolsDec { get; set; } = new List<string>();
+        public List<String> lstVols { get; set; } = new List<string>();
 
         public int Intervalle { get; set; }
 

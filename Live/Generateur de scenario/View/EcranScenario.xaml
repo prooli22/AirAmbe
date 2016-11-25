@@ -15,7 +15,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
+        
         <Label FontSize="25" Grid.Row="0">Générateur de scénarios</Label>
 
         <Label Name="lblCritique" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,70" Grid.Row="2">Zone critique en secondes:</Label>

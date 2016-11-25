@@ -41,7 +41,7 @@ namespace AirAmbe
 
             InitialiserListeVols();
 
-            lstVolScen = FusionnerListesVols(s);
+            lstVolScen = ChargerListeVols(s);
             txtDesc.Text = s.Description;
 
             btnAjouterScenario.Click += BtnAjouterScenario_ClickModifier;
@@ -74,11 +74,10 @@ namespace AirAmbe
             }
         }
 
-        private List<Vol> FusionnerListesVols(Scenario s)
+        private List<Vol> ChargerListeVols(Scenario s)
         {
             List<Vol> lstVolTemp = new List<Vol>();
-            s.lstVolsAtt.AddRange(s.lstVolsDec);
-            List<String> lstTemp = s.lstVolsAtt;
+            List<String> lstTemp = s.lstVols;
 
             for (int i = 0; i < lstTemp.Count; i++)
             {
@@ -120,14 +119,7 @@ namespace AirAmbe
 
             for (int i = 0; i < lstVolScen.Count; i++)
             {
-                if (lstVolScen[i].EstAtterrissage == true)
-                {
-                    scen.lstVolsAtt.Add(lstVolScen[i].NumeroVol);
-                }
-                else
-                {
-                    scen.lstVolsDec.Add(lstVolScen[i].NumeroVol);
-                }
+                scen.lstVols.Add(lstVolScen[i].NumeroVol);
             }
 
             return scen;
@@ -147,6 +139,31 @@ namespace AirAmbe
             dgVolsScen.Items.Refresh();
         }
 
+        //Ne fonctionne pas
+        private bool VerifNbVols()
+        {
+            int compteur = 0;
+            bool estAtterrissage = true;
+
+            for (int i = 0; i < lstVolScen.Count; i++)
+            {
+                if (estAtterrissage = lstVolScen[i].EstAtterrissage)
+                {
+                    compteur++;
+                    if (compteur >= 12)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    compteur = 0;
+                    compteur++;
+                }
+            }
+            return false;
+        }
+
         private void btnAjouterScenario_ClickAjouter(object sender, RoutedEventArgs e)
         {
             if (lstVolScen.Count <= 0)
@@ -155,18 +172,25 @@ namespace AirAmbe
             }
             else
             {
-                Scenario s = CreerScenario();
-                ScenarioAS sAS = new ScenarioAS();
+                if (VerifNbVols())
+                {
+                    MessageBox.Show("Il doit y avoir moins de 12 vols du même type (Atterrissage ou Décollage) de suite.");
+                }
+                else
+                {
+                    Scenario s = CreerScenario();
+                    ScenarioAS sAS = new ScenarioAS();
 
-                sAS.Inserer(s);
+                    sAS.Inserer(s);
 
-                MessageBox.Show("Scénario créé.");
+                    MessageBox.Show("Scénario créé.");
 
-                EcranScenario ES = new EcranScenario();
-                this.Close();
-                ES.Show();
-            }            
-        }        
+                    EcranScenario ES = new EcranScenario();
+                    this.Close();
+                    ES.Show();
+                }
+            }                      
+        }
 
         private void btnAnnuler_Click(object sender, RoutedEventArgs e)
         {

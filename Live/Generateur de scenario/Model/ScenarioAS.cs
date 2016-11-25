@@ -44,19 +44,11 @@ namespace AirAmbe.Model
         public void Inserer(Scenario Sc)
         {
             string ins = "INSERT INTO Scenarios (description)VALUES('" + Sc.Description + "');";
-            long idScen = MaBd.Commande(ins);            
+            long idScen = MaBd.Commande(ins);
 
-            
-
-            for (int i = 0; i < Sc.lstVolsAtt.Count; i++)
+            for (int i = 0; i < Sc.lstVols.Count; i++)
             {
-                string insVol = "INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + Sc.lstVolsAtt[i] + "')," + idScen + ");";
-                MaBd.Commande(insVol);
-            }
-
-            for (int i = 0; i < Sc.lstVolsDec.Count; i++)
-            {
-                string insVol = "INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + Sc.lstVolsDec[i] + "')," + idScen + ");";
+                string insVol = "INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + Sc.lstVols[i] + "')," + idScen + ");";
                 MaBd.Commande(insVol);
             }
         }
@@ -94,6 +86,17 @@ namespace AirAmbe.Model
                 foreach (DataRow RowVol in dtVolDec.Rows)
                 {
                     ObservableScenario[compt].lstVolsDec.Add(RowVol[0].ToString());
+                }
+
+                string selVols = "SELECT v.numeroVol FROM Vols v INNER JOIN volScenarios vs ON vs.idVol = v.idVol WHERE vs.idScenario = " + ObservableScenario[compt].IdScenario + ";";
+
+                DataSet dsVol = MaBd.Selection(selVols);
+
+                DataTable dtVol = dsVol.Tables[0];
+
+                foreach (DataRow RowVol in dtVol.Rows)
+                {
+                    ObservableScenario[compt].lstVols.Add(RowVol[0].ToString());
                 }
 
                 compt++;
