@@ -44,7 +44,7 @@ namespace AirAmbe
 
         private Button btnDetailsVols = new Button();
 
-        private ComboBox cboPistes = new ComboBox();
+        public ComboBox cboPistes = new ComboBox();
 
         
 
@@ -67,7 +67,6 @@ namespace AirAmbe
             AfficherDetailsVolsB();
             ChangerUserControl();
             TesterEtat();
-            TesterPiste();
 
             dt500 = new DispatcherTimer();
             dt500.Tick += dt_Tick;
@@ -270,26 +269,34 @@ namespace AirAmbe
         }
 
 
-        // À TERMINER.
         private void TesterPiste()
         {
             for (int i = 0; i < EC.LstVols.Count; i++)
             {
                 if (EC.LstVols[i] != vol)
                 {
-                    TimeSpan t = EC.LstVols[i].DateVol - vol.DateVol;
+                    TimeSpan t = vol.DateVol - EC.LstVols[i].DateVol;
 
-                    if (t.TotalMilliseconds <= 30000 && t.TotalMilliseconds >= -30000)
+                    if (t.TotalMilliseconds < 0)
+                        t = t.Negate();
+
+                    if (t.TotalMilliseconds < 30000)
                     {
-                        if (vol.PisteAssigne != null)
+                        for (int j = 0; j < EC.LstUserControlVols.Count; j++)
                         {
-                            ComboBoxItem cboI = cboPistes.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
+                            if (EC.LstUserControlVols[j].vol == EC.LstVols[i])
+                            {
+                                if (vol.PisteAssigne != null)
+                                {
+                                    ComboBoxItem cboI = EC.LstUserControlVols[j].cboPistes.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
 
-                            if (vol.EtatVol == Etat.Assigne)
-                                cboI.Foreground = Brushes.Red;
+                                    if (vol.EtatVol == Etat.Assigne)
+                                        cboI.Foreground = Brushes.Red;
 
-                            else
-                                cboI.Foreground = Brushes.Black;
+                                    else
+                                        cboI.Foreground = Brushes.Black;
+                                }
+                            }
                         }
                     }
                 }
@@ -311,7 +318,7 @@ namespace AirAmbe
                 ((ComboBoxItem)cboPistes.Items[piste.NumPiste]).Focusable = false;
 
                 if (vol.PisteAssigne == piste && vol.Delais.TotalMilliseconds > vol.TempsFinal)
-                    RemettreVolAttente();
+                    RemettreVolAttente(true);
             }
         }
 
@@ -419,7 +426,7 @@ namespace AirAmbe
                 cboPistes.IsEnabled = false;
 
                 if (vol.Delais.TotalMilliseconds > vol.TempsFinal)
-                    RemettreVolAttente();
+                    RemettreVolAttente(true);
             }
         }
          
@@ -553,16 +560,20 @@ namespace AirAmbe
         }
 
 
-        private void RemettreVolAttente()
+        private void RemettreVolAttente(bool index)
         {
             imgEtat.Source = TrouverEtat(Etat.Attente);
             imgEtat.Margin = new Thickness(10, 0, 0, 0);
 
-            cboPistes.SelectedIndex = 0;
+            if(index)
+                cboPistes.SelectedIndex = 0;
 
             vol.EtatVol = Etat.Attente;
+
             TesterPiste();
+
             vol.PisteAssigne = null;
+
             TesterEtat();
         }
 
@@ -580,9 +591,10 @@ namespace AirAmbe
         }
 
 
-        // À REVOIR.
         private void cboPistes_Selection(object sender, SelectionChangedEventArgs e)
         {
+            RemettreVolAttente(false);
+
             // Si la piste n'est pas disponible et qu'on veut la forcer.
             ComboBoxItem cboI = cboPistes.Items[cboPistes.SelectedIndex] as ComboBoxItem;
 
@@ -608,12 +620,13 @@ namespace AirAmbe
 
                 vol.EtatVol = Etat.Assigne;
                 vol.PisteAssigne = EC.LstPistes[cboPistes.SelectedIndex - 1];
-                TesterPiste();
             }
 
             // Sinon on remet l'état a ATTENTE.
             else
-                RemettreVolAttente();
+                cboPistes.SelectedIndex = 0;
+
+            TesterPiste();
         }
 
 
