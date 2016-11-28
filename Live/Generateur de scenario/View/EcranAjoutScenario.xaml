@@ -60,7 +60,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <DataGrid Name="dgVolsScen" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" CanUserResizeColumns="False" Grid.Row="1" Grid.Column="1">
+        <DataGrid Name="dgVolsScen" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" CanUserResizeColumns="False" CanUserResizeRows="False" Grid.Row="1" Grid.Column="1" LoadingRow="dgVolsScen_LoadingRow">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>

@@ -207,5 +207,10 @@ namespace AirAmbe
         {
             AjouterVol((Vol)(dgVols.SelectedItem));
         }
+
+        private void dgVolsScen_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+        }
     }
 }
