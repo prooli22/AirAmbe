@@ -45,7 +45,6 @@
                 <DataGridTemplateColumn Header="Type" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <!--<TextBox Text="{Binding }"></TextBox>-->
                             <Label Style="{DynamicResource Label}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

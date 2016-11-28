@@ -139,7 +139,6 @@ namespace AirAmbe
             dgVolsScen.Items.Refresh();
         }
 
-        //Ne fonctionne pas
         private bool VerifNbVols()
         {
             int compteur = 0;

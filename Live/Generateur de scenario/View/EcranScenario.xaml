@@ -20,9 +20,7 @@
 
         <Label Name="lblCritique" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,70" Grid.Row="2">Zone critique en secondes:</Label>
         <ComboBox Name="cboCritique" Height="25" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="165,0,0,70" Grid.Row="2">
-            <ComboBoxItem IsSelected="True">5</ComboBoxItem>
-            <ComboBoxItem>10</ComboBoxItem>
-            <ComboBoxItem>15</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">15</ComboBoxItem>
             <ComboBoxItem>30</ComboBoxItem>
             <ComboBoxItem>45</ComboBoxItem>
             <ComboBoxItem>60</ComboBoxItem>

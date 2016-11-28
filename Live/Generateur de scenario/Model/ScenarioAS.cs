@@ -28,17 +28,12 @@ namespace AirAmbe.Model
             modif = " DELETE FROM volscenarios WHERE idScenario=" + scenModification.IdScenario + ";";
             MaBd.Commande(modif);
 
-            for (int i = 0; i < scenModification.lstVolsAtt.Count; i++)
+            for (int i = 0; i < scenModification.lstVols.Count; i++)
             {
-                modif = " INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + scenModification.lstVolsAtt[i] + "')," + scenModification.IdScenario + ");";
+                modif = " INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + scenModification.lstVols[i] + "')," + scenModification.IdScenario + ");";
                 MaBd.Commande(modif);
             }
 
-            for (int i = 0; i < scenModification.lstVolsDec.Count; i++)
-            {
-                modif = " INSERT INTO VolScenarios (idVol, idScenario) VALUES((SELECT idVol FROM Vols WHERE numeroVol = '" + scenModification.lstVolsDec[i] + "')," + scenModification.IdScenario + ");";
-                MaBd.Commande(modif);
-            }
         }
 
         public void Inserer(Scenario Sc)
