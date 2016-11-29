@@ -1,0 +1,150 @@
+﻿<Window x:Class="AirAmbe.EcranConfiguration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AirAmbe"
+        mc:Ignorable="d"
+        Title="Air-Ambe" Height="500" Width="1000">
+    <Window.Resources>
+        <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                                <Setter Property="Opacity" TargetName="Chrome" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style  x:Key="Ellipse" TargetType="{x:Type Ellipse}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding estDisponible}" Value="False">
+                    <Setter Property="Fill" Value="Red" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding estDisponible}" Value="True">
+                    <Setter Property="Fill" Value="Green" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label FontSize="25" Grid.Row="0">Configuration des vols et pistes</Label>
+
+        <Label Grid.Row="0" Height="25" Width="150" HorizontalAlignment="Right" Margin="0,0,50,0">Vitesse de la simulation: </Label>
+        <ComboBox Name="cboAccel" Grid.Row="0" Height="25" Width="50" HorizontalAlignment="Right" Margin="0,0,10,0" SelectionChanged="cboAccel_SelectionChanged">
+            <ComboBoxItem>0.1x</ComboBoxItem>
+            <ComboBoxItem>0.2x</ComboBoxItem>
+            <ComboBoxItem>0.5x</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">1x</ComboBoxItem>
+            <ComboBoxItem>2x</ComboBoxItem>
+            <ComboBoxItem>5x</ComboBoxItem>
+            <ComboBoxItem>10x</ComboBoxItem>
+        </ComboBox>
+        
+        <TabControl Name="tabConfig" Grid.Row="1"  Margin="10">
+            <TabItem Header="Vols">
+                <DataGrid Name="dgVols" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Numéro de Vol" IsReadOnly="True" Binding="{Binding NumeroVol}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Modèle d'avion" IsReadOnly="True" Binding="{Binding ModeleAvion}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Provenance" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Prévu le" IsReadOnly="True" Binding="{Binding DatePrevu, StringFormat='{}{0:yyyy-MM-dd à H:mm}'}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Heure estimée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd H:mm:ss}'}"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Temps">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Name="cboTemps" SelectionChanged="cboTemps_SelectionChanged">
+                                        <ComboBoxItem IsSelected="true">1</ComboBoxItem>
+                                        <ComboBoxItem>2</ComboBoxItem>
+                                        <ComboBoxItem>3</ComboBoxItem>
+                                        <ComboBoxItem>4</ComboBoxItem>
+                                        <ComboBoxItem>5</ComboBoxItem>
+                                        <ComboBoxItem>10</ComboBoxItem>
+                                        <ComboBoxItem>15</ComboBoxItem>
+                                        <ComboBoxItem>30</ComboBoxItem>
+                                    </ComboBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Unité" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Name="cboValeur" SelectionChanged="cboValeur_SelectionChanged">
+                                        <ComboBoxItem IsSelected="true">Secondes</ComboBoxItem>
+                                        <ComboBoxItem>Minutes</ComboBoxItem>
+                                        <ComboBoxItem>Heures</ComboBoxItem>                                       
+                                    </ComboBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Retarder">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="btnRetarder" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnRetarder_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                                        <Image Source="pack://application:,,,/AirAmbe;component/Images/retard.png" />
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Annuler">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="btnAnnuler" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnAnnuler_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                                        <Image Source="pack://application:,,,/AirAmbe;component/Images/x.png" />
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Pistes">
+                <DataGrid Name="dgPistes" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}"></DataGridTextColumn>
+                        <!--À Rechercher Bravo oli-->
+                        <DataGridTemplateColumn Header="Disponibilité" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Ellipse Style="{DynamicResource Ellipse}" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                            
+                        <DataGridTemplateColumn Header="Changer état de la piste">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="btnChangerEtatPiste" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnChangerEtatPiste_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                                        <Image Source="pack://application:,,,/AirAmbe;component/Images/parametre.png" />
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
