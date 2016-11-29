@@ -1589,7 +1589,7 @@ namespace AirAmbe
         public void GenererMouvHVoieServDecollage(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurVerticale = 0;
-            DistanceAParcourirVoiePrincip = 22;
+            DistanceAParcourirVoiePrincip = 20;
 
             //Pour gérer l'aiguillage de l'avion
             Angle = 270;
@@ -1683,7 +1683,7 @@ namespace AirAmbe
                     DistanceAParcourirVoiePrincip = 405;
                     break;
                 case 4:
-                    DistanceAParcourirVoiePrincip = 432;
+                    DistanceAParcourirVoiePrincip = 425;
                     break;
             }
 
@@ -1738,11 +1738,11 @@ namespace AirAmbe
 
             if (piste==1)
             {
-                DistanceAParcourirVoiePrincip = 40;
+                DistanceAParcourirVoiePrincip = 37;
             }
             else if(piste==3)
             {
-                DistanceAParcourirVoiePrincip = 125;
+                DistanceAParcourirVoiePrincip = 112;
             }
 
             if (CoordX >= LongueurHorizontale)
