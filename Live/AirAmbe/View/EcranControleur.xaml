@@ -148,20 +148,20 @@
                 <Rectangle Name="Piste4"></Rectangle>
                 <Rectangle Name="Piste5"></Rectangle>
                 <Rectangle Name="hangar"></Rectangle>
-                <Rectangle Name="Terminal" Height="28" Width="513" Canvas.Top="196" Canvas.Left="369" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Terminal1" Height="289" Width="32" Canvas.Top="65" Canvas.Left="868" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Passerelle1" Height="42" Width="18" Canvas.Left="369" Canvas.Top="224" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Passerelle2" Height="42" Width="18" Canvas.Left="451" Canvas.Top="224" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Passerelle3" Height="42" Width="18" Canvas.Left="534" Canvas.Top="224" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Passerelle4" Height="42" Width="18" Canvas.Left="616" Canvas.Top="224" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Passerelle5" Height="42" Width="18" Canvas.Left="697" Canvas.Top="224" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Passerelle6" Height="42" Width="18" Canvas.Left="778" Canvas.Top="224" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Passerelle7" Height="42" Width="18" Canvas.Left="369" Canvas.Top="154" Fill="CornflowerBlue"></Rectangle>
-                <Rectangle Name="Passerelle8" Height="42" Width="18" Canvas.Left="451" Canvas.Top="154" Fill="CornflowerBlue" RenderTransformOrigin="1.611,0.333"></Rectangle>
-                <Rectangle Name="Passerelle9" Height="42" Width="18" Canvas.Left="534" Canvas.Top="154" Fill="CornflowerBlue" RenderTransformOrigin="1.611,0.333"></Rectangle>
-                <Rectangle Name="Passerelle10" Height="42" Width="18" Canvas.Left="616" Canvas.Top="154" Fill="CornflowerBlue" RenderTransformOrigin="1.611,0.333"></Rectangle>
-                <Rectangle Name="Passerelle11" Height="42" Width="18" Canvas.Left="697" Canvas.Top="154" Fill="CornflowerBlue" RenderTransformOrigin="1.611,0.333"></Rectangle>
-                <Rectangle Name="Passerelle12" Height="42" Width="18" Canvas.Left="778" Canvas.Top="154" Fill="CornflowerBlue" RenderTransformOrigin="1.611,0.333"></Rectangle>
+                <Rectangle Name="Terminal" Height="28" Width="513" Canvas.Top="196" Canvas.Left="369" Fill="DimGray"></Rectangle>
+                <Rectangle Name="Terminal1" Height="289" Width="32" Canvas.Top="65" Canvas.Left="868" Fill="DimGray"></Rectangle>
+                <Rectangle Name="Passerelle1" Height="42" Width="18" Canvas.Left="369" Canvas.Top="224" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle2" Height="42" Width="18" Canvas.Left="451" Canvas.Top="224" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle3" Height="42" Width="18" Canvas.Left="534" Canvas.Top="224" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle4" Height="42" Width="18" Canvas.Left="616" Canvas.Top="224" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle5" Height="42" Width="18" Canvas.Left="697" Canvas.Top="224" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle6" Height="42" Width="18" Canvas.Left="778" Canvas.Top="224" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle7" Height="42" Width="18" Canvas.Left="369" Canvas.Top="154" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle8" Height="42" Width="18" Canvas.Left="451" Canvas.Top="154" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle9" Height="42" Width="18" Canvas.Left="534" Canvas.Top="154" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle10" Height="42" Width="18" Canvas.Left="616" Canvas.Top="154" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle11" Height="42" Width="18" Canvas.Left="697" Canvas.Top="154" Fill="White"></Rectangle>
+                <Rectangle Name="Passerelle12" Height="42" Width="18" Canvas.Left="778" Canvas.Top="154" Fill="White"></Rectangle>
 
                 <Rectangle Name="ligne1" Height="3" Width="674" Canvas.Left="172" Canvas.Top="345" Fill="Gold"></Rectangle>
                 <Rectangle Name="ligne2" Height="58" Width="3" Canvas.Left="846" Canvas.Top="290" Fill="Gold"></Rectangle>
