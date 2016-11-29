@@ -61,16 +61,23 @@ namespace AirAmbe
             }
             else
             {
-                Scenario s = CreerScenario();
-                s.IdScenario = IdScenarioModif;
-                ScenarioAS sAS = new ScenarioAS();
+                if (VerifNbVols())
+                {
+                    MessageBox.Show("Il doit y avoir moins de 12 vols du même type (Atterrissage ou Décollage) de suite.");
+                }
+                else
+                {
+                    Scenario s = CreerScenario();
+                    s.IdScenario = IdScenarioModif;
+                    ScenarioAS sAS = new ScenarioAS();
 
-                sAS.Modifier(s);
+                    sAS.Modifier(s);
 
-                MessageBox.Show("Scénario #" + s.IdScenario + " modifié.");
-                EcranScenario ES = new EcranScenario();
-                this.Close();
-                ES.Show();
+                    MessageBox.Show("Scénario #" + s.IdScenario + " modifié.");
+                    EcranScenario ES = new EcranScenario();
+                    this.Close();
+                    ES.Show();
+                }                
             }
         }
 
