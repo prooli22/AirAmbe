@@ -91,19 +91,19 @@ namespace AirAmbe
                     Anim.DisperserDecollageHangar();
 
                     Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(1);
+
+                    Anim = new Animation(this);
                     Anim.DemarreAtterrissage(2);
+
+                    Anim = new Animation(this);
+                    Anim.DemarreAtterrissage(3);
 
                     Anim = new Animation(this);
                     Anim.DemarreAtterrissage(4);
 
                     Anim = new Animation(this);
                     Anim.DemarreAtterrissage(5);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(1);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(3);
                 }
 
                 Anim = new Animation(this);

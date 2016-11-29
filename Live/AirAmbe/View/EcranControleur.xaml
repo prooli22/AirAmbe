@@ -97,7 +97,7 @@
 
     </Window.Resources>
 
-    <Grid Name="grdPrincipale" Background="White">
+    <Grid Name="grdPrincipale" Background="White" Panel.ZIndex="200" >
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="500"></RowDefinition>
@@ -108,7 +108,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="0" Grid.Column="0" Background="White">
+        <Grid Grid.Row="0" Grid.Column="0" Background="White" Panel.ZIndex="200" Margin="0,0,0,490" Grid.RowSpan="2">
             <Label FontSize="25" Width="300" HorizontalAlignment="left">Centre de Contrôle</Label>
         </Grid>
 
@@ -184,8 +184,13 @@
             </Canvas>
         </Border>
 
-        <Grid Grid.Column="1" Grid.Row="1" Background="White" Grid.RowSpan="2">
-            <Border Name="brdScrollViewer" BorderBrush="Black" Width="280" HorizontalAlignment="left" Margin="10" BorderThickness="1">
+        <Grid Grid.Row="1" Background="White" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="940,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="195*"/>
+                <RowDefinition Height="26*"/>
+                <RowDefinition Height="139*"/>
+            </Grid.RowDefinitions>
+            <Border Name="brdScrollViewer" BorderBrush="Black" Width="280" HorizontalAlignment="left" Margin="10,10,0,10" BorderThickness="1" Grid.RowSpan="3">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"></RowDefinition>
