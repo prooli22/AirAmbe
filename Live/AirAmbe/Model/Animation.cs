@@ -81,12 +81,9 @@ namespace AirAmbe
         public Animation(EcranControleur ec)
         {
             Ec = ec;
-            //Vitesse = 4.5F;
-            //VitesseAeroport = 2F;
-            //TempsAttentePiste = 4000;   
-            Vitesse = 6.5F;
-            VitesseAeroport = 4F;
-            TempsAttentePiste = 50;
+            Vitesse = 4.5F;
+            VitesseAeroport = 2F;
+            TempsAttentePiste = 4000;
         }
 
         /// <summary>
