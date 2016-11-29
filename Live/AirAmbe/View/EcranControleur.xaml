@@ -125,10 +125,13 @@
         </Button>
 
 
-        <Canvas Name="cnvEspaceAerien" Grid.Row="1" Grid.Column="0" Background="DimGray" Margin="10" MouseWheel="cnvCarte_MouseWheel">
+        <Canvas Name="cnvEspaceAerien" Grid.Row="1" Grid.Column="0" Margin="10" MouseWheel="cnvCarte_MouseWheel">
             <Canvas.RenderTransform>
                 <ScaleTransform x:Name="zoomExt" CenterX="155" CenterY="74"></ScaleTransform>
             </Canvas.RenderTransform>
+            <Canvas.Background>
+                <ImageBrush ImageSource="pack://application:,,,/AirAmbe;component/Images/carte.png"/>
+            </Canvas.Background>
         </Canvas>
 
         <Border Name="brdCanvas" BorderBrush="Black" Grid.Column="0" Grid.Row="1" BorderThickness="1" Margin="10">

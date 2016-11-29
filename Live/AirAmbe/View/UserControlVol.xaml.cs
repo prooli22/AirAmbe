@@ -22,11 +22,13 @@ namespace AirAmbe
     /// </summary>
     public partial class UserControlVol : UserControl, IDisposable
     {
-        private EcranControleur EC { get; set; }
-
         public Vol vol { get; set; }
 
-        public int Accelerateur { get; set; }
+        public Animation AnimVol { get; set; }
+
+        public float Accelerateur { get; set; }
+
+        private EcranControleur EC;
 
         private int compteurVol;
 
@@ -45,9 +47,7 @@ namespace AirAmbe
         private Button btnDetailsVols = new Button();
 
         public ComboBox cboPistes = new ComboBox();
-
         
-
 
         /// <summary>
         /// Constructeur du UserControlVol
@@ -77,6 +77,8 @@ namespace AirAmbe
             dtDelais.Tick += dtDelais_Tick;
             dtDelais.Interval = TimeSpan.FromMilliseconds(1000);
             dtDelais.Start();
+
+            AnimVol = new Animation(EC);
         }
 
 
@@ -475,16 +477,6 @@ namespace AirAmbe
 
         private void ChangerUserControl()
         {
-            //if(vol.PisteAssigne != null)
-            //    System.Diagnostics.Trace.TraceInformation("Vol : " + vol.IdVol + "     Piste : " + vol.PisteAssigne.NumPiste.ToString());
-
-            //else
-            //    System.Diagnostics.Trace.TraceInformation("Vol : " + vol.IdVol + "     Piste : null");
-
-            // On test le delais.
-            //vol.Delais = vol.DateVol - DateTime.Now;
-
-
             // Changer quand le vol est terminée.
             if (vol.Delais.TotalMilliseconds < 1000)
             {
@@ -503,8 +495,7 @@ namespace AirAmbe
                 {
                     if (vol.EstAtterrissage)
                     {
-                        EC.Anim = new Animation(EC);
-                        EC.Anim.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
+                        //AnimVol.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
 
                         lblDelais.Content = "Atterrit sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
 
@@ -513,8 +504,7 @@ namespace AirAmbe
 
                     else
                     {
-                        EC.Anim = new Animation(EC);
-                        EC.Anim.DemarreDecollage(vol.PisteHistorique.NumPiste);
+                        //AnimVol.DemarreDecollage(vol.PisteHistorique.NumPiste);
 
                         lblDelais.Content = "Décolle sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
 
@@ -533,11 +523,25 @@ namespace AirAmbe
                     dtDelais.Stop();
             }
 
-            else if (vol.Delais.TotalMilliseconds < vol.TempsFinal + 500 )
+            else if (vol.Delais.TotalMilliseconds < 15900 && vol.EstAtterrissage && !vol.EstLance)
+            {
+                AnimVol.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
+                vol.EstLance = true;
+            }
+
+
+            else if(vol.Delais.TotalMilliseconds < 30900 && !vol.EstAtterrissage && !vol.EstLance)
+            {
+                AnimVol.DemarreDecollage(vol.PisteHistorique.NumPiste);
+                vol.EstLance = true;
+            }
+
+
+            else if (vol.Delais.TotalMilliseconds < vol.TempsFinal + 500)
             {
                 if (vol.EtatVol == Etat.Retarde || vol.EtatVol == Etat.Critique)
                     RetarderVol(vol.TempsCritque);
-                
+
                 else
                 {
                     ChangerLabelDelais();
@@ -551,7 +555,7 @@ namespace AirAmbe
             // Changer les secondes.
             else if (vol.Delais.TotalMilliseconds < 5 * 60000 + 1000)
                 ChangerLabelDelais();
-            
+
 
             // Changer les minutes.
             else
@@ -641,11 +645,7 @@ namespace AirAmbe
 
         private void dtDelais_Tick(object sender, EventArgs e)
         {
-            if(Accelerateur > 0)
-                vol.Delais -= TimeSpan.FromMilliseconds(Accelerateur * 1000);
-
-            else
-                vol.Delais -= TimeSpan.FromMilliseconds(-(1000 / Accelerateur));
+            vol.Delais -= TimeSpan.FromMilliseconds(Accelerateur * 1000);
         }
 
 

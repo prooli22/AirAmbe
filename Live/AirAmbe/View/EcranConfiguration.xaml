@@ -52,10 +52,10 @@
         <Label FontSize="25" Grid.Row="0">Configuration des vols et pistes</Label>
 
         <Label Grid.Row="0" Height="25" Width="150" HorizontalAlignment="Right" Margin="0,0,50,0">Vitesse de la simulation: </Label>
-        <ComboBox Grid.Row="0" Height="25" Width="50" HorizontalAlignment="Right" Margin="0,0,10,0" SelectionChanged="ComboBox_SelectionChanged">
-            <ComboBoxItem>-10x</ComboBoxItem>
-            <ComboBoxItem>-5x</ComboBoxItem>
-            <ComboBoxItem>-2x</ComboBoxItem>
+        <ComboBox Name="cboAccel" Grid.Row="0" Height="25" Width="50" HorizontalAlignment="Right" Margin="0,0,10,0" SelectionChanged="cboAccel_SelectionChanged">
+            <ComboBoxItem>0.1x</ComboBoxItem>
+            <ComboBoxItem>0.2x</ComboBoxItem>
+            <ComboBoxItem>0.5x</ComboBoxItem>
             <ComboBoxItem IsSelected="True">1x</ComboBoxItem>
             <ComboBoxItem>2x</ComboBoxItem>
             <ComboBoxItem>5x</ComboBoxItem>
@@ -71,15 +71,6 @@
                         <DataGridTextColumn Header="Provenance" IsReadOnly="True" Binding="{Binding Aeroport}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Prévu le" IsReadOnly="True" Binding="{Binding DatePrevu, StringFormat='{}{0:yyyy-MM-dd à H:mm}'}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Heure estimée" IsReadOnly="True" Binding="{Binding DateVol, StringFormat='{}{0:yyyy-MM-dd H:mm:ss}'}"></DataGridTextColumn>
-                        <!--<DataGridTemplateColumn Header="Secondes">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Name="txtSecondes" MaxLength="4" LostFocus="txtSecondes_LostFocus">
-                                        30
-                                    </TextBox>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>-->
                         <DataGridTemplateColumn Header="Temps">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -133,7 +124,7 @@
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Numéro de piste" IsReadOnly="True" Binding="{Binding NumPiste}"></DataGridTextColumn>
-                        <!--À Rechercker Bravo oli-->
+                        <!--À Rechercher Bravo oli-->
                         <DataGridTemplateColumn Header="Disponibilité" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

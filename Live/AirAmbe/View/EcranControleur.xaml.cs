@@ -45,7 +45,7 @@ namespace AirAmbe
 
         public Animation Anim { get; set; }
 
-        public int Accelerateur { get; set; } = 1;
+        public float Accelerateur { get; set; } = 1;
 
         private DispatcherTimer dtRefresh;
 
@@ -80,30 +80,13 @@ namespace AirAmbe
                     ChargerDataGrid();
                     ChargerProchainsVols();
 
-                    
+                    Anim = new Animation(this);
+                    Anim.DisperserDecollageHangar();
 
                     dtRefresh = new DispatcherTimer();
                     dtRefresh.Interval = TimeSpan.FromSeconds(1);
                     dtRefresh.Tick += dtRefresh_Tick;
                     dtRefresh.Start();
-
-                    Anim = new Animation(this);
-                    Anim.DisperserDecollageHangar();
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(1);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(2);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(3);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(4);
-
-                    Anim = new Animation(this);
-                    Anim.DemarreAtterrissage(5);
                 }
 
                 Anim = new Animation(this);
@@ -412,12 +395,20 @@ namespace AirAmbe
         }
 
 
-        public void AccelererTemps(int accelerateur)
+        public void AccelererTemps(float accelerateur)
         {
             Accelerateur = accelerateur;
 
             for (int i = 0; i < LstUserControlVols.Count; i++)
+            {
                 LstUserControlVols[i].Accelerateur = Accelerateur;
+                LstUserControlVols[i].AnimVol.Vitesse = 4.5F;
+                LstUserControlVols[i].AnimVol.VitesseAeroport = 2;
+                LstUserControlVols[i].AnimVol.TempsAttentePiste = 4000;
+                LstUserControlVols[i].AnimVol.Vitesse *= Accelerateur;
+                LstUserControlVols[i].AnimVol.VitesseAeroport *= Accelerateur;
+                LstUserControlVols[i].AnimVol.TempsAttentePiste /= Accelerateur;
+            }
         }
 
 

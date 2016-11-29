@@ -19,11 +19,12 @@ namespace AirAmbe
     /// </summary>
     public partial class EcranConfiguration : Window
     {
-        public EcranControleur EC { get; set; }
+        private EcranControleur EC;
+        
         public EcranConfiguration(EcranControleur ec)
         {
             InitializeComponent();
-
+            
             EC = ec;
 
             dgVols.ItemsSource = EC.LstVols;
@@ -107,39 +108,24 @@ namespace AirAmbe
             }            
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cboAccel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox cbo = (ComboBox)sender;
-            ComboBoxItem cboi = (ComboBoxItem)cbo.Items[cbo.SelectedIndex];
-            int accel;
-            if (cboi.Content != null)
-            {
-                char c = cboi.Content.ToString()[0];
-                if (c == '-')
-                {
-                    if (cboi.Content.ToString() == "-10x")
-                    {
-                        accel = int.Parse(cboi.Content.ToString().Substring(0, 3));
-                    }
-                    else
-                    {
-                        accel = int.Parse(cboi.Content.ToString().Substring(0, 2));
-                    }
-                }
-                else
-                {
-                    if (cboi.Content.ToString() == "10x")
-                    {
-                        accel = int.Parse(cboi.Content.ToString().Substring(0, 2));
-                    }
-                    else
-                    {
-                        accel = int.Parse(cboi.Content.ToString().Substring(0, 1));
-                    }
-                }
+            float accel = 1;
 
-                EC.AccelererTemps(accel);
+            switch (cbo.SelectedIndex)
+            {
+                case 0: accel = 0.1F; break;
+                case 1: accel = 0.2F; break;
+                case 2: accel = 0.5F; break;
+                case 3: accel = 1; break;
+                case 4: accel = 2; break;
+                case 5: accel = 5; break;
+                case 6: accel = 10; break;
             }
+
+            if(EC != null)
+                EC.AccelererTemps(accel);
         }
     }
 }

@@ -9,7 +9,7 @@
         Title="Air-Ambe" Height="240" Width="300">
     <Grid>
         <Label Width="Auto" Height="30" FontSize="12" FontWeight="Bold" Foreground="Red" Margin="0, 0, 0, 70" HorizontalAlignment="Center" VerticalAlignment="Top">! ATTENTION !</Label>
-        <TextBlock Width="260" Height="70" FontSize="12" Margin="22,30,22,0" Padding="5" HorizontalAlignment="Center" VerticalAlignment="top">L'action que vous êtes sur le point d'effectué<LineBreak/>requiert une confirmation de votre part. Vous<LineBreak/>êtes conscient des conséquences que ce geste<LineBreak/>peut engendrer.</TextBlock>
+        <TextBlock Width="260" Height="70" FontSize="12" Margin="0,30,0,0" Padding="5" HorizontalAlignment="Center" VerticalAlignment="top">L'action que vous êtes sur le point d'effectué<LineBreak/>requiert une confirmation de votre part. Vous<LineBreak/>êtes conscient des conséquences que ce geste<LineBreak/>peut engendrer.</TextBlock>
         <Label Name="lblMDP" Width="Auto" Height="30" FontSize="12" Margin="0, 0, 0, 70" HorizontalAlignment="Center" VerticalAlignment="Bottom">Entrez votre mot de passe pour confirmer</Label>
         <PasswordBox Name="txtPassword" Width="250" Height="25" Margin="0, 0, 0, 40" HorizontalAlignment="Center" VerticalAlignment="Bottom" BorderThickness="2" KeyDown="txtPassword_KeyDown"></PasswordBox>
         <Button Name="btnConfirmation" Width="75" Height="25" Content="Confirmer" Margin="50, 0, 0, 10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnConfirmation_Click"></Button>

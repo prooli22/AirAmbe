@@ -31,6 +31,7 @@ namespace AirAmbe
         public int TempsFinal { get; set; }
         public int TempsRetard { get; set; } = 1;
         public string TempsUnite { get; set; } = "Secondes";
+        public bool EstLance { get; set; } = false;
 
         /// <summary>
         /// Constructeur de la classe Vol
