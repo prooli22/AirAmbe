@@ -29,7 +29,7 @@ namespace AirAmbe
 
         public float VitesseAeroport { get; set; }
 
-        public int TempsAttentePiste { get; set; }
+        public float TempsAttentePiste { get; set; }
 
         //Déclaration des attributs de la classe Animation
  
@@ -81,9 +81,12 @@ namespace AirAmbe
         public Animation(EcranControleur ec)
         {
             Ec = ec;
-            Vitesse = 4.5F;
-            VitesseAeroport = 2F;
-            TempsAttentePiste = 4000;        
+            //Vitesse = 4.5F;
+            //VitesseAeroport = 2F;
+            //TempsAttentePiste = 4000;   
+            Vitesse = 6.5F;
+            VitesseAeroport = 4F;
+            TempsAttentePiste = 50;
         }
 
         /// <summary>
@@ -316,7 +319,7 @@ namespace AirAmbe
             }
             return 13;
         }
-
+            
         /// <summary>
         /// Une méthode pour tester la disponibilité des avions
         /// </summary>
@@ -415,7 +418,7 @@ namespace AirAmbe
             switch (noHangar)
             {
                 case 1:
-                    coordX = 812;
+                    coordX = 813;
                     coordY = 230;
                     break;
 
@@ -425,53 +428,53 @@ namespace AirAmbe
                     break;
 
                 case 3:
-                    coordX = 640;
+                    coordX = 648;
                     coordY = 230;
                     break;
 
                 case 4:
-                    coordX = 570;
+                    coordX = 568;
                     coordY = 230;
                     break;
 
                 case 5:
-                    coordX = 490;
+                    coordX = 485;
                     coordY = 230;
                     break;
 
                 case 6:
-                    coordX = 410;
+                    coordX = 403;
                     coordY = 230;
                     break;
 
                 case 7:
                     coordX = 410;
-                    coordY = 140;
+                    coordY = 160;
                     break;
 
                 case 8:
-                    coordX = 490;
-                    coordY = 140;
+                    coordX = 492;
+                    coordY = 160;
                     break;
 
                 case 9:
-                    coordX = 570;
-                    coordY = 140;
+                    coordX = 575;
+                    coordY = 160;
                     break;
 
                 case 10:
-                    coordX = 650;
-                    coordY = 140;
+                    coordX = 655;
+                    coordY = 160;
                     break;
 
                 case 11:
-                    coordX = 730;
-                    coordY = 140;
+                    coordX = 737;
+                    coordY = 160;
                     break;
 
                 case 12:
-                    coordX = 810;
-                    coordY = 140;
+                    coordX = 820;
+                    coordY = 160;
                     break;
             }
 
@@ -546,11 +549,11 @@ namespace AirAmbe
             switch (piste)
             {
                 case 1:
-                    coordX = 40;
+                    coordX = 42;
                     coordY = -500;
-                    finPiste = 450;
+                    finPiste = 440;
                     finVoieService = 210;                       
-                    PositionYDebutVoiePrincip = 350;
+                    PositionYDebutVoiePrincip = 332;
                     ImageAvion.RenderTransform = aiguillageBas;
                     break;
 
@@ -558,17 +561,17 @@ namespace AirAmbe
                     coordX = 1700;
                     coordY = 378;
                     finPiste = 330;                         
-                    PositionYDebutVoiePrincip = 350;
+                    PositionYDebutVoiePrincip = 332;
                     ImageAvion.RenderTransform = aiguillageGauche;
                     break;
 
                 case 3:
 
-                    coordX = 125;
+                    coordX = 118;
                     coordY = -500;
                     finPiste = 405;
                     finVoieService = 160;                        
-                    PositionYDebutVoiePrincip = 350;
+                    PositionYDebutVoiePrincip = 332;
                     ImageAvion.RenderTransform = aiguillageBas;
                     break;
 
@@ -576,7 +579,7 @@ namespace AirAmbe
                     coordX = 1700;
                     coordY = 432;
                     finPiste = 280;
-                    PositionYDebutVoiePrincip = 350;
+                    PositionYDebutVoiePrincip = 332;
                     ImageAvion.RenderTransform = aiguillageGauche;
                     break;
 
@@ -991,27 +994,27 @@ namespace AirAmbe
                     Operation = false;
                     break;
                 case 9:
-                    DistanceAParcourirVoiePrincip = 570;
+                    DistanceAParcourirVoiePrincip = 572;
                     Angle = 180;
                     Operation = false;
                     break;
                 case 10:
-                    DistanceAParcourirVoiePrincip = 650;
+                    DistanceAParcourirVoiePrincip = 652;
                     Angle = 180;
                     Operation = false;
                     break;
                 case 11:
-                    DistanceAParcourirVoiePrincip = 730;
+                    DistanceAParcourirVoiePrincip = 734;
                     Angle = 180;
                     Operation = false;
                     break;
                 case 12:
-                    DistanceAParcourirVoiePrincip = 810;
+                    DistanceAParcourirVoiePrincip = 818;
                     Angle = 180;
                     Operation = false;
                     break;
                 default:
-                    DistanceAParcourirVoiePrincip = 830;
+                    DistanceAParcourirVoiePrincip = 828;
                     Angle = 0;
                     Operation = true;
                     break;
@@ -1064,7 +1067,7 @@ namespace AirAmbe
         public void GenererMouvGVoiePrincipDirectionB(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurHorizontale = 0;
-            DistanceAParcourirVoiePrincip = 162;
+            DistanceAParcourirVoiePrincip = 164;
 
             //Pour gérer l'aiguillage de l'avion
             Angle = 360;
@@ -1141,25 +1144,25 @@ namespace AirAmbe
             switch(hangar)
             {
                 case 1:
-                    DistanceAParcourirVoiePrincip = 810;
+                    DistanceAParcourirVoiePrincip = 815;
                     break;
                 case 2:
-                    DistanceAParcourirVoiePrincip = 730;
+                    DistanceAParcourirVoiePrincip = 731;
                     break;
                 case 3:
-                    DistanceAParcourirVoiePrincip = 650;
+                    DistanceAParcourirVoiePrincip = 649;
                     break;
                 case 4:
-                    DistanceAParcourirVoiePrincip = 570;
+                    DistanceAParcourirVoiePrincip = 568;
                     break;
                 case 5:
-                    DistanceAParcourirVoiePrincip = 490;
+                    DistanceAParcourirVoiePrincip = 485;
                     break;
                 case 6:
-                    DistanceAParcourirVoiePrincip = 410;
+                    DistanceAParcourirVoiePrincip = 404;
                     break;           
                 default:
-                    DistanceAParcourirVoiePrincip = 330;
+                    DistanceAParcourirVoiePrincip = 318;
                     break;
             }
                
@@ -1201,7 +1204,7 @@ namespace AirAmbe
         public void GenererMouvBVoiePrincip(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurVerticale = 1000;
-            DistanceAParcourirVoiePrincip = 350;
+            DistanceAParcourirVoiePrincip = 330;
 
             //Pour gérer l'aiguillage de l'avion
             Angle = 270;
@@ -1240,7 +1243,7 @@ namespace AirAmbe
         public void GenererMouvBVoiePrincipDirectionHangar(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurVerticale = 1000;
-            DistanceAParcourirVoiePrincip = 150;
+            DistanceAParcourirVoiePrincip = 160;
 
             //Pour gérer l'aiguillage de l'avion
             Angle = 90;
@@ -1285,7 +1288,7 @@ namespace AirAmbe
         public void GenererMouvHVoiePrincipDirectionG(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurVerticale = 0;
-            DistanceAParcourirVoiePrincip = 300;
+            DistanceAParcourirVoiePrincip = 287;
 
             //Pour gérer l'aiguillage de l'avion
             Angle = 90;
@@ -1321,7 +1324,7 @@ namespace AirAmbe
         public void GenererMouvHVoiePrincipDirectionD(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurVerticale = 0;
-            DistanceAParcourirVoiePrincip = 120;
+            DistanceAParcourirVoiePrincip = 115;
 
             //Pour gérer l'aiguillage de l'avion
             Angle = 270;
@@ -1356,7 +1359,7 @@ namespace AirAmbe
         public void GenererMouvHVoiePrincipDirectionHangar(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurVerticale = 0;
-            DistanceAParcourirVoiePrincip = 250;
+            DistanceAParcourirVoiePrincip = 235;
 
             //Pour gérer l'aiguillage de l'avion
             Angle = 270;
@@ -1397,7 +1400,7 @@ namespace AirAmbe
         public void GenererMouvHVoiePrincipDirectionGFinCycle(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurVerticale = 0;
-            DistanceAParcourirVoiePrincip = 62;
+            DistanceAParcourirVoiePrincip = 70;
 
             //Pour gérer l'aiguillage de l'avion
             Angle = 90;
