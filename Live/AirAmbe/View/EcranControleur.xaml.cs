@@ -402,12 +402,14 @@ namespace AirAmbe
             for (int i = 0; i < LstUserControlVols.Count; i++)
             {
                 LstUserControlVols[i].Accelerateur = Accelerateur;
-                LstUserControlVols[i].AnimVol.Vitesse = 4.5F;
-                LstUserControlVols[i].AnimVol.VitesseAeroport = 2;
-                LstUserControlVols[i].AnimVol.TempsAttentePiste = 4000;
-                LstUserControlVols[i].AnimVol.Vitesse *= Accelerateur;
-                LstUserControlVols[i].AnimVol.VitesseAeroport *= Accelerateur;
-                LstUserControlVols[i].AnimVol.TempsAttentePiste /= Accelerateur;
+
+                LstUserControlVols[i].AnimVol.Vitesse = 4.5F * Accelerateur;
+                LstUserControlVols[i].AnimVol.VitesseAeroport = 2 * Accelerateur;
+                LstUserControlVols[i].AnimVol.TempsAttentePiste = 4000 / Accelerateur;
+
+                //LstUserControlVols[i].AnimVol.Vitesse *= Accelerateur;
+                //LstUserControlVols[i].AnimVol.VitesseAeroport *= Accelerateur;
+                //LstUserControlVols[i].AnimVol.TempsAttentePiste /= Accelerateur;
             }
         }
 

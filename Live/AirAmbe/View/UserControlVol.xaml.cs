@@ -478,7 +478,7 @@ namespace AirAmbe
         private void ChangerUserControl()
         {
             // Changer quand le vol est terminée.
-            if (vol.Delais.TotalMilliseconds < 1000)
+            if (vol.Delais.TotalMilliseconds < 0 && (vol.EtatVol == Etat.Assigne || vol.EtatVol == Etat.Cancelle))
             {
                 GrdVol.Children.Remove(btnDetailsVols);
                 GrdVol.Height = 60;
@@ -495,19 +495,13 @@ namespace AirAmbe
                 {
                     if (vol.EstAtterrissage)
                     {
-                        //AnimVol.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
-
                         lblDelais.Content = "Atterrit sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-
                         vol.EtatVol = Etat.Atterrissage;
                     }
 
                     else
                     {
-                        //AnimVol.DemarreDecollage(vol.PisteHistorique.NumPiste);
-
                         lblDelais.Content = "Décolle sur la piste " + vol.PisteHistorique.NumPiste + " à " + vol.DateVol.ToString("HH:mm");
-
                         vol.EtatVol = Etat.Decollage;
                     }
                 }
@@ -522,20 +516,6 @@ namespace AirAmbe
                 if (dtDelais != null)
                     dtDelais.Stop();
             }
-
-            else if (vol.Delais.TotalMilliseconds < 15900 && vol.EstAtterrissage && !vol.EstLance)
-            {
-                AnimVol.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
-                vol.EstLance = true;
-            }
-
-
-            else if(vol.Delais.TotalMilliseconds < 30900 && !vol.EstAtterrissage && !vol.EstLance)
-            {
-                AnimVol.DemarreDecollage(vol.PisteHistorique.NumPiste);
-                vol.EstLance = true;
-            }
-
 
             else if (vol.Delais.TotalMilliseconds < vol.TempsFinal + 500)
             {
@@ -561,6 +541,30 @@ namespace AirAmbe
             else
                 lblDelais.Content = "Dans " + (vol.Delais.Minutes + (vol.Delais.Hours * 60) + 1).ToString() + " minutes";
 
+
+            // Démarrer les animations au bon moment.
+            if (vol.Delais.TotalMilliseconds < 15000 && vol.EstAtterrissage && !vol.EstLance)
+            {
+                try
+                {
+                    AnimVol.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
+                    vol.EstLance = true;
+                }
+
+                catch(Exception e) { }
+            }
+
+
+            if (vol.Delais.TotalMilliseconds < 30000 && !vol.EstAtterrissage && !vol.EstLance)
+            {
+                try
+                {
+                    AnimVol.DemarreDecollage(vol.PisteHistorique.NumPiste);
+                    vol.EstLance = true;
+                }
+
+                catch (Exception e) { }
+            }
         }
 
 
