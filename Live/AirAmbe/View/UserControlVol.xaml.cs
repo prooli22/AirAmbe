@@ -610,7 +610,7 @@ namespace AirAmbe
             {
                 EcranConfirmation eC = new EcranConfirmation(EC.Controleur);
 
-                if (eC.ShowDialog() == false)
+                if (eC.ShowDialog() != true)
                     cboPistes.SelectedIndex = 0;
             }
 

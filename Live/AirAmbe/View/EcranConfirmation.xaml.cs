@@ -30,14 +30,6 @@ namespace AirAmbe
             Controleur = U;
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            this.DialogResult = false;
-            base.OnClosed(e);
-            //this.Close();
-        }
-
-
         private void btnConfirmation_Click(object sender, RoutedEventArgs e)
         {
             if(MD5.Hash(txtPassword.Password.ToString()) == Controleur.MotPasse)

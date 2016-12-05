@@ -107,7 +107,13 @@ namespace AirAmbe
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            ec.Close();
+
+            if(ec != null)
+                ec.Close();
+
+            EcranConnexion eCon = new EcranConnexion();
+            this.Close();
+            eCon.Show();
         }
 
         // ---------------------------------------------------------------------------------- \\
