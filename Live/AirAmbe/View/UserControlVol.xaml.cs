@@ -173,6 +173,7 @@ namespace AirAmbe
             btnDetailsVols.Width = 30;
             btnDetailsVols.HorizontalAlignment = HorizontalAlignment.Right;
             btnDetailsVols.Margin = new Thickness(0, 7, 10, 0);
+            btnDetailsVols.ToolTip = "Détails";
             Grid.SetRow(btnDetailsVols, 0);
 
 
@@ -223,6 +224,7 @@ namespace AirAmbe
             ComboBoxItem cmbItem = new ComboBoxItem() { Content = "Aucune piste" };
             cboPistes.Height = 25;
             cboPistes.Width = 100;
+            cboPistes.ToolTip = "Choisissez une piste";
             cboPistes.VerticalAlignment = VerticalAlignment.Top;
             cboPistes.HorizontalAlignment = HorizontalAlignment.Left;
             cboPistes.Margin = new Thickness(14, 30, 0, 0);

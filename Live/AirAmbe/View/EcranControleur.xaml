@@ -112,16 +112,20 @@
             <Label FontSize="25" Width="300" HorizontalAlignment="left">Centre de Contrôle</Label>
         </Grid>
 
-        <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,50,0" Grid.Column="1" Grid.Row="0" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+        <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" ToolTip="Déconnexion" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,50,0" Grid.Column="1" Grid.Row="0" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/deconnexion.png" />
         </Button>
 
-        <Button Name="btnProfil" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,100,0" Grid.Column="1" Grid.Row="0" Click="btnProfil_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+        <Button Name="btnProfil" Style="{DynamicResource NoChromeButton}" ToolTip="Profil" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,100,0" Grid.Column="1" Grid.Row="0" Click="btnProfil_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/profile.png" />
         </Button>
 
-        <Button Name="btnConfig" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,150,0" Grid.Column="1" Grid.Row="0" Click="btnConfig_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+        <Button Name="btnConfig" Style="{DynamicResource NoChromeButton}" ToolTip="Configuration" HorizontalAlignment="Right" VerticalAlignment="Center" Width="35" Height="35" Margin="0,0,150,0" Grid.Column="1" Grid.Row="0" Click="btnConfig_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/Config.png" />
+        </Button>
+
+        <Button Name="btnAide" Style="{DynamicResource NoChromeButton}" ToolTip="Aide" HorizontalAlignment="Right" VerticalAlignment="Center" Width="60" Height="60" Margin="0,0,200,0" Grid.Column="1" Grid.Row="0" Click="btnAide_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/AirAmbe;component/Images/interrogation.png" />
         </Button>
 
 
@@ -201,7 +205,7 @@
                     </Grid.RowDefinitions>
                     <Label FontSize="18" Margin="10,0,0,0" Grid.Row="0" VerticalAlignment="Center">Prochains vols</Label>
                     <Rectangle Height="1" Fill="Black" Grid.Row="0" VerticalAlignment="Bottom"></Rectangle>
-                    <Button Name="btnRefresh" Style="{DynamicResource NoChromeButton}" HorizontalAlignment="Right" Width="35" Height="35" Margin="0,0,15,0" Grid.Row="0" Click="btnRefresh_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                    <Button Name="btnRefresh" Style="{DynamicResource NoChromeButton}" ToolTip="Rafraichir les vols" HorizontalAlignment="Right" Width="35" Height="35" Margin="0,0,15,0" Grid.Row="0" Click="btnRefresh_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
                         <Image Source="pack://application:,,,/AirAmbe;component/Images/refresh.png" />
                     </Button>
                     <ScrollViewer Grid.Row="1">

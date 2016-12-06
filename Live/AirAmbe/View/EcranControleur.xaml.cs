@@ -110,10 +110,6 @@ namespace AirAmbe
 
             if(ec != null)
                 ec.Close();
-
-            EcranConnexion eCon = new EcranConnexion();
-            this.Close();
-            eCon.Show();
         }
 
         // ---------------------------------------------------------------------------------- \\
@@ -502,5 +498,12 @@ namespace AirAmbe
             RafaichirListe();
         }
 
+        private void btnAide_Click(object sender, RoutedEventArgs e)
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = "guide.pdf";
+            process.Start();
+            process.WaitForExit();
+        }
     }
 }
