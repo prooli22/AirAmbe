@@ -57,6 +57,7 @@ namespace AirAmbe
         private DispatcherTimer dtRefresh;
 
         private EcranConfiguration ec;
+        EcranGuide eg;
 
 
         /// <summary>
@@ -123,6 +124,9 @@ namespace AirAmbe
 
             if(ec != null)
                 ec.Close();
+
+            if (eg != null)
+                eg.Close();
         }
 
         // ---------------------------------------------------------------------------------- \\
@@ -589,10 +593,13 @@ namespace AirAmbe
         /// </summary>
         private void btnAide_Click(object sender, RoutedEventArgs e)
         {
-            Process process = new Process();
-            process.StartInfo.FileName = "guide.pdf";
-            process.Start();
-            process.WaitForExit();
+            //Process process = new Process();
+            //process.StartInfo.FileName = "guide.pdf";
+            //process.Start();
+            //process.WaitForExit();
+
+            eg = new EcranGuide();
+            eg.Show();
         }
 
 
