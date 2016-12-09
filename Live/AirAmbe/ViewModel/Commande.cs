@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Nom: Anthony Massé
+// Date: 9 Décembre 2016
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Nom: Anthony Massé
+// Date: 9 Décembre 2016
+using System;
 using AirAmbe.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -19,6 +21,9 @@ namespace AirAmbe.ViewModel
 
         private VolAS Vol_Service;
 
+        /// <summary>
+        /// Constructeur de la classe
+        /// </summary>
         public VolViewModel()
         {
             Vol_Service = new VolAS();
@@ -29,11 +34,17 @@ namespace AirAmbe.ViewModel
             cmdSupprimer = new Commande(ActionSupprimer);
         }
 
+        /// <summary>
+        /// Une méthode pour vider
+        /// </summary>
         private void ActionVider(object param)
         {
             VolSelectionne = null;
         }
 
+        /// <summary>
+        /// Une méthode pour ajouter
+        /// </summary>
         private void ActionAjouter(object param)
         {
             Vol v = new Vol();
@@ -48,12 +59,18 @@ namespace AirAmbe.ViewModel
             Vol_Service.Inserer(v);
         }
 
+        /// <summary>
+        /// Une méthode pour supprimer
+        /// </summary>
         private void ActionSupprimer(object param)
         {
             Vol_Service.Supprimer(VolSelectionne.IdVol);
             SommaireVols.Remove(VolSelectionne);
         }
 
+        /// <summary>
+        /// Une méthode pour modifier
+        /// </summary>
         private void ActionModifier(object param)
         {
             Vol v = new Vol();
@@ -71,6 +88,10 @@ namespace AirAmbe.ViewModel
         }
 
         private Vol volSelectionne;
+
+        /// <summary>
+        /// Une méthode pour gérer les vols
+        /// </summary>
         public Vol VolSelectionne
         {
             get { return volSelectionne; }
@@ -98,13 +119,11 @@ namespace AirAmbe.ViewModel
         }
 
 
-
-
-
-
-
-
         private string modeleAvion;
+
+        /// <summary>
+        /// Une méthode pour gérer le modèle des avions
+        /// </summary>
         public string ModeleAvion
         {
             get { return modeleAvion; }
@@ -116,6 +135,10 @@ namespace AirAmbe.ViewModel
         }
 
         private string aeroport;
+
+        /// <summary>
+        /// Une méthode pour gérer les aéroports
+        /// </summary>
         public string Aeroport
         {
             get { return aeroport; }
@@ -126,7 +149,12 @@ namespace AirAmbe.ViewModel
             }
         }
 
+    
         private string numeroVol;
+
+        /// <summary>
+        /// Une méthode pour gérer les numéros de vol
+        /// </summary>
         public string NumeroVol
         {
             get { return numeroVol; }
@@ -137,7 +165,12 @@ namespace AirAmbe.ViewModel
             }
         }
 
+
         private bool estAtterissage;
+
+        /// <summary>
+        /// Une méthode pour les atterrissages
+        /// </summary>
         public bool EstAtterissage
         {
             get { return estAtterissage; }
@@ -161,10 +194,9 @@ namespace AirAmbe.ViewModel
                 OnPropertyChanged("SommaireVols");
             }
         }
-
-        
-
+      
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void OnPropertyChanged(string propName)
         {
             if (PropertyChanged != null)

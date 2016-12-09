@@ -1,4 +1,7 @@
-﻿using MySql.Data.MySqlClient;
+﻿// Nom: Anthony Massé
+// Date: 9 Décembre 2016
+
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -17,11 +20,7 @@ namespace AirAmbe.ViewModel
     {
         //Déclaration des attributs de la classe BdService
         private MySqlConnection BdInterne;
-        //private string Serveur = "420.cstj.qc.ca/mysql";
-        //private string BaseDonnee = "420.5a5.a16_aeroplus";
-        //private string Utilisateur = "aeroplus";
-        //private string MotPasse = "AP228855";
-
+       
         /// <summary>
         /// Constructeur par défaut de la classe BdService
         /// </summary>
@@ -32,11 +31,7 @@ namespace AirAmbe.ViewModel
             {
                 string connexionString = ConfigurationManager.ConnectionStrings["MySqlConnexion"].ConnectionString;
 
-                BdInterne = new MySqlConnection(connexionString);
-
-                //MessageBox.Show("Connexion OK");
-
-                
+                BdInterne = new MySqlConnection(connexionString);                           
             }
             catch (Exception e)
             {
@@ -72,7 +67,9 @@ namespace AirAmbe.ViewModel
             return retVal;
         }
 
-
+        /// <summary>
+        /// Une méthode pour la sélection 
+        /// </summary>
         public DataSet Selection(string requete)
         {
             DataSet ds = new DataSet();
@@ -136,10 +133,5 @@ namespace AirAmbe.ViewModel
                 return false;
             }
         }
-
-
-
-
-
     }
 }

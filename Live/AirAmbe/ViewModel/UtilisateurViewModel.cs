@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Nom: Anthony Massé
+// Date: 9 Décembre 2016
+
+using System;
 using AirAmbe.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +22,9 @@ namespace AirAmbe.ViewModel
 
         private UtilisateurAS Utilisateur_Service;
 
-
+        /// <summary>
+        /// Constructeur de la classe 
+        /// </summary>
         public UtilisateurViewModel()
         {
             Utilisateur_Service = new UtilisateurAS();
@@ -30,11 +35,17 @@ namespace AirAmbe.ViewModel
             cmdSupprimer = new Commande(ActionSupprimer);
         }
 
+        /// <summary>
+        /// Une méthode pour vider
+        /// </summary>
         private void ActionVider(object param)
         {
             UtilisateurSelectionne = null;
         }
 
+        /// <summary>
+        /// Une méthode pour ajouter
+        /// </summary>
         private void ActionAjouter(object param)
         {
             Utilisateur u = new Utilisateur();
@@ -54,11 +65,19 @@ namespace AirAmbe.ViewModel
             SommaireUtilisateurs.Add(u);
             Utilisateur_Service.Inserer(u);
         }
+
+        /// <summary>
+        /// Une méthode pour supprimer
+        /// </summary>
         private void ActionSupprimer(object param)
         {
             Utilisateur_Service.Supprimer(UtilisateurSelectionne.IdUtilisateur);
             SommaireUtilisateurs.Remove(UtilisateurSelectionne);
         }
+
+        /// <summary>
+        /// Une méthode pour modifier
+        /// </summary>
         private void ActionModifier(object param)
         {
             Utilisateur u = new Utilisateur();
@@ -83,6 +102,9 @@ namespace AirAmbe.ViewModel
 
         private Utilisateur utilisateurSelectionne;
 
+        /// <summary>
+        /// Une méthode pour gérer les utilisateurs
+        /// </summary>
         public Utilisateur UtilisateurSelectionne
         {
             get { return utilisateurSelectionne; }
@@ -127,6 +149,10 @@ namespace AirAmbe.ViewModel
 
 
         private string adresse;
+
+        /// <summary>
+        /// Une méthode pour gérer les adresses
+        /// </summary>
         public string Adresse
         {
             get { return adresse; }
@@ -138,6 +164,10 @@ namespace AirAmbe.ViewModel
         }
 
         private string typeUtilisateur;
+
+        /// <summary>
+        /// Une méthode pour gérer le type des utilisateurs
+        /// </summary>
         public string TypeUtilisateur
         {
             get { return typeUtilisateur; }
@@ -150,6 +180,9 @@ namespace AirAmbe.ViewModel
 
         private string nomUtilisateur;
 
+        /// <summary>
+        /// Une méthode pour gérer le nom des utilisateurs
+        /// </summary>
         public string NomUtilisateur
         {
             get { return nomUtilisateur; }
@@ -162,6 +195,9 @@ namespace AirAmbe.ViewModel
 
         private string motPasse;
 
+        /// <summary>
+        /// Une méthode pour gérer les mot des passe
+        /// </summary>
         public string MotPasse
         {
             get { return motPasse; }
@@ -176,6 +212,9 @@ namespace AirAmbe.ViewModel
 
         private string prenom;
 
+        /// <summary>
+        /// Une méthode pour gérer les prénom
+        /// </summary>
         public string Prenom
         {
             get { return prenom; }
@@ -189,6 +228,9 @@ namespace AirAmbe.ViewModel
 
         private string nom;
 
+        /// <summary>
+        /// Une méthode pour gérer le nom
+        /// </summary>
         public string Nom
         {
             get { return nom; }
@@ -202,6 +244,9 @@ namespace AirAmbe.ViewModel
 
         private string poste;
 
+        /// <summary>
+        /// Une méthode pour gérer le poste
+        /// </summary>
         public string Poste
         {
             get { return poste; }
@@ -214,6 +259,9 @@ namespace AirAmbe.ViewModel
 
         private DateTime dateEmbauche;
 
+        /// <summary>
+        /// Une méthode pour gérer la date d'embauche
+        /// </summary>
         public DateTime DateEmbauche
         {
             get { return dateEmbauche; }
@@ -227,6 +275,9 @@ namespace AirAmbe.ViewModel
 
         private string telephone;
 
+        /// <summary>
+        /// Une méthode pour gérer le téléphone
+        /// </summary>
         public string Telephone
         {
             get { return telephone; }
@@ -240,6 +291,9 @@ namespace AirAmbe.ViewModel
 
         private string courriel;
 
+        /// <summary>
+        /// Une méthode pour gérer les courriels
+        /// </summary>
         public string Courriel
         {
             get { return courriel; }
@@ -251,6 +305,10 @@ namespace AirAmbe.ViewModel
         }
 
         private ObservableCollection<Utilisateur> sommaireUtilisateurs;
+
+        /// <summary>
+        /// Une méthode pour gérer le sommaire des utilisateurs
+        /// </summary>
         public ObservableCollection<Utilisateur> SommaireUtilisateurs
         {
             get
@@ -263,11 +321,6 @@ namespace AirAmbe.ViewModel
                 OnPropertyChanged("SommaireUtilisateurs");
             }
         }
-
-
-        
-
-       
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propName)
