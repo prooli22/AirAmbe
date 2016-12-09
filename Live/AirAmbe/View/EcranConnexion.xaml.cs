@@ -1,4 +1,8 @@
-﻿using AirAmbe.Model;
+﻿// Nom : Olivier Provost.
+// Date : 2016-12-09.
+
+
+using AirAmbe.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AirAmbe.ViewModel;
+using System.Diagnostics;
 
 namespace AirAmbe
 {
@@ -23,34 +28,48 @@ namespace AirAmbe
     /// </summary>
     public partial class EcranConnexion : Window
     {
-
+        /// <summary>
+        /// Constructeur de l'écran de Connexion.
+        /// </summary>
         public EcranConnexion()
         {
             InitializeComponent();
         }
 
 
+        /// <summary>
+        /// Appelé lorsqu'on appuie sur la touche Connexion.
+        /// </summary>
         private void btnConnexion_Click(object sender, RoutedEventArgs e)
         {
             TrouverUtilisateur(txtUser.Text.ToString(), MD5.Hash(txtMDP.Password.ToString()));
         }
 
 
+        /// <summary>
+        /// Appelé lorsqu'on appuie sur la touche Entrée dans le champs du mot de passe. 
+        /// </summary>
         private void txtMDP_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
                 TrouverUtilisateur(txtUser.Text.ToString(), MD5.Hash(txtMDP.Password.ToString()));
         }
 
-
+        
+        /// <summary>
+        /// Appelé lorsqu'on clique sur bouton Observateur.
+        /// </summary>
         private void btnObservateur_Click(object sender, RoutedEventArgs e)
         {
             EcranControleur C = new EcranControleur(null);
+            C.Show();
             this.Close();
-            C.ShowDialog();
         }
 
 
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton Quitter.
+        /// </summary>
         private void btnQuitter_Click(object sender, RoutedEventArgs e)
         {
             // Demande une confirmation à l'utilisateur avant de quitter.
@@ -61,6 +80,11 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nomUtilisateur"> Nom d'utilisateur entré dans le champs. </param>
+        /// <param name="motPasse"> Mot de passe entré dans le champs. </param>
         private void TrouverUtilisateur(string nomUtilisateur, string motPasse)
         {
             Utilisateur U = new Utilisateur();
@@ -88,21 +112,38 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Affiche l'écran du Contrôleur.
+        /// </summary>
+        /// <param name="U"></param>
         private void AfficherEcranControleur(Utilisateur U)
         {
-            EcranControleur C = new EcranControleur(U);
+            EcranControleur C = new EcranControleur(U);      
+            C.Show();
             this.Close();
-            C.ShowDialog();
         }
 
 
+        /// <summary>
+        /// Affiche l'écran de l'Administrateur.
+        /// </summary>
         private void AfficherEcranAdministrateur()
         {
             EcranAdministrateur A = new EcranAdministrateur(null, false);
+            A.Show();
             this.Close();
-            A.ShowDialog();
         }
 
 
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton Guide et ouvre le guide en format PDF.
+        /// </summary>
+        private void btnGuide_Click(object sender, RoutedEventArgs e)
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = "guide.pdf";
+            process.Start();
+            process.WaitForExit();
+        }
     }
 }

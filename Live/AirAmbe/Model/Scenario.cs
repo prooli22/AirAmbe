@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Nom : Olivier Provost
+// Date : 2016-12-09
+
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;

@@ -1,4 +1,8 @@
-﻿using AirAmbe.Model;
+﻿// Nom : Olivier Provost
+// Date : 2016-12-09
+
+
+using AirAmbe.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +20,18 @@ using System.Windows.Shapes;
 namespace AirAmbe
 {
     /// <summary>
-    /// Interaction logic for EcranConfirmation.xaml
+    /// Écran de confirmation d'une action jugée dangeureuse par l'application.
     /// </summary>
     public partial class EcranConfirmation : Window
     {
-        public Utilisateur Controleur { get; set; }
+        // Variable.
+        private Utilisateur Controleur;
 
 
+        /// <summary>
+        /// Constructeur de l'écran de Confirmation.
+        /// </summary>
+        /// <param name="U"> L'utilisateur qui accède à cet écran. </param>
         public EcranConfirmation(Utilisateur U)
         {
             InitializeComponent();
@@ -30,8 +39,13 @@ namespace AirAmbe
             Controleur = U;
         }
 
+
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton Confirmer.
+        /// </summary>
         private void btnConfirmation_Click(object sender, RoutedEventArgs e)
         {
+            // Si le mot de passe est correct.
             if(MD5.Hash(txtPassword.Password.ToString()) == Controleur.MotPasse)
             {
                 this.DialogResult = true;
@@ -46,12 +60,20 @@ namespace AirAmbe
             
         }
 
+
+        /// <summary>
+        /// Appelé lorsqu'on appuie sur la touche Entrée dans le champs du mot de passe. 
+        /// </summary>
         private void txtPassword_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
                 btnConfirmation_Click(sender, e);
         }
 
+
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton Annuler.
+        /// </summary>
         private void btnAnnuler_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;

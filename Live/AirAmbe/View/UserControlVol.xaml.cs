@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Nom : Oliver Provost
+// Date : 2016-12-09
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,16 +22,19 @@ using System.Windows.Threading;
 namespace AirAmbe
 {
     /// <summary>
-    /// Logique d'interaction pour UserControlVol.xaml
+    /// Un éléments des prochains vols.
     /// </summary>
     public partial class UserControlVol : UserControl, IDisposable
     {
+        // Propriétés.
         public Vol vol { get; set; }
 
         public Animation AnimVol { get; set; }
 
         public float Accelerateur { get; set; }
 
+
+        // Variables.
         private EcranControleur EC;
 
         private int compteurVol;
@@ -42,6 +49,8 @@ namespace AirAmbe
 
         private Label lblNumVol = new Label();
 
+        private Label lblPiste = new Label();
+
         private Label lblDelais = new Label();
 
         private Button btnDetailsVols = new Button();
@@ -50,10 +59,11 @@ namespace AirAmbe
         
 
         /// <summary>
-        /// Constructeur du UserControlVol
+        /// Constructeur du UserControlVol.
         /// </summary>
-        /// <param name="ec"></param>
-        /// <param name="volEC"></param>
+        /// <param name="ec"> L'écran de controle. </param>
+        /// <param name="volEC"> Le vol correspondant. </param>
+        /// <param name="compteur"> Le numero du UserControl. </param>
         public UserControlVol(EcranControleur ec, Vol volEC, int compteur)
         {
             InitializeComponent();
@@ -83,17 +93,22 @@ namespace AirAmbe
 
 
         // ---------------------------------------------------------------------------------- \\
+        #region Méthodes Maisons
 
 
+        /// <summary>
+        /// Contenu principal du UserControl.
+        /// </summary>
         private void AfficherDetailsVols()
         {
+            // Bordure du UserControl.
             Border brdVol = new Border();
             brdVol.Height = Double.NaN;
             brdVol.BorderBrush = Brushes.Black;
             brdVol.BorderThickness = new Thickness(2);
             brdVol.Margin = new Thickness(10);
 
-
+            // Grid qui contient les éléments.
             GrdVol = new Grid();
             GrdVol.Name = "GrdVol" + vol.IdVol.ToString();
             GrdVol.Height = 60;
@@ -104,6 +119,7 @@ namespace AirAmbe
             GrdVol.RowDefinitions.Add(grdRow1);
             GrdVol.RowDefinitions.Add(grdRow2);
 
+            // Choix de la couleur de fond.
             if (vol.EstAtterrissage)
                 GrdVol.Background = Brushes.LightBlue;
 
@@ -112,11 +128,15 @@ namespace AirAmbe
 
             brdVol.Child = GrdVol;
 
+            // On ajoute le UserControl dans la grille contenant tous les UserControls.
             Grid.SetRow(brdVol, compteurVol);
             EC.grdProchainsVols.Children.Add(brdVol);
         }
 
 
+        /// <summary>
+        /// Partie du haut (toujours affichée).
+        /// </summary>
         private void AfficherDetailsVolsH()
         {
             Ellipse E = new Ellipse();
@@ -139,17 +159,10 @@ namespace AirAmbe
             imgEtat.Margin = new Thickness(10, 0, 0, 0);
             Grid.SetRow(imgEtat, 0);
 
-
-            lblNumVol.Content = "Vol " + vol.NumeroVol;
-            lblNumVol.Height = 30;
-            lblNumVol.Width = 110;
-            lblNumVol.HorizontalAlignment = HorizontalAlignment.Center;
-            lblNumVol.VerticalAlignment = VerticalAlignment.Top;
-            Grid.SetRow(lblNumVol, 0);
-
+             
             lblDelais.Name = "lblDelais" + vol.IdVol.ToString();
             lblDelais.Height = 30;
-            lblDelais.Width = 110;
+            lblDelais.Width = 130;
             lblDelais.HorizontalAlignment = HorizontalAlignment.Center;
             lblDelais.VerticalAlignment = VerticalAlignment.Bottom;
             Grid.SetRow(lblDelais, 0);
@@ -180,11 +193,15 @@ namespace AirAmbe
             GrdVol.Children.Add(E);
             GrdVol.Children.Add(imgEtat);
             GrdVol.Children.Add(lblNumVol);
+            GrdVol.Children.Add(lblPiste);
             GrdVol.Children.Add(lblDelais);
             GrdVol.Children.Add(btnDetailsVols);
         }
 
 
+        /// <summary>
+        /// Partie du bas (affichée avec le bouton de détails).
+        /// </summary>
         private void AfficherDetailsVolsB()
         {
             string atterrissage;
@@ -257,6 +274,14 @@ namespace AirAmbe
 
             Grid.SetRow(cboPistes, 1);
 
+            lblNumVol.Content = "Vol " + vol.NumeroVol + (vol.EstAtterrissage ? " ▼ " : " ▲ " ) + (cboPistes.SelectedIndex == 0 ? "" : cboPistes.Text);
+            lblNumVol.Height = 30;
+            lblNumVol.Width = 130;
+            lblNumVol.HorizontalAlignment = HorizontalAlignment.Center;
+            lblNumVol.VerticalAlignment = VerticalAlignment.Top;
+            Grid.SetRow(lblNumVol, 0);
+
+
             Label lblEstime = new Label();
             lblEstime.Content = estime + vol.DateVol.ToString("HH:mm:ss");
             lblEstime.Height = 30;
@@ -273,33 +298,41 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Teste si la piste est occupé par une autre avion ou pas.
+        /// </summary>
         private void TesterPiste()
         {
+            // On parcourt la liste de vol.
             for (int i = 0; i < EC.LstVols.Count; i++)
             {
+                // Si le vol dans la liste est différent du vol du UserControl.
                 if (EC.LstVols[i] != vol)
                 {
+                    // On prend la différence entre ces deux vols.
                     TimeSpan t = vol.DateVol - EC.LstVols[i].DateVol;
 
+                    // Si le TimeSpan est négatif on le rend positif.
                     if (t.TotalMilliseconds < 0)
                         t = t.Negate();
 
+                    // Si le TimeSpan est plus petit que 30 secondes.
                     if (t.TotalMilliseconds < 30000)
                     {
+                        // Pour chaque UserControl dans la liste.
                         for (int j = 0; j < EC.LstUserControlVols.Count; j++)
                         {
-                            if (EC.LstUserControlVols[j].vol == EC.LstVols[i])
+                            // Si le vol du UserControl est égal au vol dans la liste et que la piste du vol est assigné.
+                            if (EC.LstUserControlVols[j].vol == EC.LstVols[i] && vol.PisteAssigne != null)
                             {
-                                if (vol.PisteAssigne != null)
-                                {
-                                    ComboBoxItem cboI = EC.LstUserControlVols[j].cboPistes.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
+                                // On va chercher l'item du ComboBox correspondant à la piste et on change sa couleur.
+                                ComboBoxItem cboI = EC.LstUserControlVols[j].cboPistes.Items[vol.PisteAssigne.NumPiste] as ComboBoxItem;
 
-                                    if (vol.EtatVol == Etat.Assigne)
-                                        cboI.Foreground = Brushes.Red;
+                                if (vol.EtatVol == Etat.Assigne)
+                                    cboI.Foreground = Brushes.Red;
 
-                                    else
-                                        cboI.Foreground = Brushes.Black;
-                                }
+                                else
+                                    cboI.Foreground = Brushes.Black;
                             }
                         }
                     }
@@ -308,6 +341,10 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Selon l'état de la piste, on désactive l'item du ComboBox.
+        /// </summary>
+        /// <param name="piste"> Piste à rendre disponible ou indisponible. </param>
         public void ChangerEtatPiste(Piste piste)
         {
             if (piste.estDisponible)
@@ -327,6 +364,11 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Trouve l'image correspondant à l'état d'un vol.
+        /// </summary>
+        /// <param name="A"> État du vol. </param>
+        /// <returns> Retourne l'image en question. </returns>
         private BitmapImage TrouverEtat(Etat A)
         {
             BitmapImage b = new BitmapImage();
@@ -372,10 +414,15 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Teste et change l'état du vol.
+        /// </summary>
         private void TesterEtat()
         {
-            if (vol.Delais.TotalMilliseconds < (vol.TempsCritque) + (vol.TempsFinal))
+            // Si le vol entre dans la zone critique.
+            if (vol.Delais.TotalMilliseconds < (vol.TempsCritque + vol.TempsFinal))
             {
+                // S'il est toujours en attente ou qu'il est critique.
                 if (vol.EtatVol == Etat.Attente || vol.EtatVol == Etat.Critique)
                 {
                     vol.EtatVol = Etat.Critique;
@@ -392,6 +439,7 @@ namespace AirAmbe
                     return;
                 }
 
+                // S'il est retardé.
                 else if (vol.EtatVol == Etat.Retarde)
                 {
                     GrdVol.Background = new SolidColorBrush(Color.FromRgb(255, 66, 66)); // Rouge
@@ -413,10 +461,14 @@ namespace AirAmbe
                 imgEtat.Margin = new Thickness(12, 0, 0, 0);
             }
 
+            // On change la source de l'image selon l'état.
             imgEtat.Source = TrouverEtat(vol.EtatVol);
         }
 
 
+        /// <summary>
+        /// Teste si tous les hangars au sol sont pris. Si oui il empêche les vols d'atterrir.
+        /// </summary>
         private void TesterHangar()
         {
             int compteur = 0;
@@ -435,6 +487,10 @@ namespace AirAmbe
         }
          
 
+        /// <summary>
+        /// Retarde le vol correspondant.
+        /// </summary>
+        /// <param name="millisecondes"> Temps en millisecondes du retard. </param>
         public void RetarderVol(int millisecondes)
         {
             // Piste null + combo box null + etat retarder
@@ -450,6 +506,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Annule le vol correspondant.
+        /// </summary>
         public void AnnulerVol()
         {
             // Etat annuler
@@ -461,6 +520,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Modifie le label qui affiche le délai.
+        /// </summary>
         private void ChangerLabelDelais()
         {
             string separateur;
@@ -477,6 +539,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Selon le délai on change l'état du vol, le délai, l'image, etc.
+        /// </summary>
         private void ChangerUserControl()
         {
             // Changer quand le vol est terminée.
@@ -519,6 +584,7 @@ namespace AirAmbe
                     dtDelais.Stop();
             }
 
+            // Si le vol entre dans la zone finale.
             else if (vol.Delais.TotalMilliseconds < vol.TempsFinal + 500)
             {
                 if (vol.EtatVol == Etat.Retarde || vol.EtatVol == Etat.Critique)
@@ -547,6 +613,7 @@ namespace AirAmbe
             // Démarrer les animations au bon moment.
             if (vol.Delais.TotalMilliseconds < 15000 && vol.EstAtterrissage && !vol.EstLance)
             {
+                // Empêche l'application de crash quand la piste est null.
                 try
                 {
                     AnimVol.DemarreAtterrissage(vol.PisteHistorique.NumPiste);
@@ -559,6 +626,7 @@ namespace AirAmbe
 
             if (vol.Delais.TotalMilliseconds < 30000 && !vol.EstAtterrissage && !vol.EstLance)
             {
+                // Empêche l'application de crash quand la piste est null.
                 try
                 {
                     AnimVol.DemarreDecollage(vol.PisteHistorique.NumPiste);
@@ -570,6 +638,10 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Remet le vol en attente.
+        /// </summary>
+        /// <param name="index"> Si vrai, remet l'index du combobox à 0, sinon ne change rien. </param>
         private void RemettreVolAttente(bool index)
         {
             imgEtat.Source = TrouverEtat(Etat.Attente);
@@ -588,9 +660,16 @@ namespace AirAmbe
         }
 
 
+        #endregion
+
+
         // ---------------------------------------------------------------------------------- \\
-
-
+        #region Méthodes Éléments
+        
+        
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton détails du UserControl.
+        /// </summary>
         private void btnDetailsVols_Click(object sender, RoutedEventArgs e)
         {
             if (GrdVol.Height == 60)
@@ -601,9 +680,13 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Appelé lorsqu'on change la sélection d'une piste.
+        /// </summary>
         private void cboPistes_Selection(object sender, SelectionChangedEventArgs e)
         {
             RemettreVolAttente(false);
+
 
             // Si la piste n'est pas disponible et qu'on veut la forcer.
             ComboBoxItem cboI = cboPistes.Items[cboPistes.SelectedIndex] as ComboBoxItem;
@@ -637,9 +720,14 @@ namespace AirAmbe
                 cboPistes.SelectedIndex = 0;
 
             TesterPiste();
+
+            lblNumVol.Content = "Vol " + vol.NumeroVol + (vol.EstAtterrissage ? " ▼ " : " ▲ ") + (cboPistes.SelectedIndex == 0 ? "" : cboI.Content);
         }
 
 
+        /// <summary>
+        /// Appelé à chaque demie seconde.
+        /// </summary>
         private void dt_Tick(object sender, EventArgs e)
         {
             ChangerUserControl();
@@ -649,17 +737,28 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Appelé a chaque seconde.
+        /// </summary>
         private void dtDelais_Tick(object sender, EventArgs e)
         {
+            // Diminue le délais en fonction de l'accelerateur (défaut = 1).
             vol.Delais -= TimeSpan.FromMilliseconds(Accelerateur * 1000);
         }
 
 
+        /// <summary>
+        /// Appelé à chaque fois que le UserControl est supprimé.
+        /// </summary>
         public void Dispose()
         {
+            // Arrête les DispatcherTimer.
             dt500.Stop();
             dtDelais.Stop();
         }
+
+
+        #endregion
 
     }
 }

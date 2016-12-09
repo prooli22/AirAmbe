@@ -1,4 +1,8 @@
-﻿using AirAmbe.Model;
+﻿// Nom : Olivier Provost
+// Date : 2016-12-09
+
+
+using AirAmbe.Model;
 using AirAmbe.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -21,10 +25,11 @@ using System.Windows.Threading;
 namespace AirAmbe
 {
     /// <summary>
-    /// Logique d'interaction pour Window1.xaml
+    /// Écran du Centre de Contrôle.
     /// </summary>
     public partial class EcranControleur : Window
     {
+        // Propriétés.
         public Utilisateur Controleur { get; set; }
 
         public List<Vol> LstVols { get; set; }
@@ -47,6 +52,8 @@ namespace AirAmbe
 
         public float Accelerateur { get; set; } = 1;
 
+
+        // Variables.
         private DispatcherTimer dtRefresh;
 
         private EcranConfiguration ec;
@@ -62,6 +69,7 @@ namespace AirAmbe
             Controleur = U;
             
 
+            // Si connextion en tant qu'observateur.
             if (Controleur == null)
             {
                 btnConfig.Visibility = Visibility.Hidden;
@@ -69,6 +77,7 @@ namespace AirAmbe
             }
 
 
+            // Si le fichier de scénarios est présent on charge tout ce qu'on a de besoin.
             if (ChargerScenarios())
             {
                 if(LstScenarios.Count > 0)
@@ -94,6 +103,7 @@ namespace AirAmbe
                 Anim.GererDessinPiste(LstPistes.Count);            
             }
 
+            // Sinon on affiche un message à l'écran.
             else
             {
                 MessageBox.Show("Le fichier de scénarios n'est pas présent ou encore il est vide. Veuillez contacter l'administrateur de l'application pour remédier au problème.", "Air-Ambe", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -104,6 +114,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Lorsqu'on ferme l'écran on veut que l'écran de configuration aussi se ferme.
+        /// </summary>
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -113,8 +126,13 @@ namespace AirAmbe
         }
 
         // ---------------------------------------------------------------------------------- \\
+        #region Méthodes Maisons
 
 
+        /// <summary>
+        /// Lis le fichier scenarios.txt et charge les vols en conséquence à partir de la BD.
+        /// </summary>
+        /// <returns> Retourne vrai si le fichier est présent, sinon retourne faux. </returns>
         private bool ChargerScenarios()
         {
             LstScenarios = new List<Scenario>();
@@ -165,6 +183,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Charge les vols présent dans le fichier de scénarios et charge la LstVols.
+        /// </summary>
         private void ChargerVols()
         {
             LstVols = new List<Vol>();
@@ -174,6 +195,7 @@ namespace AirAmbe
             {
                 for (int j = 0; j < LstScenarios[i].NumVol.Count(); j++)
                 {
+                    // Initialisé le vol et les propriétés de temps.
                     Vol V = VA.Recuperer(LstScenarios[i].NumVol[j]);
                     V.Intervalle = LstScenarios[i].Intervalle;
                     V.NumScenario = i + 1;
@@ -185,6 +207,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Modifie les heures prévues de décollages et/ou d'atterrissage de chaque vol.
+        /// </summary>
         private void ModifierHeures()
         {
             int nbVols = 1;
@@ -211,6 +236,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Créer la grille de données des atterrissages et des décollages.
+        /// </summary>
         private void ChargerDataGrid()
         {
             LstDecollages = new List<Vol>();
@@ -233,6 +261,10 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Créer la grille des prochains vols avec les 10 vols les + récents.
+        /// Avec les UserControlVols.
+        /// </summary>
         private void ChargerProchainsVols()
         {
             LstUserControlVols = new List<UserControlVol>();
@@ -253,6 +285,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Créer la liste des hangars disponibles (Anthony).
+        /// </summary>
         public void InitialiserHangar()
         {
             LstHangar = new List<Hangar>();
@@ -267,6 +302,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Créer la liste des avions selon le nombre de décollage et d'atterrissage (Anthony).
+        /// </summary>
         public void InitialiserAvion()
         {
             LstAvion = new List<Avion>();
@@ -305,6 +343,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Met à jour les données de la liste des vols, la remet en ordre du plus récent et affiche les prochains vols.
+        /// </summary>
         public void RafraichirVols()
         {
             // On vide la grille des prochains vols.
@@ -320,12 +361,9 @@ namespace AirAmbe
             // On tri la liste des vols.
             LstVols.Sort((a, b) => DateTime.Compare(a.DateVol, b.DateVol));
 
-            //for (int i = 0; i < LstVols.Count; i++)
-            //    if (i < 10 && LstVols[i].EtatVol != Etat.Decollage && LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Cancelle)
-            //        LstUserControlVols.Add(new UserControlVol(this, LstVols[i], i));
-
             int compteur = 0;
 
+            // On recréer la liste des prochains vols (10).
             for (int i = 0; i < LstVols.Count; i++)
             {
                 if (LstVols[i].EtatVol != Etat.Atterrissage && LstVols[i].EtatVol != Etat.Decollage && LstVols[i].EtatVol != Etat.Cancelle)
@@ -341,6 +379,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Met à jour la grille de données des atterrissages et des décollages.
+        /// </summary>
         public void RafaichirListe()
         {
             // On tri la liste des vols.
@@ -364,10 +405,16 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Retarde le vol selon le nombre de millisecondes.
+        /// </summary>
+        /// <param name="idVol"> id du vol à retarder. </param>
+        /// <param name="millisecondes"> Temps en millisecondes. </param>
         public void RetarderVol(int idVol, int millisecondes)
         {
             for (int i = 0; i < LstUserControlVols.Count; i++)
             {
+                // On trouve le UserControl qui contient le bon vol.
                 if(LstUserControlVols[i].vol.IdVol == idVol)
                 {
                     LstUserControlVols[i].RetarderVol(millisecondes);
@@ -377,10 +424,15 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Annule le vol.
+        /// </summary>
+        /// <param name="idVol"> id du vol à annuler. </param>
         public void AnnulerVol(int idVol)
         {
             for (int i = 0; i < LstUserControlVols.Count; i++)
             {
+                // On trouve le UserControl qui contient le bon vol.
                 if (LstUserControlVols[i].vol.IdVol == idVol)
                 {
                     LstUserControlVols[i].AnnulerVol();
@@ -390,6 +442,10 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Change l'état de la piste.
+        /// </summary>
+        /// <param name="piste"> Piste à changer. </param>
         public void ChangerEtatPiste(Piste piste)
         {
             for (int i = 0; i < LstUserControlVols.Count; i++)
@@ -397,10 +453,16 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Change la vitesse à laquelle les secondes se passent dans le simulateur.
+        /// </summary>
+        /// <param name="accelerateur"></param>
         public void AccelererTemps(float accelerateur)
         {
+            // Pour le délai.
             Accelerateur = accelerateur;
 
+            // Pour les animations.
             for (int i = 0; i < LstUserControlVols.Count; i++)
             {
                 LstUserControlVols[i].Accelerateur = Accelerateur;
@@ -408,17 +470,19 @@ namespace AirAmbe
                 LstUserControlVols[i].AnimVol.Vitesse = 4.5F * Accelerateur;
                 LstUserControlVols[i].AnimVol.VitesseAeroport = 2 * Accelerateur;
                 LstUserControlVols[i].AnimVol.TempsAttentePiste = 4000 / Accelerateur;
-
-                //LstUserControlVols[i].AnimVol.Vitesse *= Accelerateur;
-                //LstUserControlVols[i].AnimVol.VitesseAeroport *= Accelerateur;
-                //LstUserControlVols[i].AnimVol.TempsAttentePiste /= Accelerateur;
             }
         }
 
 
+#endregion
+
+
         // ---------------------------------------------------------------------------------- \\
+        #region Méthodes Éléments
 
-
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton Profil et affiche l'écran du profil utilisateur.
+        /// </summary>
         private void btnProfil_Click(object sender, RoutedEventArgs e)
         {
             EcranUtilisateur eUser = new EcranUtilisateur(Controleur, false, null);
@@ -427,12 +491,18 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton Rafraichir et rafraichis la liste des prochains vols.
+        /// </summary>
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             RafraichirVols();
         }
 
 
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton Déconnexion et quitte l'écran du Contrôleur.
+        /// </summary>
         private void btnDeconnexion_Click(object sender, RoutedEventArgs e)
         {
             EcranConnexion eCon = new EcranConnexion();
@@ -441,6 +511,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton Configuration et ouvre l'écran de Configuration.
+        /// </summary>
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
             ec = new EcranConfiguration(this);
@@ -448,6 +521,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Fonctions qui grossit les boutons on passe notre souris au dessus.
+        /// </summary>
         public void btn_MouseEnter(object sender, MouseEventArgs e)
         {
             Button btn = sender as Button;
@@ -456,6 +532,9 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Fonctions qui rappetisse les boutons on passe notre souris au dessus.
+        /// </summary>
         public void btn_MouseLeave(object sender, MouseEventArgs e)
         {
             Button btn = sender as Button;
@@ -464,6 +543,10 @@ namespace AirAmbe
         }
 
 
+        /// <summary>
+        /// Appelé lorsqu'on utilise la molette de la souris dans le canvas de la carte des pistes (Anthony).
+        /// Permet de zoomer et dézoomer dans la carte.
+        /// </summary>
         private void cnvCarte_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             const double GROSSISSEMENTEXTERIEUR = 1.6;
@@ -475,10 +558,10 @@ namespace AirAmbe
 
             if (e.Delta > 0)
             {
-
                 zoom.ScaleX *= GROSSISSEMENTINTERIEUR;
                 zoom.ScaleY *= GROSSISSEMENTINTERIEUR;
             }
+
             else
             {
 
@@ -489,15 +572,21 @@ namespace AirAmbe
             }
 
             cnvCarte.LayoutTransform = new ScaleTransform(zoom.ScaleX, zoom.ScaleY);
-
         }
 
 
+        /// <summary>
+        /// Appelé à chaque seconde pour rafraichir la grille de données des atterrissages et des décollages.
+        /// </summary>
         private void dtRefresh_Tick(object sender, EventArgs e)
         {
             RafaichirListe();
         }
 
+
+        /// <summary>
+        /// Lorsqu'on clique sur le bouton Aide, le guide d'utilisateur est ouvert.
+        /// </summary>
         private void btnAide_Click(object sender, RoutedEventArgs e)
         {
             Process process = new Process();
@@ -505,5 +594,25 @@ namespace AirAmbe
             process.Start();
             process.WaitForExit();
         }
+
+
+        /// <summary>
+        /// Appelé lorsqu'on clique sur le bouton Recharger, affiche un message de confirmation pour recharger la page.
+        /// </summary>
+        private void btnReload_Click(object sender, RoutedEventArgs e)
+        {
+            // Demande une confirmation à l'utilisateur avant de quitter.
+            MessageBoxResult resultat = MessageBox.Show("Voulez-vous vraiment recharger l'application ?", "Recharger", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (resultat == MessageBoxResult.Yes)
+            {
+                EcranControleur EC = new EcranControleur(Controleur);
+                EC.Show();
+                this.Close();
+            }
+        }
+
+        #endregion
+
     }
 }

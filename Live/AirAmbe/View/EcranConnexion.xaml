@@ -21,5 +21,6 @@
         
         <Rectangle Fill="Black" Width="auto" Height="1" Margin="0,0,0,40" VerticalAlignment="Bottom" ></Rectangle>
         <Button Name="btnQuitter" Width="75" Height="25" Content="Quitter" Margin="0, 0, 20, 7" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="btnQuitter_Click"></Button>
+        <Button Name="btnGuide" Width="125" Height="25" Content="Guide de l'utilisateur" Margin="20, 0, 20, 7" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnGuide_Click"></Button>
     </Grid>
 </Window>

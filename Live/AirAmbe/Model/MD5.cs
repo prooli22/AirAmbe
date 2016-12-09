@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Nom : Olivier Provost.
+// Date : 2016-12-09.
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -9,6 +13,11 @@ namespace AirAmbe
 {
     public static class MD5
     {
+        /// <summary>
+        /// Permet d'encoder une String en MD5.
+        /// </summary>
+        /// <param name="input"> Mot de passe à encoder en MD5. </param>
+        /// <returns> Retourne le mot de passe encodé en MD5. </returns>
         public static string Hash(string input)
         {
             StringBuilder hash = new StringBuilder();

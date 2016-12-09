@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Nom : Olivier Provost.
+// Date : 2016-12-09.
+
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -19,6 +23,8 @@ namespace AirAmbe
         public string Aeroport { get; set; } //Attribut IdAeroport
         public string NumeroVol { get; set; }
         public bool EstAtterrissage { get; set; }
+
+        // Propriétés.
         public DateTime DateVol { get; set; }
         public DateTime DatePrevu { get; set; }
         public int Intervalle { get; set; }
@@ -34,7 +40,7 @@ namespace AirAmbe
         public bool EstLance { get; set; } = false;
 
         /// <summary>
-        /// Constructeur de la classe Vol
+        /// Constructeur de la classe Vol.
         /// </summary>
         public Vol()
         {
@@ -42,9 +48,9 @@ namespace AirAmbe
         }
 
         /// <summary>
-        /// Constructeur de la classe Vol
+        /// Constructeur de la classe Vol.
         /// </summary>
-        /// <param name="unVol">Indique les données a récupérer dans une rangée</param>
+        /// <param name="unVol"> Indique les données a récupérer dans une rangée .</param>
         public Vol(DataRow unVol)
         {
             IdVol = (int)unVol["IdVol"];
