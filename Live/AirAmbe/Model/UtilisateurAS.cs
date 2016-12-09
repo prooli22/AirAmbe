@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Nom: Anthony Massé
+// Date: 9 Décembre 2016
+
+using System;
 using System.Collections.Generic;
 using AirAmbe.ViewModel;
 using System.Collections.ObjectModel;
@@ -140,46 +143,19 @@ namespace AirAmbe.Model
                                 ",u.photo " +
                          "FROM utilisateurs u " +
                                 "INNER JOIN types t ON t.idType=u.idType";
-            //string sel = "SELECT * FROM utilisateurs";
-
+        
             ObservableCollection<Utilisateur> ObservableDesUtilisateurs = new ObservableCollection<Utilisateur>();
 
             DataSet dsUtilisateurs = MaBd.Selection(sel);
                    
             DataTable dtUtilisateurs = dsUtilisateurs.Tables[0];
 
-
-            //foreach (DataRelation relation in dtUtilisateurs.ParentRelations)
-            //{
-
-                foreach (DataRow RowUtilisateur in dtUtilisateurs.Rows)
-                {
-                    //arrRows = RowUtilisateur.GetChildRows(relation);
-                    //// Print values of rows.
-                    //for (int i = 0; i < arrRows.Length; i++)
-                    //{
-                    //    foreach (DataColumn column in dtUtilisateurs.Columns)
-                    //    {
-                    //        Console.WriteLine(arrRows[i][column]);
-                    //    }
-                    //}
-                    ObservableDesUtilisateurs.Add(new Utilisateur(RowUtilisateur));
-                }
-
-            //}
-
-
-
-
-            //// DataRelation relation = thisTable.ParentRelations[0];
-            //foreach (DataRow RowUtilisateur in dtUtilisateurs.Rows)
-            //{
-            //    //dr = RowUtilisateur.GetParentRow(relation);
-            //    ObservableDesUtilisateurs.Add(new Utilisateur(RowUtilisateur));
-            //}
-
-
-
+            foreach (DataRow RowUtilisateur in dtUtilisateurs.Rows)
+            {
+                
+                ObservableDesUtilisateurs.Add(new Utilisateur(RowUtilisateur));
+            }
+                    
             return ObservableDesUtilisateurs;
         }
 

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Nom: Anthony Massé
+// Date: 9 Décembre 2016
+
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -61,8 +65,6 @@ namespace AirAmbe
 
         private int PositionYDebutVoiePrincip { get; set; }
 
-        private int LongueurHorizontaleVs { get; set; }
-
         private int NumeroHangarDisponible { get; set; }
 
         private int NumeroAvionDisponible { get; set; }
@@ -83,7 +85,7 @@ namespace AirAmbe
             Ec = ec;
             Vitesse = 4.5F;
             VitesseAeroport = 2F;
-            TempsAttentePiste = 4000;
+            TempsAttentePiste = 4000;    
         }
 
         /// <summary>
@@ -402,7 +404,8 @@ namespace AirAmbe
             ImageBrush a = new ImageBrush();
 
             //Initialisation des variables
-            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avion.png"));
+            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avionD.png"));
+            
             avionD.Fill = a;
             avionD.Width = 35;
             avionD.Height = 35;
@@ -522,12 +525,13 @@ namespace AirAmbe
                 if(avionA.NumAvion==NumeroAvionDisponible)
                 {
                     ImageAvion = avionA.ImageAvion;
+
                 }
             }
 
             //On initialise les variables
             ImageAvion = new Rectangle();
-            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avion.png"));
+            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avionA.png"));
             ImageAvion.Fill = a;
             ImageAvion.Width = 35;
             ImageAvion.Height = 35;
@@ -602,7 +606,7 @@ namespace AirAmbe
            EstAtterrissage = true;           
            FinPiste = finPiste;
            FinVoieService = finVoieService;
-
+            
            //On détermine la longeur maximale à atteindre
            if (piste == 1 || piste == 3)
            {
@@ -881,7 +885,6 @@ namespace AirAmbe
             }         
         }
 
-
         ///--------------------------------------------------------------------------------------------------------------------------------------------
         /// UTILISÉ PAR ATTERRISSAGE ET DÉCOLLAGE
         /// <summary>
@@ -976,7 +979,9 @@ namespace AirAmbe
         public void GenererMouvDVoiePrincipDirectionH(object sender, EventArgs e, Rectangle imageAvion, int piste, int hangar, int avion)
         {
             LongueurHorizontale = 1000;
-             
+
+            VitesseAeroport = 2 * Ec.Accelerateur;
+
             //Selon le hangar 7-12         
             switch (hangar)
             {
@@ -1066,6 +1071,8 @@ namespace AirAmbe
             LongueurHorizontale = 0;
             DistanceAParcourirVoiePrincip = 164;
 
+            VitesseAeroport = 2 * Ec.Accelerateur;
+
             //Pour gérer l'aiguillage de l'avion
             Angle = 360;
             AngleDesire = 270;
@@ -1079,6 +1086,8 @@ namespace AirAmbe
 
                 if (CoordX <= DistanceAParcourirVoiePrincip)
                 {
+                 
+
                     //On arrete le déplacement en cours
                     GereGauche.Stop();
 
@@ -1102,6 +1111,7 @@ namespace AirAmbe
 
                     if (CoordX <= DistanceAParcourirVoiePrincip)
                     {
+                      
 
                         //On arrete le déplacement en cours
                         GereGauche.Stop();
@@ -1135,10 +1145,11 @@ namespace AirAmbe
             Operation = false;
             GererAiguillageAvion(imageAvion, Angle, AngleDesire, Operation);
 
-            LongueurHorizontale = 0; 
-           
+            LongueurHorizontale = 0;
+            VitesseAeroport = 2 * Ec.Accelerateur;
+
             //Selon le hangar   
-            switch(hangar)
+            switch (hangar)
             {
                 case 1:
                     DistanceAParcourirVoiePrincip = 815;
@@ -1253,6 +1264,8 @@ namespace AirAmbe
 
                 if (CoordY >= DistanceAParcourirVoiePrincip)
                 {
+
+                    VitesseAeroport = 2;
                     //On arrete le déplacement en cours
                     GereBas.Stop();
 
@@ -1298,6 +1311,8 @@ namespace AirAmbe
 
                 if (CoordY <= DistanceAParcourirVoiePrincip)
                 {
+                    VitesseAeroport = 2;
+
                     //On arrete le mouvement en cours
                     GereHaut.Stop();
 
@@ -1332,7 +1347,9 @@ namespace AirAmbe
             if (CoordY >= LongueurVerticale)
             {
                 if (CoordY <= DistanceAParcourirVoiePrincip)
-                {
+                {                                    
+                    VitesseAeroport = 2;              
+              
                     //On arrete le mouvement en cours
                     GereHaut.Stop();
 
@@ -1343,6 +1360,8 @@ namespace AirAmbe
                     GereDroit.Tick += new EventHandler((senderA, eA) => GenererMouvDVoiePrincipDirectionH(sender, e, imageAvion, piste, hangar, avion));
                     GereDroit.Interval = TimeSpan.FromMilliseconds(50);
                 }
+
+
                 CoordY -= VitesseAeroport;
             }
 
@@ -1370,6 +1389,7 @@ namespace AirAmbe
                 {
                     //On arrete le mouvement en cours
                     GereHaut.Stop();
+                    VitesseAeroport = 2;
 
                     //L'avion est maintenant disponible pour un décollage
                     foreach (Avion a in Ec.LstAvion)
@@ -1398,7 +1418,7 @@ namespace AirAmbe
         {
             LongueurVerticale = 0;
             DistanceAParcourirVoiePrincip = 70;
-
+          
             //Pour gérer l'aiguillage de l'avion
             Angle = 90;
             AngleDesire = 0;
@@ -1409,6 +1429,8 @@ namespace AirAmbe
             {
                 if (CoordY <= DistanceAParcourirVoiePrincip)
                 {
+                    VitesseAeroport = 2;
+
                     //On arrete le mouvement en cours
                     GereHaut.Stop();
 
@@ -1439,7 +1461,7 @@ namespace AirAmbe
             Rectangle rectRotation = new Rectangle();
             ImageBrush a = new ImageBrush();
 
-            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avion.png"));
+            a.ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/AirAmbe;component/Images/avionD.png"));
 
             //Pour chaque avion dans la liste d'avion
             foreach (Avion av in Ec.LstAvion)
@@ -1560,6 +1582,7 @@ namespace AirAmbe
 
                 if (CoordY >= DistanceAParcourirVoiePrincip)
                 {
+                    VitesseAeroport = 2;
                     //On arrete le déplacement en cours
                     GereBas.Stop();
 

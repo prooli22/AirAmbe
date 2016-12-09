@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Nom: Anthony Massé
+// Date: 9 Décembre 2016
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,10 +23,15 @@ namespace AirAmbe
         public bool EstDisponibleDecollage { get; set; }
 
         public bool EstInitialisee { get; set; }
+
         public Rectangle ImageAvion { get; set; }
+
         public int HangarAssigne { get; set; }
-        public int CoordX { get; set; }
-        public int CoordY { get; set; }
+
+        public float CoordX { get; set; }
+
+        public float CoordY { get; set; }
+
         /// <summary>
         /// Constructeur de la classe Avion
         /// </summary>
