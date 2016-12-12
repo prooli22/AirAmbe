@@ -1,6 +1,5 @@
-﻿// Nom: Anthony Massé
-// Date: 9 Décembre 2016
-
+﻿//Nom: Vincent Désilets
+//Date: 2016-12-09
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,9 +27,6 @@ namespace AirAmbe.Model
         public DateTime DateEmbauche { get; set; }
         public string Telephone { get; set; }
         public string Courriel { get; set; }
-
-        //TODO
-        //Rajouter attribut photo
 
         /// <summary>
         /// Constructeur par défaut de la classe Utilisateur

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Nom: Vincent Désilets
+//Date: 2016-12-09
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -163,6 +165,11 @@ namespace AirAmbe
             return user;
         }
 
+        /// <summary>
+        /// Vérifie si le nom de l'utilisateur est déjà
+        /// </summary>
+        /// <param name="nomUser"></param>
+        /// <returns></returns>
         private string VerifierNomUtilisateur(string nomUser)
         {
             int compteur = 0;
@@ -210,6 +217,11 @@ namespace AirAmbe
             return user;
         }
 
+        /// <summary>
+        /// Ce bouton fait l'action demandé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAction_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult resultat = MessageBox.Show("Voulez-vous vraiment " + btnAction.Content.ToString().ToLower() + " l'utilisateur ?", "Quitter", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -227,11 +239,6 @@ namespace AirAmbe
                     QuitterPage(u, true);
                 }
             }
-        }
-
-        private void btnParcourir_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Fonction non-implémenté dans la version 0.5");
         }
     }
 }

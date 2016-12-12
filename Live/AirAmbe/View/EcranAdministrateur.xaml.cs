@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Nom: Vincent Désilets
+//Date: 2016-12-09
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,7 +40,11 @@ namespace AirAmbe
             lstUser = ((UtilisateurViewModel)DataContext).SommaireUtilisateurs;
             dgUtilisateur.ItemsSource = lstUser;
         }
-
+        /// <summary>
+        /// Montre un message à l'écran de la dernière action faite
+        /// </summary>
+        /// <param name="u">L'utilisateur qui reçoi l'action</param>
+        /// <param name="estAjout">si c'est un ajout</param>
         private void AfficherDerniereAction(Utilisateur u, bool estAjout)
         {
             if (u != null)
@@ -90,7 +96,11 @@ namespace AirAmbe
             eUser.Show();
         }
 
-
+        /// <summary>
+        /// Quand la souris entre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_MouseEnter(object sender, MouseEventArgs e)
         {
             Button btn = sender as Button;
@@ -98,7 +108,11 @@ namespace AirAmbe
             btn.Width += 2;
         }
 
-
+        /// <summary>
+        /// Quand la souris sort
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_MouseLeave(object sender, MouseEventArgs e)
         {
             Button btn = sender as Button;

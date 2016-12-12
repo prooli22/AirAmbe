@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Nom: Vincent Désilets
+//Date: 2016-12-12
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +12,9 @@ using System.Windows;
 
 namespace AirAmbe.Model
 {
+    /// <summary>
+    /// Connexion à la bd d'un scénario
+    /// </summary>
     public class ScenarioAS
     {
         private BdService MaBd;
@@ -19,6 +24,10 @@ namespace AirAmbe.Model
             MaBd = new BdService();
         }
 
+        /// <summary>
+        /// Modification d'un scénario
+        /// </summary>
+        /// <param name="scenModification">le scénario à modifier</param>
         public void Modifier(Scenario scenModification)
         {
             string modif = "UPDATE scenarios SET description='" 
@@ -36,6 +45,10 @@ namespace AirAmbe.Model
 
         }
 
+        /// <summary>
+        /// Insertion d'un scénario
+        /// </summary>
+        /// <param name="Sc">Le scénario à modifier</param>
         public void Inserer(Scenario Sc)
         {
             string ins = "INSERT INTO Scenarios (description)VALUES('" + Sc.Description + "');";
@@ -47,6 +60,11 @@ namespace AirAmbe.Model
                 MaBd.Commande(insVol);
             }
         }
+
+        /// <summary>
+        /// Chercher tous les scénarios
+        /// </summary>
+        /// <returns>Retourne la collection de scénarios</returns>
         public ObservableCollection<Scenario> RecupererTous()
         {
             string sel = "SELECT * FROM Scenarios;";

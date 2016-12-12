@@ -1,4 +1,6 @@
-﻿using AirAmbe.Model;
+﻿//Nom: Vincent Désilets
+//Date: 2016-12-12
+using AirAmbe.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +26,11 @@ namespace AirAmbe
         public ObservableCollection<Vol> lstVols { get; set; } = new ObservableCollection<Vol>();
         public List<Vol> lstVolScen { get; set; } = new List<Vol>();
         public int IdScenarioModif { get; set; }
+        public int numeroChk { get; set; } = -1;
 
+        /// <summary>
+        /// Constructeur de base de la fenetre d'ajout
+        /// </summary>
         public EcranAjoutScenario()
         {
             InitializeComponent();
@@ -35,7 +41,28 @@ namespace AirAmbe
             dgVolsScen.ItemsSource = lstVolScen;
         }
 
-        public EcranAjoutScenario(Scenario s)
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="numChk">Le numéro du checkbox à cocher</param>
+        public EcranAjoutScenario(int numChk)
+        {
+            InitializeComponent();
+
+            InitialiserListeVols();
+
+            dgVols.ItemsSource = lstVols;
+            dgVolsScen.ItemsSource = lstVolScen;
+
+            numeroChk = numChk;
+        }
+
+        /// <summary>
+        /// Constructeur en modification
+        /// </summary>
+        /// <param name="s">Le scénario à modifier</param>
+        /// <param name="numChk">Le numéro du checkbox à cocher</param>
+        public EcranAjoutScenario(Scenario s, int numChk)
         {
             InitializeComponent();
 
@@ -51,8 +78,15 @@ namespace AirAmbe
 
             dgVols.ItemsSource = lstVols;
             dgVolsScen.ItemsSource = lstVolScen;
+
+            numeroChk = numChk;
         }
 
+        /// <summary>
+        /// Quand on clique sur le bouton modifier
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnAjouterScenario_ClickModifier(object sender, RoutedEventArgs e)
         {
             if (lstVolScen.Count <= 0)
@@ -74,13 +108,18 @@ namespace AirAmbe
                     sAS.Modifier(s);
 
                     MessageBox.Show("Scénario #" + s.IdScenario + " modifié.");
-                    EcranScenario ES = new EcranScenario();
+                    EcranScenario ES = new EcranScenario(numeroChk);
                     this.Close();
                     ES.Show();
                 }                
             }
         }
 
+        /// <summary>
+        /// On charge la liste des vols
+        /// </summary>
+        /// <param name="s">Le scénario contenant les vols</param>
+        /// <returns>Liste de vols</returns>
         private List<Vol> ChargerListeVols(Scenario s)
         {
             List<Vol> lstVolTemp = new List<Vol>();
@@ -100,6 +139,9 @@ namespace AirAmbe
             return lstVolTemp;
         }
 
+        /// <summary>
+        /// Va chercher tous les vols en bd
+        /// </summary>
         private void InitialiserListeVols()
         {
             VolAS vAs = new VolAS();
@@ -107,6 +149,10 @@ namespace AirAmbe
             lstVols =  vAs.RecupererTous();
         }
 
+        /// <summary>
+        /// Fonction non-utilisé
+        /// </summary>
+        /// <param name="cbo"></param>
         private void RemplirCombobox(ComboBox cbo)
         {
             for (int i = 0; i < lstVols.Count; i++)
@@ -118,6 +164,10 @@ namespace AirAmbe
             }
         }
 
+        /// <summary>
+        /// On crée le scénario avec les données entrées par l'utilisateur
+        /// </summary>
+        /// <returns>Un scénario</returns>
         private Scenario CreerScenario()
         {
             Scenario scen = new Scenario();
@@ -132,6 +182,10 @@ namespace AirAmbe
             return scen;
         }
 
+        /// <summary>
+        /// Ajoute un vol dans la liste du scénario
+        /// </summary>
+        /// <param name="v"></param>
         private void AjouterVol(Vol v)
         {
             lstVolScen.Add(v);
@@ -139,6 +193,10 @@ namespace AirAmbe
             dgVolsScen.Items.Refresh();
         }
 
+        /// <summary>
+        /// Enleve un vol de la liste du scénario
+        /// </summary>
+        /// <param name="v"></param>
         private void EnleverVol(Vol v)
         {
             lstVolScen.Remove(v);
@@ -146,6 +204,10 @@ namespace AirAmbe
             dgVolsScen.Items.Refresh();
         }
 
+        /// <summary>
+        /// Vérifie si le nombre de vols est correct
+        /// </summary>
+        /// <returns>Vrai ou faux</returns>
         private bool VerifNbVols()
         {
             int compteur = 0;
@@ -170,6 +232,11 @@ namespace AirAmbe
             return false;
         }
 
+        /// <summary>
+        /// Quand on clique sur le bouton ajouter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAjouterScenario_ClickAjouter(object sender, RoutedEventArgs e)
         {
             if (lstVolScen.Count <= 0)
@@ -191,29 +258,55 @@ namespace AirAmbe
 
                     MessageBox.Show("Scénario créé.");
 
-                    EcranScenario ES = new EcranScenario();
+                    EcranScenario ES = new EcranScenario(numeroChk);
                     this.Close();
                     ES.Show();
                 }
             }                      
         }
 
+        /// <summary>
+        /// Quand on clique sur le bouton annuler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAnnuler_Click(object sender, RoutedEventArgs e)
-        {
-            EcranScenario eS = new EcranScenario();
-            this.Close();
-            eS.Show();
+        {            
+            if (numeroChk >= 0)
+            {
+                EcranScenario es = new EcranScenario(numeroChk);
+                this.Close();
+                es.Show();
+            }
+            else
+            {
+                EcranScenario eS = new EcranScenario();
+                this.Close();
+                eS.Show();
+            }
+            
         }
 
+        /// <summary>
+        /// Quand on clique sur le bouton enlever
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnEnlever_Click(object sender, RoutedEventArgs e)
         {
             EnleverVol((Vol)dgVolsScen.SelectedItem);
         }
 
+        /// <summary>
+        /// Quand on clique sur le bouton ajouter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAjouter_Click(object sender, RoutedEventArgs e)
         {
             AjouterVol((Vol)(dgVols.SelectedItem));
         }
+
 
         private void dgVolsScen_LoadingRow(object sender, DataGridRowEventArgs e)
         {

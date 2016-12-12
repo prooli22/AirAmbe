@@ -1,5 +1,8 @@
-﻿using System;
+﻿//Nom: Vincent Désilets
+//Date: 2016-12-09
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AirAmbe
 {
@@ -20,7 +24,12 @@ namespace AirAmbe
     public partial class EcranConfiguration : Window
     {
         private EcranControleur EC;
-        
+        private DispatcherTimer dt = new DispatcherTimer();
+
+        /// <summary>
+        /// L'écran de configuration permet de configurer les vols
+        /// </summary>
+        /// <param name="ec">L'écran controleur</param>
         public EcranConfiguration(EcranControleur ec)
         {
             InitializeComponent();
@@ -29,8 +38,43 @@ namespace AirAmbe
 
             dgVols.ItemsSource = EC.LstVols;
             dgPistes.ItemsSource = EC.LstPistes;
+
+            dt.Interval = TimeSpan.FromMilliseconds(250);
+            dt.Tick += Dt_Tick;
+            dt.Start();
         }
 
+        /// <summary>
+        /// À toutes les 0.25 secondes la fonction DeleteRows est appellé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Dt_Tick(object sender, EventArgs e)
+        {
+            DeleteRows();
+        }
+
+        /// <summary>
+        /// Les vols qui sont cancellés ou terminé ne s'afficheront plus
+        /// </summary>
+        private void DeleteRows()
+        {
+            for (int i = 0; i < EC.LstVols.Count; i++)
+            {
+                if (EC.LstVols[i].EstLance || EC.LstVols[i].EtatVol == Etat.Cancelle || EC.LstVols[i].EtatVol == Etat.Decollage || EC.LstVols[i].EtatVol == Etat.Atterrissage)
+                {
+                    DataGridRow row = (DataGridRow)dgVols.ItemContainerGenerator.ContainerFromIndex(i);
+
+                    row.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Le bouton retarder permet de retarder un vol selon le temps choisi dans les combobox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnRetarder_Click(object sender, RoutedEventArgs e)
         {
             Vol v = (Vol)(dgVols.SelectedItem);
@@ -51,6 +95,11 @@ namespace AirAmbe
             dgVols.Items.Refresh();
         }
 
+        /// <summary>
+        /// En cliquant sur ce bouton, la piste choisi change d'état
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnChangerEtatPiste_Click(object sender, RoutedEventArgs e)
         {
             FacteursExterieurs.ChangerEtatPiste((Piste)dgPistes.SelectedItem, EC);
@@ -61,6 +110,11 @@ namespace AirAmbe
             EC.ChangerEtatPiste((Piste)dgPistes.SelectedItem);
         }
 
+        /// <summary>
+        /// Quand la souris entre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_MouseEnter(object sender, MouseEventArgs e)
         {
             Button btn = sender as Button;
@@ -68,6 +122,11 @@ namespace AirAmbe
             btn.Width += 2;
         }
 
+        /// <summary>
+        /// Quand la souris sort
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_MouseLeave(object sender, MouseEventArgs e)
         {
             Button btn = sender as Button;
@@ -75,6 +134,11 @@ namespace AirAmbe
             btn.Width -= 2;
         }
 
+        /// <summary>
+        /// Ce bouton annule le vol choisi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAnnuler_Click(object sender, RoutedEventArgs e)
         {
             EcranConfirmation eConf = new EcranConfirmation(EC.Controleur);
@@ -83,6 +147,11 @@ namespace AirAmbe
                 EC.AnnulerVol(((Vol)(dgVols.SelectedItem)).IdVol);
         }
 
+        /// <summary>
+        /// Quand on change la valeur du combobox, cette donnée est sauvegardé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cboTemps_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Vol v = ((Vol)dgVols.SelectedItem);
@@ -96,6 +165,11 @@ namespace AirAmbe
             
         }
 
+        /// <summary>
+        /// Quand on change la valeur du combobox, cette donnée est sauvegardé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cboValeur_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Vol v = ((Vol)dgVols.SelectedItem);
@@ -108,6 +182,11 @@ namespace AirAmbe
             }            
         }
 
+        /// <summary>
+        /// Quand on change la valeur du combobox, cette donnée est sauvegardé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cboAccel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox cbo = (ComboBox)sender;

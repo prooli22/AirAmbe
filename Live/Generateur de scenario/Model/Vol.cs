@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Nom: Vincent Désilets
+//Date: 2016-12-12
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
