@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Nom: Olivier Provost
+//Date: 2016-12-13
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -24,13 +26,16 @@ namespace AirAmbe
     /// </summary>
     public partial class EcranGuide : Window
     {
-        public EcranGuide()
+        public EcranGuide(int numPage)
         {
             InitializeComponent();
 
-            string fileName = Environment.CurrentDirectory.GetFilePath("Documents\\guide.pdf");
+            string fileName = Environment.CurrentDirectory.GetFilePath("Documents\\Guide.xps");
             XpsDocument doc = new XpsDocument(fileName, FileAccess.Read);
+            
             dvGuide.Document = doc.GetFixedDocumentSequence();
+
+            dvGuide.GoToPage(numPage);
         }
     }
 

@@ -312,5 +312,36 @@ namespace AirAmbe
         {
             e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
+
+        /// <summary>
+        /// Quand la souris entre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.Height += 2;
+            btn.Width += 2;
+        }
+
+        /// <summary>
+        /// Quand la souris sort
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.Height -= 2;
+            btn.Width -= 2;
+        }
+
+        private void btnAide_Click(object sender, RoutedEventArgs e)
+        {
+            EcranGuide eg;
+            eg = new EcranGuide(7);
+            eg.Show();
+        }
     }
 }

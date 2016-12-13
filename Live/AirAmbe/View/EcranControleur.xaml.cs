@@ -598,7 +598,7 @@ namespace AirAmbe
             //process.Start();
             //process.WaitForExit();
 
-            eg = new EcranGuide();
+            eg = new EcranGuide(8);
             eg.Show();
         }
 

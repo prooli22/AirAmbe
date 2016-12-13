@@ -6,8 +6,37 @@
         xmlns:local="clr-namespace:AirAmbe"
         mc:Ignorable="d"
         Title="EcranUtilisateur" Height="500" Width="550" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                                <Setter Property="Opacity" TargetName="Chrome" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Label FontSize="20" Name="lblTitre">Profil utilisateur</Label>
+
+        <Button Name="btnAide" Style="{DynamicResource NoChromeButton}" ToolTip="Aide" VerticalAlignment="Top" HorizontalAlignment="Right" Width="30" Height="30" Margin="0,0,0,0" Click="btnAide_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/AirAmbe;component/Images/interrogation.png" />
+        </Button>
 
         <Label Height="25" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,35,0,0">Prénom:</Label>
         <TextBox Name="txtPrenom" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,35,0,0" Height="25" Width="200" IsReadOnly="True"></TextBox>
@@ -38,6 +67,6 @@
         <!--<Button Name="btnParcourir" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="50,160,50,50" Click="btnParcourir_Click">Parcourir</Button>-->
 
         <Button Name="btnAction" Height="25" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Click="btnAction_Click"></Button>
-        <Button Name="btnRetour" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="btnRetour_Click">Retour</Button>
+        <Button Name="btnRetour" ToolTip="Quitter cet écran" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="btnRetour_Click">Retour</Button>
     </Grid>
 </Window>

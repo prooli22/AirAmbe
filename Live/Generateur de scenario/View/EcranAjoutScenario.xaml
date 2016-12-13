@@ -7,6 +7,30 @@
         mc:Ignorable="d"
         Title="EcranAjoutScenario" Height="500" Width="1100">
     <Window.Resources>
+        <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                                <Setter Property="Opacity" TargetName="Chrome" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
         <Style  x:Key="Label" TargetType="{x:Type Label}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding EstAtterrissage}" Value="False">
@@ -31,12 +55,15 @@
         </Grid.ColumnDefinitions>
 
         <Label FontSize="25" Grid.Row="0">Ajout d'un scénario</Label>
+        <Button Name="btnAide" Style="{DynamicResource NoChromeButton}" ToolTip="Aide" Width="35" Height="35" Margin="0,0,10,20" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="0" Click="btnAide_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/Generateur;component/Images/interrogation.png" />
+        </Button>
 
         <Label Grid.Row="0" Margin="0,50,0,0" HorizontalAlignment="Left" Height="25">Description:</Label>
-        <TextBox Name="txtDesc" Grid.Row="0" Margin="75,50,0,0" HorizontalAlignment="Left" Height="25" Width="250"></TextBox>
+        <TextBox Name="txtDesc" ToolTip="La description du scénario" Grid.Row="0" Margin="75,50,0,0" HorizontalAlignment="Left" Height="25" Width="250"></TextBox>
 
-        <Button Name="btnAjouterScenario" Grid.Row="2" Height="25" Width="125" HorizontalAlignment="Left" Click="btnAjouterScenario_ClickAjouter">Sauvegarder</Button>
-        <Button Name="btnAnnuler" Grid.Row="2" Height="25" Width="125" HorizontalAlignment="Left" Margin="0,65,0,0" Click="btnAnnuler_Click">Annuler</Button>
+        <Button Name="btnAjouterScenario" ToolTip="Sauvegarder les informations dans la base de données" Grid.Row="2" Height="25" Width="125" HorizontalAlignment="Left" Click="btnAjouterScenario_ClickAjouter">Sauvegarder</Button>
+        <Button Name="btnAnnuler" ToolTip="Revenir à l'écran principal" Grid.Row="2" Height="25" Width="125" HorizontalAlignment="Left" Margin="0,65,0,0" Click="btnAnnuler_Click">Annuler</Button>
 
         <DataGrid Name="dgVols" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" CanUserResizeColumns="False" Grid.Row="1">
             <DataGrid.Columns>
@@ -52,7 +79,7 @@
                 <DataGridTemplateColumn Header="Ajouter" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Name="btnAjouter" Width="75" Height="25" Content="Ajouter" Click="btnAjouter_Click">
+                            <Button Name="btnAjouter" ToolTip="Ajouter ce vol au scénario" Width="75" Height="25" Content="Ajouter" Click="btnAjouter_Click">
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -74,7 +101,7 @@
                 <DataGridTemplateColumn Header="Enlever" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Name="btnEnlever" Width="75" Height="25" Content="Enlever" Click="btnEnlever_Click">
+                            <Button Name="btnEnlever" ToolTip="Enlever ce vol du scénario" Width="75" Height="25" Content="Enlever" Click="btnEnlever_Click">
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

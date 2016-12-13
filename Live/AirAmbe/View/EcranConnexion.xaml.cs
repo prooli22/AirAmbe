@@ -140,10 +140,9 @@ namespace AirAmbe
         /// </summary>
         private void btnGuide_Click(object sender, RoutedEventArgs e)
         {
-            Process process = new Process();
-            process.StartInfo.FileName = "guide.pdf";
-            process.Start();
-            process.WaitForExit();
+            EcranGuide eg;
+            eg = new EcranGuide(1);
+            eg.Show();
         }
     }
 }

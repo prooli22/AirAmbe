@@ -6,6 +6,32 @@
         xmlns:local="clr-namespace:AirAmbe"
         mc:Ignorable="d"
         Title="Air-Ambe" Height="Auto" Width="525" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <Style x:Key="NoChromeButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                                <Setter Property="Opacity" TargetName="Chrome" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
     <Grid Name="gridPrincipal">
         <Grid.RowDefinitions>
             <RowDefinition Height="75"></RowDefinition>
@@ -17,6 +43,10 @@
         </Grid.ColumnDefinitions>
         
         <Label FontSize="25" Grid.Row="0">Générateur de scénarios</Label>
+        
+        <Button Name="btnAide" Style="{DynamicResource NoChromeButton}" ToolTip="Aide" Width="35" Height="35" Margin="0,0,10,20" HorizontalAlignment="Right" Grid.Row="0" Click="btnAide_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/Generateur;component/Images/interrogation.png" />
+        </Button>
 
         <Label Name="lblCritique" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,70" Grid.Row="2">Zone critique en secondes:</Label>
         <ComboBox Name="cboCritique" Height="25" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="165,0,0,70" Grid.Row="2">
@@ -28,9 +58,9 @@
             <ComboBoxItem>120</ComboBoxItem>
         </ComboBox>
 
-        <Button Name="btnCreer" Content="Créer un scénario" Height="25" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,35" Grid.Row="2" Click="btnCreer_Click"></Button>
-        <Button Name="btnGenerer" Content="Activer" Height="25" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5" Grid.Row="2" Click="btnGenerer_Click"></Button>
-        <Button Name="btnQuitter" Content="Quitter" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Grid.Row="2" Click="btnQuitter_Click"></Button>
+        <Button Name="btnCreer" ToolTip="Ajouter un scénario à la base de données" Content="Créer un scénario" Height="25" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,35" Grid.Row="2" Click="btnCreer_Click"></Button>
+        <Button Name="btnGenerer" ToolTip="Active les scénarios sélectionnés et mets leurs informations dans le fichier scenario.txt" Content="Activer" Height="25" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5" Grid.Row="2" Click="btnGenerer_Click"></Button>
+        <Button Name="btnQuitter" ToolTip="Quitter le générateur" Content="Quitter" Height="25" Width="75" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Grid.Row="2" Click="btnQuitter_Click"></Button>
 
         <ScrollViewer MaxHeight="500" Grid.Row="1">
             <Grid Name="gridScen">

@@ -119,5 +119,12 @@ namespace AirAmbe
             btn.Height -= 2;
             btn.Width -= 2;
         }
+
+        private void btnAide_Click(object sender, RoutedEventArgs e)
+        {
+            EcranGuide eg;
+            eg = new EcranGuide(12);
+            eg.Show();
+        }
     }
 }

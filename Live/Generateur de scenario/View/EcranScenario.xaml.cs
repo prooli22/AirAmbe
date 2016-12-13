@@ -197,6 +197,7 @@ namespace AirAmbe
             cboMin.HorizontalAlignment = HorizontalAlignment.Left;
             cboMin.VerticalAlignment = VerticalAlignment.Top;
             cboMin.Name = "cboMin" + compteurScenario;
+            cboMin.ToolTip = "Interval de temps en secondes entre chaque vols du scénario";
             gridScen.RegisterName(cboMin.Name, cboMin);
             Grid.SetRow(cboMin, 1);
             Grid.SetColumn(cboMin, 3);
@@ -220,6 +221,7 @@ namespace AirAmbe
             btnModifier.Name = "btnModifier" + compteurScenario;
             btnModifier.Content = "Modifier";
             btnModifier.Click += BtnModifier_Click;
+            btnModifier.ToolTip = "Modifier le scénario";
             gridScen.RegisterName(btnModifier.Name, btnModifier);
             Grid.SetRow(btnModifier, 2);
             Grid.SetColumn(btnModifier, 1);
@@ -383,6 +385,37 @@ namespace AirAmbe
         private void btnQuitter_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        /// <summary>
+        /// Quand la souris entre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.Height += 2;
+            btn.Width += 2;
+        }
+
+        /// <summary>
+        /// Quand la souris sort
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.Height -= 2;
+            btn.Width -= 2;
+        }
+
+        private void btnAide_Click(object sender, RoutedEventArgs e)
+        {
+            EcranGuide eg;
+            eg = new EcranGuide(6);
+            eg.Show();
         }
     }
 }

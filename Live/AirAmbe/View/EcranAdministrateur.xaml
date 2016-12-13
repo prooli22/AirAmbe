@@ -42,9 +42,13 @@
         </Grid.RowDefinitions>
 
         <Label FontSize="25" Grid.Row="0">Administration des utilisateurs</Label>
-        
-        <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" Width="35" Height="35" Margin="10" HorizontalAlignment="Right" Grid.Row="0" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+
+        <Button Name="btnDeconnexion" Style="{DynamicResource NoChromeButton}" ToolTip="Déconnexion" Width="35" Height="35" Margin="10" HorizontalAlignment="Right" Grid.Row="0" Click="btnDeconnexion_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/deconnexion.png" />
+        </Button>
+
+        <Button Name="btnAide" Style="{DynamicResource NoChromeButton}" ToolTip="Aide" Width="35" Height="35" Margin="10,10,50,10" HorizontalAlignment="Right" Grid.Row="0" Click="btnAide_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/AirAmbe;component/Images/interrogation.png" />
         </Button>
 
         <DataGrid Name="dgUtilisateur" RowHeight="30" VerticalAlignment="Top" HorizontalAlignment="Center" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false" Grid.Row="1">
@@ -57,7 +61,7 @@
                 <DataGridTemplateColumn Header="Modifier">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Name="btnModifier" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnModifier_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                            <Button Name="btnModifier" ToolTip="Modifier l'utilisateur" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnModifier_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
                                 <Image Source="pack://application:,,,/AirAmbe;component/Images/parametre.png" />
                             </Button>
                         </DataTemplate>
@@ -66,7 +70,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Name="btnAjouter" Style="{DynamicResource NoChromeButton}" Width="35" Height="35" Margin="0, 0, 10, 30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="2" Click="btnAjouter_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+        <Button Name="btnAjouter" Style="{DynamicResource NoChromeButton}" ToolTip="Ajouter un utilisateur" Width="35" Height="35" Margin="0, 0, 10, 30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="2" Click="btnAjouter_Click" MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
             <Image Source="pack://application:,,,/AirAmbe;component/Images/plus.png" />
         </Button>
         

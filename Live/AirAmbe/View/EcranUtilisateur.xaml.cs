@@ -41,6 +41,7 @@ namespace AirAmbe
             SetTxtWritable(true);
             Retour = "EcranAdministrateur";
             btnAction.Content = "Ajouter";
+            btnAction.ToolTip = "Ajouter l'utilisateur";
             lblNouvMdp.Content = "Mot de passe: ";
             txtCour.Text = "L'adresse courriel est créée toute seule.";
         }
@@ -58,6 +59,7 @@ namespace AirAmbe
             UsagerAfficher = user;
             lblTitre.Content = lblTitre.Content + " : " + user.NomUtilisateur;
             btnAction.Content = "Modifier";
+            btnAction.ToolTip = "Modifier l'utilisateur";
             if (peutModifier)
             {
                 SetTxtWritable(false);
@@ -239,6 +241,37 @@ namespace AirAmbe
                     QuitterPage(u, true);
                 }
             }
+        }
+
+        /// <summary>
+        /// Quand la souris entre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.Height += 2;
+            btn.Width += 2;
+        }
+
+        /// <summary>
+        /// Quand la souris sort
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.Height -= 2;
+            btn.Width -= 2;
+        }
+
+        private void btnAide_Click(object sender, RoutedEventArgs e)
+        {
+            EcranGuide eg;
+            eg = new EcranGuide(13);
+            eg.Show();
         }
     }
 }

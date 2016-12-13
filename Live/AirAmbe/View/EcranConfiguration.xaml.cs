@@ -206,5 +206,12 @@ namespace AirAmbe
             if(EC != null)
                 EC.AccelererTemps(accel);
         }
+
+        private void btnAide_Click(object sender, RoutedEventArgs e)
+        {
+            EcranGuide eg;
+            eg = new EcranGuide(10);
+            eg.Show();
+        }
     }
 }

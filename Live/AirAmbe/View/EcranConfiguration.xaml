@@ -52,7 +52,7 @@
         <Label FontSize="25" Grid.Row="0">Configuration des vols et pistes</Label>
 
         <Label Grid.Row="0" Height="25" Width="150" HorizontalAlignment="Right" Margin="0,0,50,0">Vitesse de la simulation: </Label>
-        <ComboBox Name="cboAccel" Grid.Row="0" Height="25" Width="50" HorizontalAlignment="Right" Margin="0,0,10,0" SelectionChanged="cboAccel_SelectionChanged">
+        <ComboBox Name="cboAccel" ToolTip="Accélérateur" Grid.Row="0" Height="25" Width="50" HorizontalAlignment="Right" Margin="0,0,10,0" SelectionChanged="cboAccel_SelectionChanged">
             <ComboBoxItem>0.1x</ComboBoxItem>
             <ComboBoxItem>0.2x</ComboBoxItem>
             <ComboBoxItem>0.5x</ComboBoxItem>
@@ -61,7 +61,11 @@
             <ComboBoxItem>5x</ComboBoxItem>
             <ComboBoxItem>10x</ComboBoxItem>
         </ComboBox>
-        
+
+        <Button Name="btnAide" Style="{DynamicResource NoChromeButton}" ToolTip="Aide" Width="35" Height="35" Margin="10,10,200,10" HorizontalAlignment="Right" Grid.Row="0" Click="btnAide_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+            <Image Source="pack://application:,,,/AirAmbe;component/Images/interrogation.png" />
+        </Button>
+
         <TabControl Name="tabConfig" Grid.Row="1"  Margin="10">
             <TabItem Header="Vols">
                 <DataGrid Name="dgVols" RowHeight="30" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionMode="Single" CanUserAddRows="false">
@@ -74,7 +78,7 @@
                         <DataGridTemplateColumn Header="Temps">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox Name="cboTemps" SelectionChanged="cboTemps_SelectionChanged">
+                                    <ComboBox Name="cboTemps" ToolTip="Temps à retarder" SelectionChanged="cboTemps_SelectionChanged">
                                         <ComboBoxItem IsSelected="true">1</ComboBoxItem>
                                         <ComboBoxItem>2</ComboBoxItem>
                                         <ComboBoxItem>3</ComboBoxItem>
@@ -90,7 +94,7 @@
                         <DataGridTemplateColumn Header="Unité" Width="80">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox Name="cboValeur" SelectionChanged="cboValeur_SelectionChanged">
+                                    <ComboBox Name="cboValeur" ToolTip="Unité pour le retard" SelectionChanged="cboValeur_SelectionChanged">
                                         <ComboBoxItem IsSelected="true">Secondes</ComboBoxItem>
                                         <ComboBoxItem>Minutes</ComboBoxItem>
                                         <ComboBoxItem>Heures</ComboBoxItem>                                       
@@ -101,7 +105,7 @@
                         <DataGridTemplateColumn Header="Retarder">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Name="btnRetarder" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnRetarder_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                                    <Button Name="btnRetarder" ToolTip="Retarder le vol" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnRetarder_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
                                         <Image Source="pack://application:,,,/AirAmbe;component/Images/retard.png" />
                                     </Button>
                                 </DataTemplate>
@@ -110,7 +114,7 @@
                         <DataGridTemplateColumn Header="Annuler">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Name="btnAnnuler" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnAnnuler_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                                    <Button Name="btnAnnuler" ToolTip="Annuler le vol" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnAnnuler_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
                                         <Image Source="pack://application:,,,/AirAmbe;component/Images/x.png" />
                                     </Button>
                                 </DataTemplate>
@@ -136,7 +140,7 @@
                         <DataGridTemplateColumn Header="Changer état de la piste">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Name="btnChangerEtatPiste" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnChangerEtatPiste_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
+                                    <Button Name="btnChangerEtatPiste" ToolTip="Changer l'état de la piste" Style="{DynamicResource NoChromeButton}" Width="25" Height="25" Click="btnChangerEtatPiste_Click"  MouseEnter="btn_MouseEnter" MouseLeave="btn_MouseLeave">
                                         <Image Source="pack://application:,,,/AirAmbe;component/Images/parametre.png" />
                                     </Button>
                                 </DataTemplate>
